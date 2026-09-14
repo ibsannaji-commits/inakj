@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="om" data-lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buyer Register – INA-KJ Agro Connect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(160deg, #E3F2FD 0%, #F7F9F8 40%, #fff 100%);
+    }
+    .auth-page {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    .auth-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      width: 100%;
+      max-width: 480px;
+      overflow: hidden;
+    }
+    .auth-header {
+      background: linear-gradient(135deg, #1565C0, #0D47A1);
+      color: white;
+      padding: 24px 28px;
+      text-align: center;
+    }
+    .auth-header h1 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .auth-header p {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    .auth-body { padding: 28px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .form-group label .req { color: var(--danger); }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      font-size: 0.95rem;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #1565C0;
+      background: white;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(21,101,192,0.12);
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .btn-auth {
+      width: 100%;
+      padding: 14px;
+      background: #1565C0;
+      color: white;
+      border-radius: var(--radius);
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-top: 8px;
+    }
+    .btn-auth:hover {
+      background: #0D47A1;
+    }
+    .auth-footer {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+    .auth-footer a {
+      color: #1565C0;
+      font-weight: 700;
+    }
+    .check-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+    .check-row input {
+      margin-top: 3px;
+      accent-color: #1565C0;
+    }
+    .lang-top { position: absolute; top: 16px; right: 16px; }
+    .back-home {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #1565C0;
+    }
+    @media (max-width: 500px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <a href="../index.html" class="back-home">← Home</a>
+  <div class="lang-top">
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="om">OM</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </div>
+
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h1>
+          <span class="lang-om">🛒 Buyer Galmaa'i</span>
+          <span class="lang-en">🛒 Buyer Register</span>
+        </h1>
+        <p>
+          <span class="lang-om">Oomisha qonnaa bitadhu</span>
+          <span class="lang-en">Buy farm products online</span>
+        </p>
+      </div>
+      <div class="auth-body">
+        <form onsubmit="return handleRegister(event)">
+          <div class="form-group">
+            <label>
+              <span class="lang-om">Maqaa / Dhaabbata</span>
+              <span class="lang-en">Name / Business Name</span>
+              <span class="req">*</span>
+            </label>
+            <input type="text" required placeholder="Sara Trading Co.">
+          </div>
+          <div class="form-group">
+            <label>
+              <span class="lang-om">Gosa Buyer</span>
+              <span class="lang-en">Buyer Type</span>
+            </label>
+            <select>
+              <option>
+                <span class="lang-om">Individual</span>
+                <span class="lang-en">Individual</span>
+              </option>
+              <option>
+                <span class="lang-om">Wholesaler</span>
+                <span class="lang-en">Wholesaler</span>
+              </option>
+              <option>Exporter</option>
+              <option>
+                <span class="lang-om">Restaurant / Hotel</span>
+                <span class="lang-en">Restaurant / Hotel</span>
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>
+              <span class="lang-om">Bilbila</span>
+              <span class="lang-en">Phone</span>
+              <span class="req">*</span>
+            </label>
+            <input type="tel" required placeholder="+251 9XX XXX XXX">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" placeholder="sara@email.com">
+          </div>
+          <div class="form-group">
+            <label>
+              <span class="lang-om">Magaalaa</span>
+              <span class="lang-en">City</span>
+            </label>
+            <input type="text" placeholder="Addis Ababa">
+          </div>
+          <div class="form-group">
+            <label>
+              <span class="lang-om">Jecha iccitii</span>
+              <span class="lang-en">Password</span>
+              <span class="req">*</span>
+            </label>
+            <input type="password" required placeholder="Min 6 characters" minlength="6">
+          </div>
+          <div class="form-group">
+            <label>
+              <span class="lang-om">Jecha iccitii mirkaneessi</span>
+              <span class="lang-en">Confirm Password</span>
+              <span class="req">*</span>
+            </label>
+            <input type="password" required placeholder="••••••••">
+          </div>
+          <div class="check-row">
+            <input type="checkbox" required id="terms">
+            <label for="terms">
+              <span class="lang-om">Haala fayyadamaa fi iccitii nan fudhadha</span>
+              <span class="lang-en">I agree to the Terms of Use and Privacy Policy</span>
+            </label>
+          </div>
+          <button type="submit" class="btn-auth">
+            <span class="lang-om">Galmaa'i</span>
+            <span class="lang-en">Create Account</span>
+          </button>
+        </form>
+        <div class="auth-footer">
+          <span class="lang-om">Account qabdaa?</span>
+          <span class="lang-en">Already have an account?</span>
+          <a href="login.html">
+            <span class="lang-om">Seeni</span>
+            <span class="lang-en">Log In</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/script.js"></script>
+  <script>
+    function handleRegister(e) {
+      e.preventDefault();
+      window.location.href = 'dashboard.html';
+      return false;
+    }
+  </script>
+</body>
+</html>

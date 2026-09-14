@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="om" data-lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ergaa | Messages – INA-KJ Agro Connect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .msg-wrapper {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      height: calc(100vh - 120px);
+      max-width: 1200px;
+      margin: 0 auto;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    /* Sidebar – conversations list */
+    .conv-sidebar {
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+    }
+    .conv-header {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      background: var(--white);
+    }
+    .conv-header h2 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .conv-search {
+      position: relative;
+    }
+    .conv-search input {
+      width: 100%;
+      padding: 10px 14px 10px 36px;
+      border: 1.5px solid var(--border);
+      border-radius: 50px;
+      background: var(--bg);
+      font-size: 0.9rem;
+    }
+    .conv-search input:focus {
+      border-color: var(--primary);
+      outline: none;
+      background: white;
+    }
+    .conv-search .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .conv-list {
+      flex: 1;
+      overflow-y: auto;
+    }
+    .conv-item {
+      display: flex;
+      gap: 12px;
+      padding: 14px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border-light);
+      transition: background 0.15s;
+      align-items: flex-start;
+    }
+    .conv-item:hover {
+      background: var(--white);
+    }
+    .conv-item.active {
+      background: var(--primary-soft);
+      border-left: 3px solid var(--primary);
+    }
+    .conv-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--primary-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .conv-avatar .online {
+      position: absolute;
+      bottom: 1px;
+      right: 1px;
+      width: 12px;
+      height: 12px;
+      background: var(--success);
+      border: 2px solid white;
+      border-radius: 50%;
+    }
+    .conv-body {
+      flex: 1;
+      min-width: 0;
+    }
+    .conv-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3px;
+    }
+    .conv-top strong {
+      font-size: 0.95rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .conv-top .time {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+    .conv-preview {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .conv-item.unread .conv-preview {
+      font-weight: 600;
+      color: var(--text);
+    }
+    .unread-badge {
+      background: var(--primary);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 20px;
+      margin-left: 6px;
+    }
+
+    /* Chat area */
+    .chat-area {
+      display: flex;
+      flex-direction: column;
+      background: var(--white);
+    }
+    .chat-header {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .chat-header .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--primary-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+    .chat-header-info h3 {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .chat-header-info p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .chat-header-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+    }
+    .chat-header-actions button {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: white;
+      transition: all 0.2s;
+    }
+    .chat-header-actions button:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Product context bar */
+    .product-context {
+      background: var(--primary-soft);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--border-light);
+      font-size: 0.9rem;
+    }
+    .product-context .pc-icon {
+      font-size: 1.4rem;
+    }
+    .product-context strong {
+      font-weight: 700;
+    }
+    .product-context a {
+      margin-left: auto;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+    .product-context a:hover {
+      text-decoration: underline;
+    }
+
+    /* Messages */
+    .messages-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      background: #F7F9F8;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .msg-date-divider {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin: 8px 0;
+    }
+    .msg-date-divider span {
+      background: var(--border-light);
+      padding: 4px 14px;
+      border-radius: 20px;
+    }
+    .msg-bubble {
+      max-width: 70%;
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      position: relative;
+    }
+    .msg-bubble.received {
+      background: white;
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+      align-self: flex-start;
+    }
+    .msg-bubble.sent {
+      background: var(--primary);
+      color: white;
+      border-bottom-right-radius: 4px;
+      align-self: flex-end;
+    }
+    .msg-bubble .msg-time {
+      font-size: 0.7rem;
+      margin-top: 4px;
+      opacity: 0.7;
+      text-align: right;
+    }
+    .msg-bubble.received .msg-time {
+      color: var(--text-muted);
+    }
+
+    /* Quick replies */
+    .quick-replies {
+      display: flex;
+      gap: 8px;
+      padding: 10px 20px 0;
+      flex-wrap: wrap;
+      background: #F7F9F8;
+    }
+    .quick-reply {
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      background: white;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .quick-reply:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    /* Input area */
+    .chat-input-area {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      background: white;
+    }
+    .chat-input-area textarea {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 24px;
+      resize: none;
+      font-size: 0.95rem;
+      max-height: 100px;
+      background: var(--bg);
+      line-height: 1.4;
+    }
+    .chat-input-area textarea:focus {
+      border-color: var(--primary);
+      outline: none;
+      background: white;
+    }
+    .chat-input-area .send-btn {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+    .chat-input-area .send-btn:hover {
+      background: var(--primary-dark);
+    }
+    .attach-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+    .attach-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Empty state */
+    .chat-empty {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      padding: 40px;
+      text-align: center;
+    }
+    .chat-empty .empty-icon {
+      font-size: 3.5rem;
+      margin-bottom: 12px;
+    }
+    .chat-empty h3 {
+      font-size: 1.15rem;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    /* Page header bar */
+    .page-bar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 0;
+    }
+    .page-bar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .page-bar h1 {
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    @media (max-width: 800px) {
+      .msg-wrapper {
+        grid-template-columns: 1fr;
+        height: calc(100vh - 100px);
+      }
+      .conv-sidebar {
+        display: none;
+      }
+      .conv-sidebar.mobile-show {
+        display: flex;
+        position: absolute;
+        inset: 0;
+        z-index: 100;
+      }
+      .msg-bubble {
+        max-width: 85%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-main" style="padding:10px 0;">
+      <div class="container">
+        <a href="index.html" class="logo">
+          <div class="logo-icon" style="width:36px;height:36px;font-size:1.1rem;">IK</div>
+          <div class="logo-text" style="font-size:1.1rem;">INA-KJ <span>Agro</span></div>
+        </a>
+        <div class="header-actions" style="margin-left:auto;">
+          <div class="lang-toggle">
+            <button class="lang-btn active" data-lang="om">OM</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+          </div>
+          <a href="buyer/dashboard.html" class="header-btn">
+            <span class="icon">📊</span>
+            <span class="lang-om">Dashboard</span>
+            <span class="lang-en">Dashboard</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-bar">
+    <div class="container">
+      <h1>
+        <span class="lang-om">💬 Ergaa (Messages)</span>
+        <span class="lang-en">💬 Messages</span>
+      </h1>
+      <a href="marketplace.html" style="font-size:0.9rem;color:var(--primary);font-weight:600;">
+        <span class="lang-om">← Gabaa</span>
+        <span class="lang-en">← Marketplace</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="container" style="padding-top:16px;padding-bottom:16px;">
+    <div class="msg-wrapper">
+
+      <!-- Conversations list -->
+      <aside class="conv-sidebar" id="convSidebar">
+        <div class="conv-header">
+          <h2>
+            <span class="lang-om">Haasa'awwan</span>
+            <span class="lang-en">Conversations</span>
+          </h2>
+          <div class="conv-search">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Search..." id="convSearch">
+          </div>
+        </div>
+        <div class="conv-list" id="convList">
+
+          <div class="conv-item active unread" data-id="1" onclick="openChat(1)">
+            <div class="conv-avatar">
+              👨‍🌾
+              <span class="online"></span>
+            </div>
+            <div class="conv-body">
+              <div class="conv-top">
+                <strong>Ahmed Hassan</strong>
+                <span class="time">10:42</span>
+              </div>
+              <div class="conv-preview">
+                <span class="lang-om">Eeyyee, 50kg ni danda'ama. Gatiin...</span>
+                <span class="lang-en">Yes, 50kg is available. Price is...</span>
+                <span class="unread-badge">2</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="conv-item" data-id="2" onclick="openChat(2)">
+            <div class="conv-avatar">☕</div>
+            <div class="conv-body">
+              <div class="conv-top">
+                <strong>Tigist Cooperative</strong>
+                <span class="time">
+                  <span class="lang-om">Kaleessa</span>
+                  <span class="lang-en">Yesterday</span>
+                </span>
+              </div>
+              <div class="conv-preview">
+                <span class="lang-om">Buna Grade 1 qabna. Export ready...</span>
+                <span class="lang-en">We have Grade 1 coffee. Export ready...</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="conv-item" data-id="3" onclick="openChat(3)">
+            <div class="conv-avatar">🍯</div>
+            <div class="conv-body">
+              <div class="conv-top">
+                <strong>Fatuma Ali</strong>
+                <span class="time">12 Sep</span>
+              </div>
+              <div class="conv-preview">
+                <span class="lang-om">Damma organic 20kg qophaa'eera</span>
+                <span class="lang-en">20kg organic honey is ready</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="conv-item" data-id="4" onclick="openChat(4)">
+            <div class="conv-avatar">🌾</div>
+            <div class="conv-body">
+              <div class="conv-top">
+                <strong>Mulugeta Alemu</strong>
+                <span class="time">10 Sep</span>
+              </div>
+              <div class="conv-preview">
+                <span class="lang-om">Order #ORD-1031 karaa irra jira</span>
+                <span class="lang-en">Order #ORD-1031 is in transit</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </aside>
+
+      <!-- Chat area -->
+      <main class="chat-area" id="chatArea">
+
+        <!-- Header -->
+        <div class="chat-header">
+          <div class="avatar">👨‍🌾</div>
+          <div class="chat-header-info">
+            <h3>Ahmed Hassan <span style="color:var(--info);font-size:0.85rem;">✓</span></h3>
+            <p>
+              <span style="color:var(--success);">● Online</span> •
+              <span class="lang-om">Qonnaan Bulaa • West Hararghe</span>
+              <span class="lang-en">Verified Farmer • West Hararghe</span>
+            </p>
+          </div>
+          <div class="chat-header-actions">
+            <button onclick="location.href='product-details.html?id=1'">
+              <span class="lang-om">Oomisha</span>
+              <span class="lang-en">Product</span>
+            </button>
+            <button>
+              📞
+            </button>
+          </div>
+        </div>
+
+        <!-- Product context -->
+        <div class="product-context">
+          <span class="pc-icon">🌿</span>
+          <div>
+            <strong>
+              <span class="lang-om">Jimaa Goggogaa – Grade A</span>
+              <span class="lang-en">Dried Khat – Grade A</span>
+            </strong>
+            <span style="color:var(--text-muted);"> • 1,200 ETB/kg • 500 kg available</span>
+          </div>
+          <a href="product-details.html?id=1">
+            <span class="lang-om">Ilaali →</span>
+            <span class="lang-en">View →</span>
+          </a>
+        </div>
+
+        <!-- Messages -->
+        <div class="messages-scroll" id="messagesScroll">
+          <div class="msg-date-divider">
+            <span>14 Sep 2026</span>
+          </div>
+
+          <div class="msg-bubble received">
+            <span class="lang-om">Akkam! Jimaa Grade A barbaaddaa? Hanga meeqa?</span>
+            <span class="lang-en">Hello! Looking for Grade A khat? How much quantity?</span>
+            <div class="msg-time">09:15 AM</div>
+          </div>
+
+          <div class="msg-bubble sent">
+            <span class="lang-om">Akkam jirta. 50 kg barbaada. Gatiin meeqa?</span>
+            <span class="lang-en">Hi. I need 50 kg. What's the price?</span>
+            <div class="msg-time">09:22 AM</div>
+          </div>
+
+          <div class="msg-bubble received">
+            <span class="lang-om">Gatiin 1,200 ETB/kg. Min order 10 kg. Delivery platform ykn ani ofiin geessuu nan danda'a.</span>
+            <span class="lang-en">Price is 1,200 ETB/kg. Min order 10 kg. Delivery via platform or I can deliver.</span>
+            <div class="msg-time">09:25 AM</div>
+          </div>
+
+          <div class="msg-bubble sent">
+            <span class="lang-om">Gaarii. 50 kg nan bitadha. Quality Grade A mirkaneeffameeraa?</span>
+            <span class="lang-en">Good. I'll take 50 kg. Is the quality verified Grade A?</span>
+            <div class="msg-time">09:30 AM</div>
+          </div>
+
+          <div class="msg-bubble received">
+            <span class="lang-om">Eeyyee, Grade A mirkaneeffameera. Suuraa erguu dandeessa yoo barbaadde. Yeroo kam barbaadda?</span>
+            <span class="lang-en">Yes, verified Grade A. I can send photos if you want. When do you need it?</span>
+            <div class="msg-time">09:35 AM</div>
+          </div>
+
+          <div class="msg-date-divider">
+            <span>
+              <span class="lang-om">Har'a</span>
+              <span class="lang-en">Today</span>
+            </span>
+          </div>
+
+          <div class="msg-bubble sent">
+            <span class="lang-om">Torbee dhufu. Order platform irratti nan godha.</span>
+            <span class="lang-en">Next week. I'll place the order on the platform.</span>
+            <div class="msg-time">10:40 AM</div>
+          </div>
+
+          <div class="msg-bubble received">
+            <span class="lang-om">Eeyyee, 50kg ni danda'ama. Gatiin ammas 1,200 ETB/kg. Eega order godhte natti himi!</span>
+            <span class="lang-en">Yes, 50kg is available. Price is still 1,200 ETB/kg. Let me know once you order!</span>
+            <div class="msg-time">10:42 AM</div>
+          </div>
+        </div>
+
+        <!-- Quick replies -->
+        <div class="quick-replies">
+          <button class="quick-reply" onclick="sendQuick(this)">
+            <span class="lang-om">Gatiin mari'achuun ni danda'amaa?</span>
+            <span class="lang-en">Is the price negotiable?</span>
+          </button>
+          <button class="quick-reply" onclick="sendQuick(this)">
+            <span class="lang-om">Delivery yeroo meeqa fudhata?</span>
+            <span class="lang-en">How long for delivery?</span>
+          </button>
+          <button class="quick-reply" onclick="sendQuick(this)">
+            <span class="lang-om">Order nan godha</span>
+            <span class="lang-en">I'll place the order</span>
+          </button>
+        </div>
+
+        <!-- Input -->
+        <div class="chat-input-area">
+          <button class="attach-btn" title="Attach">📎</button>
+          <textarea id="msgInput" rows="1" placeholder="Ergaa barreessi..." 
+                    class="lang-om"
+                    onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"></textarea>
+          <textarea id="msgInputEn" rows="1" placeholder="Type a message..." 
+                    class="lang-en"
+                    style="display:none;"
+                    onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"></textarea>
+          <button class="send-btn" onclick="sendMessage()">➤</button>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+  <script>
+    // Sync language for input placeholder
+    function updateInputLang() {
+      const lang = document.documentElement.getAttribute('data-lang');
+      const om = document.getElementById('msgInput');
+      const en = document.getElementById('msgInputEn');
+      if (lang === 'en') {
+        om.style.display = 'none';
+        en.style.display = 'block';
+      } else {
+        om.style.display = 'block';
+        en.style.display = 'none';
+      }
+    }
+    // Observe lang changes
+    const observer = new MutationObserver(updateInputLang);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-lang'] });
+    updateInputLang();
+
+    function sendMessage() {
+      const lang = document.documentElement.getAttribute('data-lang');
+      const input = lang === 'en' ? document.getElementById('msgInputEn') : document.getElementById('msgInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const scroll = document.getElementById('messagesScroll');
+      const bubble = document.createElement('div');
+      bubble.className = 'msg-bubble sent';
+      const now = new Date();
+      const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      bubble.innerHTML = `${text}<div class="msg-time">${time}</div>`;
+      scroll.appendChild(bubble);
+      scroll.scrollTop = scroll.scrollHeight;
+      input.value = '';
+
+      // Simulate reply after 1.5s
+      setTimeout(() => {
+        const reply = document.createElement('div');
+        reply.className = 'msg-bubble received';
+        const replies = lang === 'om'
+          ? ['Eeyyee, nan eeggadha.', 'Gaarii, natti himi.', 'Tole, eegaa jira.']
+          : ['Yes, I\'ll wait.', 'Good, let me know.', 'Okay, waiting.'];
+        reply.innerHTML = `${replies[Math.floor(Math.random()*replies.length)]}<div class="msg-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>`;
+        scroll.appendChild(reply);
+        scroll.scrollTop = scroll.scrollHeight;
+      }, 1500);
+    }
+
+    function sendQuick(btn) {
+      const lang = document.documentElement.getAttribute('data-lang');
+      const text = btn.querySelector(lang === 'en' ? '.lang-en' : '.lang-om')?.textContent || btn.textContent;
+      const input = lang === 'en' ? document.getElementById('msgInputEn') : document.getElementById('msgInput');
+      input.value = text.trim();
+      sendMessage();
+    }
+
+    function openChat(id) {
+      document.querySelectorAll('.conv-item').forEach(c => c.classList.remove('active'));
+      document.querySelector(`.conv-item[data-id="${id}"]`)?.classList.add('active');
+      // In real app: load messages for this conversation
+    }
+
+    // Auto-scroll to bottom on load
+    document.getElementById('messagesScroll').scrollTop = document.getElementById('messagesScroll').scrollHeight;
+  </script>
+</body>
+</html>

@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="om" data-lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farmer Dashboard – INA-KJ Agro Connect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* ========== DASHBOARD LAYOUT ========== */
+    .dash-wrapper {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: calc(100vh - 60px);
+    }
+
+    /* Sidebar */
+    .dash-sidebar {
+      background: #0D3D1F;
+      color: white;
+      padding: 24px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .dash-sidebar .logo {
+      padding: 0 20px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      margin-bottom: 16px;
+    }
+    .dash-sidebar .logo-text {
+      color: white;
+      font-size: 1.1rem;
+    }
+    .dash-sidebar .logo-text span {
+      color: var(--gold);
+    }
+    .sidebar-user {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      margin-bottom: 12px;
+    }
+    .sidebar-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+    .sidebar-user-info h4 {
+      font-size: 0.95rem;
+      font-weight: 650;
+    }
+    .sidebar-user-info p {
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.8);
+      transition: all 0.2s;
+      border-left: 3px solid transparent;
+    }
+    .sidebar-nav a:hover,
+    .sidebar-nav a.active {
+      background: rgba(255,255,255,0.08);
+      color: white;
+      border-left-color: var(--gold);
+    }
+    .sidebar-nav a .icon {
+      font-size: 1.15rem;
+      width: 24px;
+      text-align: center;
+    }
+    .sidebar-nav .badge-count {
+      margin-left: auto;
+      background: var(--accent-dark);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+
+    /* Main Content */
+    .dash-main {
+      background: var(--bg);
+      padding: 28px 32px 60px;
+      overflow-x: hidden;
+    }
+    .dash-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .dash-header h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .dash-header p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+    .dash-header-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    /* Stats Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: all 0.2s;
+    }
+    .stat-card:hover {
+      box-shadow: var(--shadow);
+      border-color: var(--primary-light);
+    }
+    .stat-card .stat-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+    }
+    .stat-card .stat-icon.green { background: var(--primary-soft); }
+    .stat-card .stat-icon.blue { background: #E3F2FD; }
+    .stat-card .stat-icon.orange { background: #FFF3E0; }
+    .stat-card .stat-icon.purple { background: #F3E5F5; }
+    .stat-card h3 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .stat-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .stat-card .stat-change {
+      font-size: 0.8rem;
+      margin-top: 8px;
+      font-weight: 600;
+    }
+    .stat-change.up { color: var(--success); }
+    .stat-change.down { color: var(--danger); }
+
+    /* Section Card */
+    .dash-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .dash-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .dash-card-header h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    .dash-card-body {
+      padding: 0;
+    }
+
+    /* Tables */
+    .dash-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .dash-table th {
+      background: var(--bg);
+      padding: 12px 18px;
+      text-align: left;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .dash-table td {
+      padding: 14px 18px;
+      border-top: 1px solid var(--border-light);
+      font-size: 0.95rem;
+      vertical-align: middle;
+    }
+    .dash-table tr:hover td {
+      background: var(--bg);
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .status-pending { background: #FFF3E0; color: #E65100; }
+    .status-processing { background: #E3F2FD; color: #1565C0; }
+    .status-delivered { background: var(--primary-soft); color: var(--primary); }
+    .status-cancelled { background: #FFEBEE; color: #C62828; }
+    .status-active { background: var(--primary-soft); color: var(--primary); }
+    .status-soldout { background: #F5F5F5; color: #757575; }
+
+    .product-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .product-thumb {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      background: var(--primary-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .action-btns {
+      display: flex;
+      gap: 6px;
+    }
+    .action-btns button,
+    .action-btns a {
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: var(--white);
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+    .action-btns button:hover,
+    .action-btns a:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .action-btns .btn-danger:hover {
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    /* Quick Actions */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .quick-btn {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 16px;
+      text-align: center;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .quick-btn:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+    .quick-btn .qa-icon {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+    .quick-btn h4 {
+      font-size: 0.95rem;
+      font-weight: 650;
+      color: var(--text);
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--text-muted);
+    }
+    .empty-state .empty-icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+    }
+
+    /* Top bar inside dash */
+    .dash-topbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .dash-topbar .lang-toggle {
+      margin-left: auto;
+    }
+
+    /* Mobile */
+    .sidebar-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--primary);
+      cursor: pointer;
+    }
+
+    @media (max-width: 1100px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 900px) {
+      .dash-wrapper {
+        grid-template-columns: 1fr;
+      }
+      .dash-sidebar {
+        position: fixed;
+        left: -280px;
+        z-index: 2000;
+        transition: left 0.3s ease;
+        width: 260px;
+      }
+      .dash-sidebar.open {
+        left: 0;
+      }
+      .sidebar-toggle {
+        display: block;
+      }
+      .dash-main {
+        padding: 20px 16px 60px;
+      }
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+    }
+    @media (max-width: 500px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <div class="dash-topbar">
+    <button class="sidebar-toggle" onclick="document.querySelector('.dash-sidebar').classList.toggle('open')">☰</button>
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="om">OM</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </div>
+
+  <div class="dash-wrapper">
+
+    <!-- ========== SIDEBAR ========== -->
+    <aside class="dash-sidebar">
+      <div class="logo">
+        <div class="logo-icon" style="width:36px;height:36px;font-size:1.1rem;">IK</div>
+        <div class="logo-text">INA-KJ <span>Agro</span></div>
+      </div>
+
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">👨‍🌾</div>
+        <div class="sidebar-user-info">
+          <h4>Ahmed Hassan</h4>
+          <p>
+            <span class="lang-om">Qonnaan Bulaa ✓</span>
+            <span class="lang-en">Verified Farmer ✓</span>
+          </p>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="active">
+          <span class="icon">📊</span>
+          <span class="lang-om">Dashboard</span>
+          <span class="lang-en">Dashboard</span>
+        </a>
+        <a href="add-product.html">
+          <span class="icon">➕</span>
+          <span class="lang-om">Oomisha Galchi</span>
+          <span class="lang-en">Add Product</span>
+        </a>
+        <a href="my-products.html">
+          <span class="icon">📦</span>
+          <span class="lang-om">Oomisha Koo</span>
+          <span class="lang-en">My Products</span>
+        </a>
+        <a href="#orders">
+          <span class="icon">🛒</span>
+          <span class="lang-om">Orders</span>
+          <span class="lang-en">Orders</span>
+          <span class="badge-count">5</span>
+        </a>
+        <a href="#sales">
+          <span class="icon">💰</span>
+          <span class="lang-om">Gurgurtaa / Revenue</span>
+          <span class="lang-en">Sales / Revenue</span>
+        </a>
+        <a href="../messages.html">
+          <span class="icon">💬</span>
+          <span class="lang-om">Ergaa</span>
+          <span class="lang-en">Messages</span>
+          <span class="badge-count">3</span>
+        </a>
+        <a href="../market-price.html">
+          <span class="icon">📈</span>
+          <span class="lang-om">Gatii Gabaa</span>
+          <span class="lang-en">Market Prices</span>
+        </a>
+        <a href="#profile">
+          <span class="icon">👤</span>
+          <span class="lang-om">Profile</span>
+          <span class="lang-en">Profile</span>
+        </a>
+        <a href="../index.html" style="margin-top:20px;opacity:0.7;">
+          <span class="icon">🏠</span>
+          <span class="lang-om">Gara Website</span>
+          <span class="lang-en">Back to Website</span>
+        </a>
+        <a href="login.html" style="opacity:0.7;">
+          <span class="icon">🚪</span>
+          <span class="lang-om">Ba'i</span>
+          <span class="lang-en">Logout</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="dash-main">
+
+      <!-- Header -->
+      <div class="dash-header">
+        <div>
+          <h1>
+            <span class="lang-om">Akkam jirta, Ahmed! 👋</span>
+            <span class="lang-en">Welcome back, Ahmed! 👋</span>
+          </h1>
+          <p>
+            <span class="lang-om">Dashboard kee — har'a maal akka jiru ilaali</span>
+            <span class="lang-en">Here's what's happening with your farm products today</span>
+          </p>
+        </div>
+        <div class="dash-header-actions">
+          <a href="add-product.html" class="btn-primary">
+            <span class="lang-om">+ Oomisha Haaraa Galchi</span>
+            <span class="lang-en">+ Add New Product</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon green">📦</div>
+          <h3>12</h3>
+          <p>
+            <span class="lang-om">Oomisha Aktiivii</span>
+            <span class="lang-en">Active Products</span>
+          </p>
+          <div class="stat-change up">+2 <span class="lang-om">torbee kana</span><span class="lang-en">this week</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue">🛒</div>
+          <h3>5</h3>
+          <p>
+            <span class="lang-om">Orders Haaraa</span>
+            <span class="lang-en">New Orders</span>
+          </p>
+          <div class="stat-change up">+3 <span class="lang-om">har'a</span><span class="lang-en">today</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange">💰</div>
+          <h3>84,500</h3>
+          <p>
+            <span class="lang-om">Revenue (ETB)</span>
+            <span class="lang-en">Revenue (ETB)</span>
+          </p>
+          <div class="stat-change up">+12% <span class="lang-om">ji'a kana</span><span class="lang-en">this month</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple">⭐</div>
+          <h3>4.8</h3>
+          <p>
+            <span class="lang-om">Rating</span>
+            <span class="lang-en">Rating</span>
+          </p>
+          <div class="stat-change up">23 <span class="lang-om">reviews</span><span class="lang-en">reviews</span></div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <a href="add-product.html" class="quick-btn">
+          <div class="qa-icon">➕</div>
+          <h4>
+            <span class="lang-om">Oomisha Galchi</span>
+            <span class="lang-en">Add Product</span>
+          </h4>
+        </a>
+        <a href="#orders" class="quick-btn">
+          <div class="qa-icon">🛒</div>
+          <h4>
+            <span class="lang-om">Orders Ilaali</span>
+            <span class="lang-en">View Orders</span>
+          </h4>
+        </a>
+        <a href="../market-price.html" class="quick-btn">
+          <div class="qa-icon">📈</div>
+          <h4>
+            <span class="lang-om">Gatii Gabaa</span>
+            <span class="lang-en">Market Prices</span>
+          </h4>
+        </a>
+        <a href="../messages.html" class="quick-btn">
+          <div class="qa-icon">💬</div>
+          <h4>
+            <span class="lang-om">Ergaa</span>
+            <span class="lang-en">Messages</span>
+          </h4>
+        </a>
+      </div>
+
+      <!-- Recent Orders -->
+      <div class="dash-card" id="orders">
+        <div class="dash-card-header">
+          <h2>
+            <span class="lang-om">🛒 Orders Haaraa</span>
+            <span class="lang-en">🛒 Recent Orders</span>
+          </h2>
+          <a href="#" class="view-all" style="margin:0;font-size:0.9rem;">
+            <span class="lang-om">Hunda Ilaali →</span>
+            <span class="lang-en">View All →</span>
+          </a>
+        </div>
+        <div class="dash-card-body">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>
+                  <span class="lang-om">Order ID</span>
+                  <span class="lang-en">Order ID</span>
+                </th>
+                <th>
+                  <span class="lang-om">Oomisha</span>
+                  <span class="lang-en">Product</span>
+                </th>
+                <th>
+                  <span class="lang-om">Buyer</span>
+                  <span class="lang-en">Buyer</span>
+                </th>
+                <th>
+                  <span class="lang-om">Hanga</span>
+                  <span class="lang-en">Qty</span>
+                </th>
+                <th>
+                  <span class="lang-om">Gatii</span>
+                  <span class="lang-en">Amount</span>
+                </th>
+                <th>
+                  <span class="lang-om">Haala</span>
+                  <span class="lang-en">Status</span>
+                </th>
+                <th>
+                  <span class="lang-om">Gocha</span>
+                  <span class="lang-en">Action</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>#ORD-1042</strong></td>
+                <td>
+                  <div class="product-cell">
+                    <div class="product-thumb">🌿</div>
+                    <div>
+                      <span class="lang-om">Jimaa Goggogaa</span>
+                      <span class="lang-en">Dried Khat</span>
+                    </div>
+                  </div>
+                </td>
+                <td>Mohammed Ali</td>
+                <td>50 kg</td>
+                <td><strong>60,000 ETB</strong></td>
+                <td><span class="status-badge status-pending">
+                  <span class="lang-om">Eegaa</span>
+                  <span class="lang-en">Pending</span>
+                </span></td>
+                <td>
+                  <div class="action-btns">
+                    <button>
+                      <span class="lang-om">Fudhadhu</span>
+                      <span class="lang-en">Accept</span>
+                    </button>
+                    <button class="btn-danger">
+                      <span class="lang-om">Dhiisi</span>
+                      <span class="lang-en">Reject</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>#ORD-1038</strong></td>
+                <td>
+                  <div class="product-cell">
+                    <div class="product-thumb">🌿</div>
+                    <div>
+                      <span class="lang-om">Jimaa Goggogaa</span>
+                      <span class="lang-en">Dried Khat</span>
+                    </div>
+                  </div>
+                </td>
+                <td>Sara Trading Co.</td>
+                <td>100 kg</td>
+                <td><strong>120,000 ETB</strong></td>
+                <td><span class="status-badge status-processing">
+                  <span class="lang-om">Hojii irra</span>
+                  <span class="lang-en">Processing</span>
+                </span></td>
+                <td>
+                  <div class="action-btns">
+                    <button>
+                      <span class="lang-om">Ilaali</span>
+                      <span class="lang-en">View</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>#ORD-1029</strong></td>
+                <td>
+                  <div class="product-cell">
+                    <div class="product-thumb">🌾</div>
+                    <div>
+                      <span class="lang-om">Qamadii</span>
+                      <span class="lang-en">Wheat</span>
+                    </div>
+                  </div>
+                </td>
+                <td>Abdi Warehouse</td>
+                <td>500 kg</td>
+                <td><strong>22,500 ETB</strong></td>
+                <td><span class="status-badge status-delivered">
+                  <span class="lang-om">Geesse</span>
+                  <span class="lang-en">Delivered</span>
+                </span></td>
+                <td>
+                  <div class="action-btns">
+                    <button>
+                      <span class="lang-om">Ilaali</span>
+                      <span class="lang-en">View</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>#ORD-1021</strong></td>
+                <td>
+                  <div class="product-cell">
+                    <div class="product-thumb">🌿</div>
+                    <div>
+                      <span class="lang-om">Jimaa Haaraa</span>
+                      <span class="lang-en">Fresh Khat</span>
+                    </div>
+                  </div>
+                </td>
+                <td>Hassan Export</td>
+                <td>30 kg</td>
+                <td><strong>29,400 ETB</strong></td>
+                <td><span class="status-badge status-delivered">
+                  <span class="lang-om">Geesse</span>
+                  <span class="lang-en">Delivered</span>
+                </span></td>
+                <td>
+                  <div class="action-btns">
+                    <button>
+                      <span class="lang-om">Ilaali</span>
+                      <span class="lang-en">View</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>#ORD-1015</strong></td>
+                <td>
+                  <div class="product-cell">
+                    <div class="product-thumb">🍯</div>
+                    <div>
+                      <span class="lang-om">Damma</span>
+                      <span class="lang-en">Honey</span>
+                    </div>
+                  </div>
+                </td>
+                <td>Fatuma Shop</td>
+                <td>20 kg</td>
+                <td><strong>7,000 ETB</strong></td>
+                <td><span class="status-badge status-cancelled">
+                  <span class="lang-om">Haqame</span>
+                  <span class="lang-en">Cancelled</span>
+                </span></td>
+                <td>
+                  <div class="action-btns">
+                    <button>
+                      <span class="lang-om">Ilaali</span>
+                      <span class="lang-en">View</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- My Products -->
+      <div class="dash-card" id="products">
+        <div class="dash-card-header">
+          <h2>
+            <span class="lang-om">📦 Oomisha Koo</span>
+            <span class="lang-en">📦 My Products</span>
+          </h2>
+          <a href="add-product.html" class="btn-primary" style="padding:8px 16px;font-size:0.9rem;">
+            <span class="lang-om">+ Galchi</span>
+            <span class="lang-en">+ Add</span>
+          </a>
+        </div>
+        <div class="dash-card-body">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>
+                  <span class="lang-om">Oomisha</span>
+                  <span class="lang-en">Product</span>
+                </th>
+                <th>
+                  <span class="lang-om">Gatii</span>
+                  <span class="lang-en">Price</span>
+                </th>
+                <th>
+                  <span class="lang-om">Hanga</span>
+                  <span class="lang-en">Stock</span>
+                </th>
+                <th>
+                  <span class="lang-om">Gurgurame</span>
+                  <span class="lang-en">Sold</span>
+                </th>
+                <th>
+                  <span class="lang-om">Haala</span>
+                  <span class="lang-en">Status</span>
+                </th>
+                <th>
+                  <span class="lang-om">Gocha</span>
+                  <span class="lang-en">Action</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="product-cell">
+                    <div class="product-thumb">🌿</div>
+                    <div>
+                      <strong>
+                        <span class="lang-om">Jimaa Goggogaa – Grade A</span>
+                        <span class="lang-en">Dried Khat – Grade A</span>
+                      </strong>
+                      <div style="font-size:0.8rem;color:var(--text-muted);">West Hararghe</div>
+                    </div>
+                  </div>
+                </td>
+                <td>1,200 ETB/kg</td>
+                <td>350 kg</td>
+                <td>150 kg</td>
+                <td><span class="status-badge status-active">
+                  <span class="lang-om">Aktiivii</span>
+                  <span class="lang-en">Active</span>
+                </span></td>
+                <td>
+                  <div class="action-btns">
+                    <button>
+                      <span class="lang-om">Gulaali</span>
+                      <span class="lang-en">Edit</span>
+                    </button>
+                    <button class="btn-danger">
+                      <span class="lang-om">Haqi</span>
+                      <span class="lang-en">Delete</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="product-cell">
+                    <div class="product-thumb">🌿</div>
+                    <div>
+                      <strong>
+                        <span class="lang-om">Jimaa Haaraa – Grade B</span>
+                        <span class="lang-en">Fresh Khat – Grade B</span>
+                      </strong>
+                      <div style="font-size:0.8rem;color:var(--text-muted);">West Hararghe</div>
+                    </div>
+                  </div>
+                </td>
+                <td>980 ETB/kg</td>
+                <td>80 kg</td>
+                <td>70 kg</td>
+                <td><span class="status-badge status-active">
+                  <span class="lang-om">Aktiivii</span>
+                  <span class="lang-en">Active</span>
+                </span></td>
+                <td>
+                  <div class="action-btns">
+                    <button>
+                      <span class="lang-om">Gulaali</span>
+                      <span class="lang-en">Edit</span>
+                    </button>
+                    <button class="btn-danger">
+                      <span class="lang-om">Haqi</span>
+                      <span class="lang-en">Delete</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="product-cell">
+                    <div class="product-thumb">🌾</div>
+                    <div>
+                      <strong>
+                        <span class="lang-om">Qamadii</span>
+                        <span class="lang-en">Wheat</span>
+                      </strong>
+                      <div style="font-size:0.8rem;color:var(--text-muted);">Arsi</div>
+                    </div>
+                  </div>
+                </td>
+                <td>45 ETB/kg</td>
+                <td>0 kg</td>
+                <td>2,000 kg</td>
+                <td><span class="status-badge status-soldout">
+                  <span class="lang-om">Xumurame</span>
+                  <span class="lang-en">Sold Out</span>
+                </span></td>
+                <td>
+                  <div class="action-btns">
+                    <button>
+                      <span class="lang-om">Gulaali</span>
+                      <span class="lang-en">Edit</span>
+                    </button>
+                    <button>
+                      <span class="lang-om">Stock Dabali</span>
+                      <span class="lang-en">Restock</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="product-cell">
+                    <div class="product-thumb">🍯</div>
+                    <div>
+                      <strong>
+                        <span class="lang-om">Damma Organic</span>
+                        <span class="lang-en">Organic Honey</span>
+                      </strong>
+                      <div style="font-size:0.8rem;color:var(--text-muted);">Bale</div>
+                    </div>
+                  </div>
+                </td>
+                <td>350 ETB/kg</td>
+                <td>120 kg</td>
+                <td>80 kg</td>
+                <td><span class="status-badge status-active">
+                  <span class="lang-om">Aktiivii</span>
+                  <span class="lang-en">Active</span>
+                </span></td>
+                <td>
+                  <div class="action-btns">
+                    <button>
+                      <span class="lang-om">Gulaali</span>
+                      <span class="lang-en">Edit</span>
+                    </button>
+                    <button class="btn-danger">
+                      <span class="lang-om">Haqi</span>
+                      <span class="lang-en">Delete</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Sales Summary -->
+      <div class="dash-card" id="sales">
+        <div class="dash-card-header">
+          <h2>
+            <span class="lang-om">💰 Gurgurtaa fi Revenue</span>
+            <span class="lang-en">💰 Sales & Revenue Summary</span>
+          </h2>
+        </div>
+        <div class="dash-card-body" style="padding:24px;">
+          <div class="stats-grid" style="margin-bottom:0;">
+            <div class="stat-card" style="border:none;box-shadow:none;background:var(--bg);">
+              <h3>84,500 ETB</h3>
+              <p>
+                <span class="lang-om">Ji'a kana</span>
+                <span class="lang-en">This Month</span>
+              </p>
+            </div>
+            <div class="stat-card" style="border:none;box-shadow:none;background:var(--bg);">
+              <h3>312,000 ETB</h3>
+              <p>
+                <span class="lang-om">Walgahii</span>
+                <span class="lang-en">Total Revenue</span>
+              </p>
+            </div>
+            <div class="stat-card" style="border:none;box-shadow:none;background:var(--bg);">
+              <h3>28</h3>
+              <p>
+                <span class="lang-om">Orders Xumuraman</span>
+                <span class="lang-en">Completed Orders</span>
+              </p>
+            </div>
+            <div class="stat-card" style="border:none;box-shadow:none;background:var(--bg);">
+              <h3>2,300 kg</h3>
+              <p>
+                <span class="lang-om">Oomisha Gurgurame</span>
+                <span class="lang-en">Total Sold</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../js/script.js"></script>
+  <script>
+    // Close sidebar when clicking outside on mobile
+    document.addEventListener('click', function(e) {
+      const sidebar = document.querySelector('.dash-sidebar');
+      const toggle = document.querySelector('.sidebar-toggle');
+      if (window.innerWidth <= 900 && sidebar.classList.contains('open')) {
+        if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
+          sidebar.classList.remove('open');
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+
+const resources = {
+  om: {
+    translation: {
+      appName: 'INA-KJ Agro Connect',
+      home: 'Mana',
+      market: 'Gabaa',
+      cart: 'Cart',
+      orders: 'Orders',
+      profile: 'Profile',
+      login: 'Seeni',
+      register: 'Galmaa\'i',
+      phone: 'Bilbila',
+      password: 'Jecha iccitii',
+      fullName: 'Maqaa guutuu',
+      farmer: 'Qonnaan Bulaa',
+      buyer: 'Buyer',
+      search: 'Oomisha barbaadi...',
+      addToCart: 'Cartitti dabali',
+      buyNow: 'Amma biti',
+      checkout: 'Checkout',
+      pay: 'Kaffali',
+      total: 'Walgahii',
+      verified: 'Mirkaneeffame',
+      marketPrices: 'Gatii Gabaa',
+      messages: 'Ergaa',
+      logout: 'Ba\'i',
+      noProducts: 'Oomisha hin jiru',
+      loading: 'Loading...',
+      welcome: 'Baga nagaan dhuftan',
+      tagline: 'Qonnaan Bulaa → Gabaa → Buyer → Delivery → Kaffaltii',
+    },
+  },
+  en: {
+    translation: {
+      appName: 'INA-KJ Agro Connect',
+      home: 'Home',
+      market: 'Marketplace',
+      cart: 'Cart',
+      orders: 'Orders',
+      profile: 'Profile',
+      login: 'Log In',
+      register: 'Register',
+      phone: 'Phone',
+      password: 'Password',
+      fullName: 'Full name',
+      farmer: 'Farmer',
+      buyer: 'Buyer',
+      search: 'Search products...',
+      addToCart: 'Add to Cart',
+      buyNow: 'Buy Now',
+      checkout: 'Checkout',
+      pay: 'Pay',
+      total: 'Total',
+      verified: 'Verified',
+      marketPrices: 'Market Prices',
+      messages: 'Messages',
+      logout: 'Log out',
+      noProducts: 'No products found',
+      loading: 'Loading...',
+      welcome: 'Welcome',
+      tagline: 'Farmer → Market → Buyer → Delivery → Payment',
+    },
+  },
+};
+
+i18n.use(initReactI18next).init({
+  resources,
+  lng: 'om',
+  fallbackLng: 'en',
+  interpolation: { escapeValue: false },
+});
+
+export default i18n;

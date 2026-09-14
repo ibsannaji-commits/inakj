@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="om" data-lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmed – INA-KJ Agro Connect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .confirm-wrapper {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+      text-align: center;
+    }
+
+    /* Success icon */
+    .success-icon {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      color: white;
+      margin: 0 auto 24px;
+      box-shadow: 0 8px 24px rgba(27, 122, 61, 0.3);
+      animation: scaleIn 0.5s ease;
+    }
+    @keyframes scaleIn {
+      from { transform: scale(0.5); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .confirm-wrapper h1 {
+      font-size: 1.9rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--primary-dark);
+    }
+    .confirm-wrapper .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .order-id-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--primary-soft);
+      border: 1px solid var(--primary-light);
+      border-radius: 50px;
+      padding: 10px 22px;
+      margin: 16px 0 28px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--primary-dark);
+    }
+    .order-id-box .copy-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Steps progress */
+    .progress-steps {
+      display: flex;
+      justify-content: space-between;
+      margin: 32px 0;
+      position: relative;
+      padding: 0 10px;
+    }
+    .progress-steps::before {
+      content: '';
+      position: absolute;
+      top: 18px;
+      left: 8%;
+      right: 8%;
+      height: 3px;
+      background: var(--border);
+      z-index: 0;
+    }
+    .progress-steps::after {
+      content: '';
+      position: absolute;
+      top: 18px;
+      left: 8%;
+      width: 20%;
+      height: 3px;
+      background: var(--primary);
+      z-index: 0;
+    }
+    .prog-step {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      flex: 1;
+    }
+    .prog-step .dot {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--border);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin: 0 auto 8px;
+    }
+    .prog-step.done .dot {
+      background: var(--primary);
+    }
+    .prog-step.active .dot {
+      background: var(--accent-dark);
+      box-shadow: 0 0 0 4px rgba(231, 111, 81, 0.25);
+    }
+    .prog-step p {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .prog-step.done p,
+    .prog-step.active p {
+      color: var(--text);
+    }
+
+    /* Order card */
+    .order-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      text-align: left;
+      overflow: hidden;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .order-card-header {
+      background: var(--primary-soft);
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .order-card-header h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+    .order-card-body {
+      padding: 20px;
+    }
+    .order-item {
+      display: flex;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .order-item:last-child {
+      border-bottom: none;
+    }
+    .order-item .img {
+      width: 56px;
+      height: 56px;
+      border-radius: 10px;
+      background: var(--primary-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+    .order-item .info {
+      flex: 1;
+    }
+    .order-item .info strong {
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 2px;
+    }
+    .order-item .info span {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .order-item .price {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--primary);
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-light);
+    }
+    .detail-item .label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+    .detail-item .value {
+      font-weight: 650;
+      font-size: 0.95rem;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      background: var(--bg);
+      border-top: 1px solid var(--border-light);
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    /* Next steps */
+    .next-steps {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      text-align: left;
+      margin-bottom: 28px;
+    }
+    .next-steps h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .next-step-item {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 16px;
+      align-items: flex-start;
+    }
+    .next-step-item:last-child {
+      margin-bottom: 0;
+    }
+    .next-step-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--primary-soft);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+    .next-step-item p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .next-step-item strong {
+      color: var(--text);
+    }
+
+    /* Actions */
+    .confirm-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .confirm-actions .btn-primary {
+      padding: 14px 28px;
+      font-size: 1rem;
+    }
+    .confirm-actions .btn-outline {
+      padding: 12px 24px;
+      font-size: 1rem;
+    }
+
+    /* Payment pending notice */
+    .payment-notice {
+      background: #FFF3E0;
+      border: 1px solid #FFE0B2;
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      text-align: left;
+    }
+    .payment-notice .icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+    .payment-notice h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #E65100;
+      margin-bottom: 4px;
+    }
+    .payment-notice p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 600px) {
+      .progress-steps::before,
+      .progress-steps::after {
+        display: none;
+      }
+      .progress-steps {
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+      .confirm-wrapper h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER (minimal) -->
+  <header class="header">
+    <div class="header-main">
+      <div class="container">
+        <a href="index.html" class="logo">
+          <div class="logo-icon">IK</div>
+          <div class="logo-text">INA-KJ <span>Agro</span></div>
+        </a>
+        <div class="header-actions" style="margin-left:auto;">
+          <div class="lang-toggle">
+            <button class="lang-btn active" data-lang="om">OM</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+          </div>
+          <a href="buyer/dashboard.html" class="header-btn">
+            <span class="icon">📊</span>
+            <span class="lang-om">Dashboard</span>
+            <span class="lang-en">Dashboard</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="confirm-wrapper">
+
+    <!-- Success -->
+    <div class="success-icon">✓</div>
+    <h1>
+      <span class="lang-om">Order kee milkaa'inaan mirkanaa'e!</span>
+      <span class="lang-en">Your order has been confirmed!</span>
+    </h1>
+    <p class="subtitle">
+      <span class="lang-om">Galatoomi. Order kee qabameera.</span>
+      <span class="lang-en">Thank you. Your order has been received.</span>
+    </p>
+
+    <div class="order-id-box">
+      <span>Order ID: <strong>#ORD-1050</strong></span>
+      <button class="copy-btn" onclick="copyOrderId()">
+        <span class="lang-om">Copy</span>
+        <span class="lang-en">Copy</span>
+      </button>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-steps">
+      <div class="prog-step done">
+        <div class="dot">✓</div>
+        <p>
+          <span class="lang-om">Mirkanaa'e</span>
+          <span class="lang-en">Confirmed</span>
+        </p>
+      </div>
+      <div class="prog-step active">
+        <div class="dot">2</div>
+        <p>
+          <span class="lang-om">Kaffaltii</span>
+          <span class="lang-en">Payment</span>
+        </p>
+      </div>
+      <div class="prog-step">
+        <div class="dot">3</div>
+        <p>
+          <span class="lang-om">Hojii irra</span>
+          <span class="lang-en">Processing</span>
+        </p>
+      </div>
+      <div class="prog-step">
+        <div class="dot">4</div>
+        <p>
+          <span class="lang-om">Delivery</span>
+          <span class="lang-en">Delivery</span>
+        </p>
+      </div>
+      <div class="prog-step">
+        <div class="dot">5</div>
+        <p>
+          <span class="lang-om">Geesse</span>
+          <span class="lang-en">Delivered</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Payment notice -->
+    <div class="payment-notice">
+      <div class="icon">⏳</div>
+      <div>
+        <h4>
+          <span class="lang-om">Kaffaltii eegaa jira</span>
+          <span class="lang-en">Payment pending</span>
+        </h4>
+        <p class="lang-om">
+          Mala kaffaltii filatte (Telebirr) fayyadami. Erga kaffalte booda order kee 
+          Processing garaa deema. SMS / notification ni argatta.
+        </p>
+        <p class="lang-en">
+          Complete payment via your selected method (Telebirr). Once paid, your order 
+          will move to Processing. You will receive an SMS / notification.
+        </p>
+      </div>
+    </div>
+
+    <!-- Order details card -->
+    <div class="order-card">
+      <div class="order-card-header">
+        <h3>
+          <span class="lang-om">📦 Odeeffannoo Order</span>
+          <span class="lang-en">📦 Order Details</span>
+        </h3>
+        <span style="font-size:0.85rem;color:var(--text-secondary);">14 Sep 2026, 11:48 PM</span>
+      </div>
+      <div class="order-card-body">
+        <div class="order-item">
+          <div class="img">🌿</div>
+          <div class="info">
+            <strong>
+              <span class="lang-om">Jimaa Goggogaa – Grade A</span>
+              <span class="lang-en">Dried Khat – Grade A</span>
+            </strong>
+            <span>50 kg × 1,200 ETB • Ahmed Hassan ✓</span>
+          </div>
+          <div class="price">60,000 ETB</div>
+        </div>
+        <div class="order-item">
+          <div class="img">🍯</div>
+          <div class="info">
+            <strong>
+              <span class="lang-om">Damma Organic</span>
+              <span class="lang-en">Organic Honey</span>
+            </strong>
+            <span>20 kg × 350 ETB • Fatuma Ali ✓</span>
+          </div>
+          <div class="price">7,000 ETB</div>
+        </div>
+
+        <div class="detail-grid">
+          <div class="detail-item">
+            <div class="label">
+              <span class="lang-om">Mala Delivery</span>
+              <span class="lang-en">Delivery Method</span>
+            </div>
+            <div class="value">
+              <span class="lang-om">Platform Delivery</span>
+              <span class="lang-en">Platform Delivery</span>
+            </div>
+          </div>
+          <div class="detail-item">
+            <div class="label">
+              <span class="lang-om">Teessoo</span>
+              <span class="lang-en">Address</span>
+            </div>
+            <div class="value">Bole, Addis Ababa</div>
+          </div>
+          <div class="detail-item">
+            <div class="label">
+              <span class="lang-om">Mala Kaffaltii</span>
+              <span class="lang-en">Payment Method</span>
+            </div>
+            <div class="value">Telebirr</div>
+          </div>
+          <div class="detail-item">
+            <div class="label">
+              <span class="lang-om">Haala</span>
+              <span class="lang-en">Status</span>
+            </div>
+            <div class="value" style="color:#E65100;">
+              <span class="lang-om">Kaffaltii eegaa</span>
+              <span class="lang-en">Awaiting Payment</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="total-row">
+        <span>
+          <span class="lang-om">Walgahii</span>
+          <span class="lang-en">Total</span>
+        </span>
+        <span>68,500 ETB</span>
+      </div>
+    </div>
+
+    <!-- Next steps -->
+    <div class="next-steps">
+      <h3>
+        <span class="lang-om">Tarkaanfii itti aanu</span>
+        <span class="lang-en">What's next?</span>
+      </h3>
+      <div class="next-step-item">
+        <div class="next-step-num">1</div>
+        <p>
+          <strong>
+            <span class="lang-om">Kaffaltii xumuri</span>
+            <span class="lang-en">Complete payment</span>
+          </strong><br>
+          <span class="lang-om">Telebirr / CBE Birr / Bank Transfer fayyadami. Kaffaltiin erga milkaa'e booda notification ni argatta.</span>
+          <span class="lang-en">Use Telebirr / CBE Birr / Bank Transfer. You will get a notification once payment is confirmed.</span>
+        </p>
+      </div>
+      <div class="next-step-item">
+        <div class="next-step-num">2</div>
+        <p>
+          <strong>
+            <span class="lang-om">Seller order fudhata</span>
+            <span class="lang-en">Seller accepts the order</span>
+          </strong><br>
+          <span class="lang-om">Seller order kee ilaalee fudhata. Erga fudhate booda Processing ta'a.</span>
+          <span class="lang-en">The seller will review and accept your order. Then it moves to Processing.</span>
+        </p>
+      </div>
+      <div class="next-step-item">
+        <div class="next-step-num">3</div>
+        <p>
+          <strong>
+            <span class="lang-om">Delivery hordofi</span>
+            <span class="lang-en">Track delivery</span>
+          </strong><br>
+          <span class="lang-om">Dashboard kee irraa ykn Delivery Tracking page irraa status hordofuu dandeessa.</span>
+          <span class="lang-en">Track status from your Dashboard or the Delivery Tracking page.</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="confirm-actions">
+      <a href="payment.html" class="btn-primary">
+        <span class="lang-om">💳 Amma Kaffali</span>
+        <span class="lang-en">💳 Pay Now</span>
+      </a>
+      <a href="buyer/dashboard.html" class="btn-outline">
+        <span class="lang-om">📊 Dashboard Koo</span>
+        <span class="lang-en">📊 My Dashboard</span>
+      </a>
+      <a href="marketplace.html" class="btn-outline">
+        <span class="lang-om">← Gabaa itti fufi</span>
+        <span class="lang-en">← Continue Shopping</span>
+      </a>
+    </div>
+
+    <p style="margin-top:28px;font-size:0.9rem;color:var(--text-muted);">
+      <span class="lang-om">Gaffii qabdaa? </span>
+      <span class="lang-en">Have questions? </span>
+      <a href="#" style="color:var(--primary);font-weight:600;">
+        <span class="lang-om">Nu qunnamaa</span>
+        <span class="lang-en">Contact support</span>
+      </a>
+      • 📞 +251 9XX XXX XXX
+    </p>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border:none;padding-top:0;">
+        <span>© 2026 INA-KJ Agro Connect</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+  <script>
+    function copyOrderId() {
+      navigator.clipboard.writeText('#ORD-1050').then(() => {
+        const btn = document.querySelector('.copy-btn');
+        const lang = document.documentElement.getAttribute('data-lang');
+        btn.textContent = lang === 'om' ? 'Copied!' : 'Copied!';
+        setTimeout(() => {
+          btn.textContent = lang === 'om' ? 'Copy' : 'Copy';
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>

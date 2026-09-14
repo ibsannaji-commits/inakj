@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="om" data-lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kaffaltii | Payment – INA-KJ Agro Connect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .pay-wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+    }
+    .pay-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .pay-header h1 {
+      font-size: 1.7rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .pay-header p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+    .order-ref {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary-soft);
+      border-radius: 50px;
+      padding: 8px 18px;
+      margin-top: 12px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      font-size: 0.95rem;
+    }
+
+    .pay-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 28px;
+    }
+
+    /* Methods */
+    .pay-methods {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .pay-methods-header {
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--border-light);
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+    .method-list {
+      padding: 8px;
+    }
+    .method-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 14px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+      margin-bottom: 4px;
+    }
+    .method-item:hover {
+      background: var(--bg);
+    }
+    .method-item.active {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+    }
+    .method-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+    .method-icon.telebirr { background: #E8F5E9; }
+    .method-icon.cbe { background: #E3F2FD; }
+    .method-icon.bank { background: #FFF3E0; }
+    .method-icon.card { background: #F3E5F5; }
+    .method-info {
+      flex: 1;
+    }
+    .method-info strong {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 2px;
+    }
+    .method-info span {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .method-check {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: white;
+      flex-shrink: 0;
+    }
+    .method-item.active .method-check {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* Payment form panels */
+    .pay-panel {
+      display: none;
+      padding: 20px 22px 28px;
+      border-top: 1px solid var(--border-light);
+    }
+    .pay-panel.active {
+      display: block;
+    }
+    .pay-panel h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      font-size: 0.95rem;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--primary);
+      background: white;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(27,122,61,0.1);
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .hint {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .info-box {
+      background: var(--bg);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .info-box strong {
+      color: var(--text);
+    }
+    .bank-details {
+      background: var(--primary-soft);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .bank-details .row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      font-size: 0.95rem;
+    }
+    .bank-details .row .label {
+      color: var(--text-secondary);
+    }
+    .bank-details .row .value {
+      font-weight: 700;
+    }
+    .copy-small {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-left: 6px;
+    }
+
+    .btn-pay {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: white;
+      border-radius: var(--radius);
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-top: 8px;
+      transition: all 0.2s;
+    }
+    .btn-pay:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow);
+    }
+    .btn-pay:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Summary sidebar */
+    .pay-summary {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      position: sticky;
+      top: 100px;
+      height: fit-content;
+    }
+    .pay-summary h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .sum-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+    .sum-item .label {
+      color: var(--text-secondary);
+    }
+    .sum-item.total {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary);
+      padding-top: 12px;
+      margin-top: 8px;
+      border-top: 2px solid var(--border);
+    }
+    .secure-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 18px;
+      padding: 12px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    /* Success overlay */
+    .pay-success {
+      display: none;
+      text-align: center;
+      padding: 48px 24px;
+    }
+    .pay-success.show {
+      display: block;
+    }
+    .pay-success .icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      font-size: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      animation: scaleIn 0.4s ease;
+    }
+    @keyframes scaleIn {
+      from { transform: scale(0.5); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .pay-success h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--primary-dark);
+    }
+    .pay-success p {
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+    /* Steps mini */
+    .mini-steps {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .mini-step {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .mini-step .n {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--border); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem;
+    }
+    .mini-step.done { color: var(--success); }
+    .mini-step.done .n { background: var(--success); }
+    .mini-step.active { color: var(--primary); }
+    .mini-step.active .n { background: var(--primary); }
+    .mini-line {
+      width: 28px; height: 2px; background: var(--border); align-self: center;
+    }
+    .mini-line.done { background: var(--success); }
+
+    @media (max-width: 800px) {
+      .pay-layout { grid-template-columns: 1fr; }
+      .pay-summary { position: static; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-main">
+      <div class="container">
+        <a href="index.html" class="logo">
+          <div class="logo-icon">IK</div>
+          <div class="logo-text">INA-KJ <span>Agro</span></div>
+        </a>
+        <div class="header-actions" style="margin-left:auto;">
+          <div class="lang-toggle">
+            <button class="lang-btn active" data-lang="om">OM</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+          </div>
+          <a href="buyer/dashboard.html" class="header-btn">
+            <span class="icon">📊</span>
+            <span class="lang-om">Dashboard</span>
+            <span class="lang-en">Dashboard</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="pay-wrapper">
+
+    <!-- Mini steps -->
+    <div class="mini-steps">
+      <div class="mini-step done">
+        <span class="n">✓</span>
+        <span class="lang-om">Cart</span>
+        <span class="lang-en">Cart</span>
+      </div>
+      <div class="mini-line done"></div>
+      <div class="mini-step done">
+        <span class="n">✓</span>
+        <span class="lang-om">Checkout</span>
+        <span class="lang-en">Checkout</span>
+      </div>
+      <div class="mini-line done"></div>
+      <div class="mini-step active">
+        <span class="n">3</span>
+        <span class="lang-om">Kaffaltii</span>
+        <span class="lang-en">Payment</span>
+      </div>
+      <div class="mini-line"></div>
+      <div class="mini-step">
+        <span class="n">4</span>
+        <span class="lang-om">Xumurame</span>
+        <span class="lang-en">Done</span>
+      </div>
+    </div>
+
+    <div class="pay-header">
+      <h1>
+        <span class="lang-om">💳 Kaffaltii Xumuri</span>
+        <span class="lang-en">💳 Complete Payment</span>
+      </h1>
+      <p>
+        <span class="lang-om">Order kee mirkanaa'eera. Kaffaltii amma xumuri.</span>
+        <span class="lang-en">Your order is confirmed. Complete payment now.</span>
+      </p>
+      <div class="order-ref">
+        Order: <strong>#ORD-1050</strong> • 68,500 ETB
+      </div>
+    </div>
+
+    <!-- Success state (hidden by default) -->
+    <div class="pay-success" id="paySuccess">
+      <div class="icon">✓</div>
+      <h2>
+        <span class="lang-om">Kaffaltiin milkaa'e!</span>
+        <span class="lang-en">Payment successful!</span>
+      </h2>
+      <p>
+        <span class="lang-om">Order kee amma Processing garaa deema. Seller ni beekama.</span>
+        <span class="lang-en">Your order is now being processed. The seller has been notified.</span>
+      </p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="buyer/dashboard.html" class="btn-primary" style="padding:12px 24px;">
+          <span class="lang-om">📊 Dashboard</span>
+          <span class="lang-en">📊 Dashboard</span>
+        </a>
+        <a href="order-confirmed.html" class="btn-outline" style="padding:10px 20px;">
+          <span class="lang-om">Order Ilaali</span>
+          <span class="lang-en">View Order</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Main payment UI -->
+    <div class="pay-layout" id="payMain">
+
+      <div class="pay-methods">
+        <div class="pay-methods-header">
+          <span class="lang-om">Mala Kaffaltii Filadhu</span>
+          <span class="lang-en">Select Payment Method</span>
+        </div>
+
+        <div class="method-list">
+          <div class="method-item active" data-method="telebirr" onclick="selectMethod('telebirr')">
+            <div class="method-icon telebirr">📱</div>
+            <div class="method-info">
+              <strong>Telebirr</strong>
+              <span>
+                <span class="lang-om">Mobile money • Battee salphaa</span>
+                <span class="lang-en">Mobile money • Instant</span>
+              </span>
+            </div>
+            <div class="method-check">✓</div>
+          </div>
+          <div class="method-item" data-method="cbe" onclick="selectMethod('cbe')">
+            <div class="method-icon cbe">🏦</div>
+            <div class="method-info">
+              <strong>CBE Birr</strong>
+              <span>
+                <span class="lang-om">Commercial Bank of Ethiopia</span>
+                <span class="lang-en">Commercial Bank of Ethiopia</span>
+              </span>
+            </div>
+            <div class="method-check">✓</div>
+          </div>
+          <div class="method-item" data-method="bank" onclick="selectMethod('bank')">
+            <div class="method-icon bank">🏧</div>
+            <div class="method-info">
+              <strong>
+                <span class="lang-om">Bank Transfer</span>
+                <span class="lang-en">Bank Transfer</span>
+              </strong>
+              <span>CBE / Awash / Abyssinia / Dashen</span>
+            </div>
+            <div class="method-check">✓</div>
+          </div>
+          <div class="method-item" data-method="card" onclick="selectMethod('card')">
+            <div class="method-icon card">💳</div>
+            <div class="method-info">
+              <strong>Card (Visa / Mastercard)</strong>
+              <span>
+                <span class="lang-om">International cards</span>
+                <span class="lang-en">International cards</span>
+              </span>
+            </div>
+            <div class="method-check">✓</div>
+          </div>
+        </div>
+
+        <!-- Telebirr Panel -->
+        <div class="pay-panel active" id="panel-telebirr">
+          <h3>
+            <span class="lang-om">Telebirr kaffaltii</span>
+            <span class="lang-en">Pay with Telebirr</span>
+          </h3>
+          <div class="info-box">
+            <span class="lang-om">Lakkoofsa bilbilaa Telebirr kee galchi. Code mirkaneessaa SMS dhaan ni argatta.</span>
+            <span class="lang-en">Enter your Telebirr phone number. You will receive a confirmation code via SMS.</span>
+          </div>
+          <div class="form-group">
+            <label>
+              <span class="lang-om">Lakkoofsa Telebirr</span>
+              <span class="lang-en">Telebirr Phone Number</span>
+            </label>
+            <input type="tel" id="telebirrPhone" placeholder="+251 9XX XXX XXX" value="+251 9">
+            <div class="hint">
+              <span class="lang-om">Fakkeenya: +251 911 234 567</span>
+              <span class="lang-en">Example: +251 911 234 567</span>
+            </div>
+          </div>
+          <button class="btn-pay" onclick="processPayment('telebirr')">
+            <span class="lang-om">68,500 ETB Kaffali (Telebirr)</span>
+            <span class="lang-en">Pay 68,500 ETB with Telebirr</span>
+          </button>
+        </div>
+
+        <!-- CBE Birr Panel -->
+        <div class="pay-panel" id="panel-cbe">
+          <h3>
+            <span class="lang-om">CBE Birr kaffaltii</span>
+            <span class="lang-en">Pay with CBE Birr</span>
+          </h3>
+          <div class="info-box">
+            <span class="lang-om">CBE Birr app kee banii ykn USSD *847# fayyadami. Account number kee galchi.</span>
+            <span class="lang-en">Open CBE Birr app or use USSD *847#. Enter your account details.</span>
+          </div>
+          <div class="form-group">
+            <label>
+              <span class="lang-om">CBE Account / Phone</span>
+              <span class="lang-en">CBE Account / Phone</span>
+            </label>
+            <input type="text" placeholder="Account number or phone">
+          </div>
+          <button class="btn-pay" onclick="processPayment('cbe')">
+            <span class="lang-om">68,500 ETB Kaffali (CBE Birr)</span>
+            <span class="lang-en">Pay 68,500 ETB with CBE Birr</span>
+          </button>
+        </div>
+
+        <!-- Bank Transfer Panel -->
+        <div class="pay-panel" id="panel-bank">
+          <h3>
+            <span class="lang-om">Bank Transfer</span>
+            <span class="lang-en">Bank Transfer</span>
+          </h3>
+          <div class="info-box">
+            <span class="lang-om">Maallaqa armaan gadiitti ergi. Reference: <strong>#ORD-1050</strong> barreessi. Erga erge booda screenshot upload godhi.</span>
+            <span class="lang-en">Transfer to the account below. Use reference: <strong>#ORD-1050</strong>. Upload screenshot after transfer.</span>
+          </div>
+          <div class="bank-details">
+            <div class="row">
+              <span class="label">Bank</span>
+              <span class="value">Commercial Bank of Ethiopia (CBE)</span>
+            </div>
+            <div class="row">
+              <span class="label">
+                <span class="lang-om">Maqaa Account</span>
+                <span class="lang-en">Account Name</span>
+              </span>
+              <span class="value">INA-KJ Agro Connect</span>
+            </div>
+            <div class="row">
+              <span class="label">
+                <span class="lang-om">Lakkoofsa Account</span>
+                <span class="lang-en">Account Number</span>
+              </span>
+              <span class="value">1000XXXXXXXX <button class="copy-small" onclick="copyText('1000XXXXXXXX')">Copy</button></span>
+            </div>
+            <div class="row">
+              <span class="label">Amount</span>
+              <span class="value">68,500 ETB</span>
+            </div>
+            <div class="row">
+              <span class="label">Reference</span>
+              <span class="value">#ORD-1050 <button class="copy-small" onclick="copyText('#ORD-1050')">Copy</button></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>
+              <span class="lang-om">Transaction Reference / Screenshot</span>
+              <span class="lang-en">Transaction Reference / Screenshot</span>
+            </label>
+            <input type="text" placeholder="TXN reference number">
+            <div class="hint">
+              <span class="lang-om">Ykn screenshot upload godhi (soon)</span>
+              <span class="lang-en">Or upload screenshot (coming soon)</span>
+            </div>
+          </div>
+          <button class="btn-pay" onclick="processPayment('bank')">
+            <span class="lang-om">Kaffaltii Nan Xumure (Confirm Transfer)</span>
+            <span class="lang-en">I Have Transferred (Confirm)</span>
+          </button>
+        </div>
+
+        <!-- Card Panel -->
+        <div class="pay-panel" id="panel-card">
+          <h3>
+            <span class="lang-om">Card Payment</span>
+            <span class="lang-en">Card Payment</span>
+          </h3>
+          <div class="info-box">
+            <span class="lang-om">Visa ykn Mastercard galchi. Kaffaltiin secure (SSL) ta'ee raawwatama.</span>
+            <span class="lang-en">Enter Visa or Mastercard. Payment is processed securely (SSL).</span>
+          </div>
+          <div class="form-group">
+            <label>
+              <span class="lang-om">Card Number</span>
+              <span class="lang-en">Card Number</span>
+            </label>
+            <input type="text" placeholder="ACCT-000035" maxlength="19">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Expiry</label>
+              <input type="text" placeholder="MM/YY" maxlength="5">
+            </div>
+            <div class="form-group">
+              <label>CVV</label>
+              <input type="text" placeholder="123" maxlength="4">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>
+              <span class="lang-om">Maqaa Card irratti</span>
+              <span class="lang-en">Name on Card</span>
+            </label>
+            <input type="text" placeholder="SARA BEKELE">
+          </div>
+          <button class="btn-pay" onclick="processPayment('card')">
+            <span class="lang-om">68,500 ETB Kaffali (Card)</span>
+            <span class="lang-en">Pay 68,500 ETB with Card</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <aside class="pay-summary">
+        <h2>
+          <span class="lang-om">Cuunfaa</span>
+          <span class="lang-en">Summary</span>
+        </h2>
+        <div class="sum-item">
+          <span class="label">Order ID</span>
+          <span>#ORD-1050</span>
+        </div>
+        <div class="sum-item">
+          <span class="label">
+            <span class="lang-om">Oomisha (2)</span>
+            <span class="lang-en">Products (2)</span>
+          </span>
+          <span>67,000 ETB</span>
+        </div>
+        <div class="sum-item">
+          <span class="label">
+            <span class="lang-om">Delivery</span>
+            <span class="lang-en">Delivery</span>
+          </span>
+          <span>1,500 ETB</span>
+        </div>
+        <div class="sum-item total">
+          <span>
+            <span class="lang-om">Walgahii</span>
+            <span class="lang-en">Total</span>
+          </span>
+          <span>68,500 ETB</span>
+        </div>
+        <div class="secure-badge">
+          🔒
+          <span>
+            <span class="lang-om">Kaffaltiin nageenya qabu (SSL encrypted)</span>
+            <span class="lang-en">Secure payment (SSL encrypted)</span>
+          </span>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border:none;padding-top:0;">
+        <span>© 2026 INA-KJ Agro Connect</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+  <script>
+    function selectMethod(method) {
+      document.querySelectorAll('.method-item').forEach(m => m.classList.remove('active'));
+      document.querySelectorAll('.pay-panel').forEach(p => p.classList.remove('active'));
+      document.querySelector(`.method-item[data-method="${method}"]`).classList.add('active');
+      document.getElementById('panel-' + method).classList.add('active');
+    }
+
+    function processPayment(method) {
+      const btn = event.target;
+      const lang = document.documentElement.getAttribute('data-lang');
+      btn.disabled = true;
+      btn.textContent = lang === 'om' ? 'Kaffaltii raawwachaa jira...' : 'Processing payment...';
+
+      // Simulate payment processing (in real app: call Telebirr/CBE/Card API)
+      setTimeout(() => {
+        document.getElementById('payMain').style.display = 'none';
+        document.getElementById('paySuccess').classList.add('show');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 1800);
+    }
+
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        event.target.textContent = '✓';
+        setTimeout(() => { event.target.textContent = 'Copy'; }, 1500);
+      });
+    }
+  </script>
+</body>
+</html>

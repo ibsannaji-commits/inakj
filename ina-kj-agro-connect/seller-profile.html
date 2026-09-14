@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="om" data-lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seller Profile | Verification & Rating – INA-KJ Agro Connect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .profile-hero {
+      background: linear-gradient(135deg, #1B7A3D 0%, #145C2E 100%);
+      color: white;
+      padding: 40px 0 50px;
+    }
+    .profile-hero-inner {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .profile-avatar-lg {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      border: 3px solid rgba(255,255,255,0.4);
+      flex-shrink: 0;
+    }
+    .profile-info h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .verified-pill {
+      background: rgba(255,255,255,0.25);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .profile-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 0.95rem;
+      opacity: 0.95;
+      margin-top: 8px;
+    }
+    .profile-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .profile-actions a,
+    .profile-actions button {
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+    .btn-white {
+      background: white;
+      color: var(--primary);
+    }
+    .btn-white:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .btn-ghost {
+      border: 2px solid rgba(255,255,255,0.5);
+      color: white;
+      background: transparent;
+    }
+    .btn-ghost:hover {
+      background: rgba(255,255,255,0.15);
+      border-color: white;
+    }
+
+    /* Stats row */
+    .profile-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: -28px auto 32px;
+      position: relative;
+      z-index: 5;
+    }
+    .pstat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .pstat-card h3 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .pstat-card p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    /* Two col layout */
+    .profile-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 28px;
+      padding-bottom: 60px;
+    }
+
+    .section-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .section-card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .section-card-header h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    .section-card-body {
+      padding: 20px;
+    }
+
+    /* Verification checklist */
+    .verify-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .verify-item:last-child {
+      border-bottom: none;
+    }
+    .verify-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .verify-icon.ok {
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+    .verify-icon.pending {
+      background: #FFF3E0;
+      color: #E65100;
+    }
+    .verify-item strong {
+      display: block;
+      font-size: 0.95rem;
+    }
+    .verify-item span {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Rating breakdown */
+    .rating-summary {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .rating-big {
+      text-align: center;
+    }
+    .rating-big .score {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+    }
+    .rating-big .stars {
+      color: var(--gold);
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+    }
+    .rating-big .count {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .rating-bars {
+      flex: 1;
+      min-width: 200px;
+    }
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+      font-size: 0.85rem;
+    }
+    .bar-row .star-label {
+      width: 28px;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+    .bar-track {
+      flex: 1;
+      height: 8px;
+      background: var(--bg);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      background: var(--gold);
+      border-radius: 4px;
+    }
+    .bar-row .pct {
+      width: 36px;
+      text-align: right;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    /* Review cards */
+    .review-card {
+      border-bottom: 1px solid var(--border-light);
+      padding: 16px 0;
+    }
+    .review-card:last-child {
+      border-bottom: none;
+    }
+    .review-top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .review-author {
+      font-weight: 650;
+      font-size: 0.95rem;
+    }
+    .review-stars {
+      color: var(--gold);
+      font-size: 0.9rem;
+    }
+    .review-date {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .review-text {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .review-product {
+      font-size: 0.8rem;
+      color: var(--primary);
+      margin-top: 6px;
+      font-weight: 600;
+    }
+
+    /* Write review form */
+    .write-review {
+      background: var(--bg);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-top: 16px;
+    }
+    .write-review h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .star-select {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .star-select button {
+      font-size: 1.5rem;
+      color: var(--border);
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+    .star-select button.active,
+    .star-select button:hover {
+      color: var(--gold);
+    }
+    .write-review textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: white;
+      font-size: 0.95rem;
+      min-height: 80px;
+      resize: vertical;
+      margin-bottom: 12px;
+    }
+    .write-review textarea:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+
+    /* Seller products */
+    .seller-products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+    }
+
+    /* Trust badges */
+    .trust-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .trust-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .trust-badge .tb-icon {
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 900px) {
+      .profile-layout { grid-template-columns: 1fr; }
+      .profile-stats { grid-template-columns: repeat(2, 1fr); }
+      .profile-actions { margin-left: 0; width: 100%; }
+    }
+    @media (max-width: 500px) {
+      .profile-stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .profile-avatar-lg { width: 72px; height: 72px; font-size: 2.2rem; }
+      .profile-info h1 { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-top">
+      <div class="container">
+        <span class="lang-om">🌱 Qonnaan Bulaa → Gabaa → Buyer → Delivery → Kaffaltii</span>
+        <span class="lang-en">🌱 Farmer → Market → Buyer → Delivery → Payment</span>
+        <span>
+          <span class="lang-om">📞 Deeggarsa: +251 9XX XXX XXX</span>
+          <span class="lang-en">📞 Support: +251 9XX XXX XXX</span>
+        </span>
+      </div>
+    </div>
+    <div class="header-main">
+      <div class="container">
+        <a href="index.html" class="logo">
+          <div class="logo-icon">IK</div>
+          <div class="logo-text">INA-KJ <span>Agro</span></div>
+        </a>
+        <div class="header-actions" style="margin-left:auto;">
+          <div class="lang-toggle">
+            <button class="lang-btn active" data-lang="om">OM</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+          </div>
+          <a href="messages.html" class="header-btn">
+            <span class="icon">💬</span>
+            <span class="lang-om">Ergaa</span>
+            <span class="lang-en">Messages</span>
+          </a>
+          <a href="marketplace.html" class="header-btn">
+            <span class="icon">🛍️</span>
+            <span class="lang-om">Gabaa</span>
+            <span class="lang-en">Marketplace</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Profile Hero -->
+  <section class="profile-hero">
+    <div class="container">
+      <div class="profile-hero-inner">
+        <div class="profile-avatar-lg">👨‍🌾</div>
+        <div class="profile-info">
+          <h1>
+            Ahmed Hassan
+            <span class="verified-pill">✓ 
+              <span class="lang-om">Mirkaneeffame</span>
+              <span class="lang-en">Verified</span>
+            </span>
+          </h1>
+          <div class="profile-meta">
+            <span>📍 West Hararghe, Chiro</span>
+            <span>🌿 
+              <span class="lang-om">Jimaa • Midhaan</span>
+              <span class="lang-en">Khat • Grains</span>
+            </span>
+            <span>📅 
+              <span class="lang-om">Member since 2024</span>
+              <span class="lang-en">Member since 2024</span>
+            </span>
+          </div>
+        </div>
+        <div class="profile-actions">
+          <a href="messages.html" class="btn-white">
+            💬 
+            <span class="lang-om">Ergaa Ergi</span>
+            <span class="lang-en">Send Message</span>
+          </a>
+          <a href="marketplace.html?seller=ahmed" class="btn-ghost">
+            <span class="lang-om">Oomisha Ilaali</span>
+            <span class="lang-en">View Products</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <!-- Stats -->
+    <div class="profile-stats">
+      <div class="pstat-card">
+        <h3>4.8</h3>
+        <p>⭐ 
+          <span class="lang-om">Rating</span>
+          <span class="lang-en">Rating</span>
+        </p>
+      </div>
+      <div class="pstat-card">
+        <h3>23</h3>
+        <p>
+          <span class="lang-om">Reviews</span>
+          <span class="lang-en">Reviews</span>
+        </p>
+      </div>
+      <div class="pstat-card">
+        <h3>48</h3>
+        <p>
+          <span class="lang-om">Oomisha</span>
+          <span class="lang-en">Products</span>
+        </p>
+      </div>
+      <div class="pstat-card">
+        <h3>96%</h3>
+        <p>
+          <span class="lang-om">Milkaa'ina</span>
+          <span class="lang-en">Success Rate</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="profile-layout">
+
+      <!-- Main column -->
+      <div>
+
+        <!-- Verification -->
+        <div class="section-card">
+          <div class="section-card-header">
+            <h2>
+              <span class="lang-om">✅ Mirkaneessa (Verification)</span>
+              <span class="lang-en">✅ Verification Status</span>
+            </h2>
+            <span class="status-badge status-approved" style="background:var(--primary-soft);color:var(--primary);padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:600;">
+              <span class="lang-om">Verified Seller</span>
+              <span class="lang-en">Verified Seller</span>
+            </span>
+          </div>
+          <div class="section-card-body">
+            <div class="verify-item">
+              <div class="verify-icon ok">✓</div>
+              <div>
+                <strong>
+                  <span class="lang-om">ID / Document</span>
+                  <span class="lang-en">ID / Document</span>
+                </strong>
+                <span>
+                  <span class="lang-om">National ID mirkanaa'eera</span>
+                  <span class="lang-en">National ID verified</span>
+                </span>
+              </div>
+            </div>
+            <div class="verify-item">
+              <div class="verify-icon ok">✓</div>
+              <div>
+                <strong>
+                  <span class="lang-om">Phone Number</span>
+                  <span class="lang-en">Phone Number</span>
+                </strong>
+                <span>
+                  <span class="lang-om">Bilbila mirkanaa'eera</span>
+                  <span class="lang-en">Phone verified via SMS</span>
+                </span>
+              </div>
+            </div>
+            <div class="verify-item">
+              <div class="verify-icon ok">✓</div>
+              <div>
+                <strong>
+                  <span class="lang-om">Farm / Location</span>
+                  <span class="lang-en">Farm / Location</span>
+                </strong>
+                <span>
+                  <span class="lang-om">Bakka qonnaa mirkanaa'eera (West Hararghe)</span>
+                  <span class="lang-en">Farm location verified (West Hararghe)</span>
+                </span>
+              </div>
+            </div>
+            <div class="verify-item">
+              <div class="verify-icon ok">✓</div>
+              <div>
+                <strong>
+                  <span class="lang-om">Admin Review</span>
+                  <span class="lang-en">Admin Review</span>
+                </strong>
+                <span>
+                  <span class="lang-om">Admin'n mirkaneesseera — Jan 2025</span>
+                  <span class="lang-en">Approved by admin — Jan 2025</span>
+                </span>
+              </div>
+            </div>
+            <div class="verify-item">
+              <div class="verify-icon ok">✓</div>
+              <div>
+                <strong>
+                  <span class="lang-om">Successful Orders</span>
+                  <span class="lang-en">Successful Orders</span>
+                </strong>
+                <span>
+                  <span class="lang-om">28+ orders milkaa'inan xumuraman</span>
+                  <span class="lang-en">28+ completed successful orders</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ratings & Reviews -->
+        <div class="section-card">
+          <div class="section-card-header">
+            <h2>
+              <span class="lang-om">⭐ Rating fi Reviews</span>
+              <span class="lang-en">⭐ Ratings & Reviews</span>
+            </h2>
+          </div>
+          <div class="section-card-body">
+            <div class="rating-summary">
+              <div class="rating-big">
+                <div class="score">4.8</div>
+                <div class="stars">★★★★★</div>
+                <div class="count">23 
+                  <span class="lang-om">reviews</span>
+                  <span class="lang-en">reviews</span>
+                </div>
+              </div>
+              <div class="rating-bars">
+                <div class="bar-row">
+                  <span class="star-label">5★</span>
+                  <div class="bar-track"><div class="bar-fill" style="width:78%"></div></div>
+                  <span class="pct">78%</span>
+                </div>
+                <div class="bar-row">
+                  <span class="star-label">4★</span>
+                  <div class="bar-track"><div class="bar-fill" style="width:15%"></div></div>
+                  <span class="pct">15%</span>
+                </div>
+                <div class="bar-row">
+                  <span class="star-label">3★</span>
+                  <div class="bar-track"><div class="bar-fill" style="width:5%"></div></div>
+                  <span class="pct">5%</span>
+                </div>
+                <div class="bar-row">
+                  <span class="star-label">2★</span>
+                  <div class="bar-track"><div class="bar-fill" style="width:2%"></div></div>
+                  <span class="pct">2%</span>
+                </div>
+                <div class="bar-row">
+                  <span class="star-label">1★</span>
+                  <div class="bar-track"><div class="bar-fill" style="width:0%"></div></div>
+                  <span class="pct">0%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reviews list -->
+            <div class="review-card">
+              <div class="review-top">
+                <div>
+                  <span class="review-author">Mohammed Ali</span>
+                  <span class="review-stars">★★★★★</span>
+                </div>
+                <span class="review-date">10 Sep 2026</span>
+              </div>
+              <p class="review-text lang-om">Qulqullina baay'ee gaarii. Delivery yeroo isaa irratti geesse. Ani ammas nan bitadha.</p>
+              <p class="review-text lang-en">Excellent quality. Delivered on time. Will buy again.</p>
+              <div class="review-product">
+                <span class="lang-om">📦 Jimaa Goggogaa – Grade A</span>
+                <span class="lang-en">📦 Dried Khat – Grade A</span>
+              </div>
+            </div>
+            <div class="review-card">
+              <div class="review-top">
+                <div>
+                  <span class="review-author">Sara Trading Co.</span>
+                  <span class="review-stars">★★★★☆</span>
+                </div>
+                <span class="review-date">05 Sep 2026</span>
+              </div>
+              <p class="review-text lang-om">Oomisha gaarii. Seller waliin quunnamuun salphaa ture. Gatiinis qajeelaa ture.</p>
+              <p class="review-text lang-en">Good product. Easy to communicate with seller. Fair price.</p>
+              <div class="review-product">
+                <span class="lang-om">📦 Jimaa Goggogaa – Grade A</span>
+                <span class="lang-en">📦 Dried Khat – Grade A</span>
+              </div>
+            </div>
+            <div class="review-card">
+              <div class="review-top">
+                <div>
+                  <span class="review-author">Hassan Export</span>
+                  <span class="review-stars">★★★★★</span>
+                </div>
+                <span class="review-date">28 Aug 2026</span>
+              </div>
+              <p class="review-text lang-om">Export quality dhuguma. Packagingis gaarii ture. Amanamoo dha.</p>
+              <p class="review-text lang-en">Truly export quality. Packaging was good. Trustworthy seller.</p>
+              <div class="review-product">
+                <span class="lang-om">📦 Jimaa Haaraa – Grade B</span>
+                <span class="lang-en">📦 Fresh Khat – Grade B</span>
+              </div>
+            </div>
+
+            <!-- Write a review -->
+            <div class="write-review">
+              <h4>
+                <span class="lang-om">Review kee barreessi</span>
+                <span class="lang-en">Write a review</span>
+              </h4>
+              <div class="star-select" id="starSelect">
+                <button type="button" data-star="1">★</button>
+                <button type="button" data-star="2">★</button>
+                <button type="button" data-star="3">★</button>
+                <button type="button" data-star="4">★</button>
+                <button type="button" data-star="5">★</button>
+              </div>
+              <textarea id="reviewText" placeholder="Odeeffannoo kee barreessi... / Share your experience..."></textarea>
+              <button class="btn-primary" style="padding:10px 20px;" onclick="submitReview()">
+                <span class="lang-om">Review Ergi</span>
+                <span class="lang-en">Submit Review</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Seller products -->
+        <div class="section-card">
+          <div class="section-card-header">
+            <h2>
+              <span class="lang-om">📦 Oomisha Seller kanaa</span>
+              <span class="lang-en">📦 Products from this seller</span>
+            </h2>
+            <a href="marketplace.html" class="view-all" style="margin:0;font-size:0.9rem;">
+              <span class="lang-om">Hunda →</span>
+              <span class="lang-en">All →</span>
+            </a>
+          </div>
+          <div class="section-card-body">
+            <div class="seller-products-grid">
+              <a href="product-details.html?id=1" class="product-card" style="text-decoration:none;">
+                <div class="product-img" style="height:120px;font-size:2.5rem;">🌿
+                  <span class="product-badge">Grade A</span>
+                </div>
+                <div class="product-body" style="padding:12px;">
+                  <h3 class="product-title" style="font-size:0.95rem;">
+                    <span class="lang-om">Jimaa Goggogaa</span>
+                    <span class="lang-en">Dried Khat</span>
+                  </h3>
+                  <div class="product-price" style="font-size:1.05rem;">1,200 <span>ETB/kg</span></div>
+                </div>
+              </a>
+              <a href="product-details.html?id=7" class="product-card" style="text-decoration:none;">
+                <div class="product-img" style="height:120px;font-size:2.5rem;">🌿
+                  <span class="product-badge">Grade B</span>
+                </div>
+                <div class="product-body" style="padding:12px;">
+                  <h3 class="product-title" style="font-size:0.95rem;">
+                    <span class="lang-om">Jimaa Haaraa</span>
+                    <span class="lang-en">Fresh Khat</span>
+                  </h3>
+                  <div class="product-price" style="font-size:1.05rem;">980 <span>ETB/kg</span></div>
+                </div>
+              </a>
+              <a href="product-details.html?id=3" class="product-card" style="text-decoration:none;">
+                <div class="product-img" style="height:120px;font-size:2.5rem;">🌾
+                  <span class="product-badge">Fresh</span>
+                </div>
+                <div class="product-body" style="padding:12px;">
+                  <h3 class="product-title" style="font-size:0.95rem;">
+                    <span class="lang-om">Qamadii</span>
+                    <span class="lang-en">Wheat</span>
+                  </h3>
+                  <div class="product-price" style="font-size:1.05rem;">45 <span>ETB/kg</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <aside>
+        <!-- Trust badges -->
+        <div class="section-card">
+          <div class="section-card-header">
+            <h2>
+              <span class="lang-om">🛡️ Amanamummaa</span>
+              <span class="lang-en">🛡️ Trust & Safety</span>
+            </h2>
+          </div>
+          <div class="section-card-body">
+            <div class="trust-badges">
+              <div class="trust-badge">
+                <span class="tb-icon">✓</span>
+                <span class="lang-om">Verified ID</span>
+                <span class="lang-en">Verified ID</span>
+              </div>
+              <div class="trust-badge">
+                <span class="tb-icon">📱</span>
+                <span class="lang-om">Phone OK</span>
+                <span class="lang-en">Phone OK</span>
+              </div>
+              <div class="trust-badge">
+                <span class="tb-icon">📍</span>
+                <span class="lang-om">Location OK</span>
+                <span class="lang-en">Location OK</span>
+              </div>
+              <div class="trust-badge">
+                <span class="tb-icon">⭐</span>
+                4.8 Rating
+              </div>
+              <div class="trust-badge">
+                <span class="tb-icon">📦</span>
+                28+ Orders
+              </div>
+              <div class="trust-badge">
+                <span class="tb-icon">⏱️</span>
+                <span class="lang-om">Deebii saffisaa</span>
+                <span class="lang-en">Fast response</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- About -->
+        <div class="section-card">
+          <div class="section-card-header">
+            <h2>
+              <span class="lang-om">ℹ️ Waa'ee</span>
+              <span class="lang-en">ℹ️ About</span>
+            </h2>
+          </div>
+          <div class="section-card-body">
+            <p style="font-size:0.95rem;color:var(--text-secondary);line-height:1.6;" class="lang-om">
+              Qonnaan bulaa West Hararghe, Chiro. Jimaa fi midhaan gurgura. 
+              Waggoota 8 oliif qonnaa irratti hirmaate. Oomisha qulqullina olaanaa 
+              fi amanamoo ta'uu irratti xiyyeeffata.
+            </p>
+            <p style="font-size:0.95rem;color:var(--text-secondary);line-height:1.6;" class="lang-en">
+              Farmer from West Hararghe, Chiro. Sells khat and grains. 
+              Over 8 years in farming. Focuses on high quality and reliable delivery.
+            </p>
+          </div>
+        </div>
+
+        <!-- How verification works -->
+        <div class="section-card">
+          <div class="section-card-header">
+            <h2>
+              <span class="lang-om">❓ Mirkaneessi akkamitti?</span>
+              <span class="lang-en">❓ How verification works</span>
+            </h2>
+          </div>
+          <div class="section-card-body" style="font-size:0.9rem;color:var(--text-secondary);line-height:1.7;">
+            <p class="lang-om">
+              1. Seller ID fi bilbila galcha<br>
+              2. Bakka qonnaa mirkaneessa<br>
+              3. Admin review godha<br>
+              4. ✓ Verified badge argata<br>
+              5. Buyers amanamoo ta'uu hubatu
+            </p>
+            <p class="lang-en">
+              1. Seller submits ID & phone<br>
+              2. Farm location verified<br>
+              3. Admin reviews application<br>
+              4. Gets ✓ Verified badge<br>
+              5. Buyers can trust the seller
+            </p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border:none;padding-top:0;">
+        <span>© 2026 INA-KJ Agro Connect</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+  <script>
+    // Star rating select
+    let selectedStars = 0;
+    document.querySelectorAll('#starSelect button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedStars = parseInt(btn.dataset.star);
+        document.querySelectorAll('#starSelect button').forEach((b, i) => {
+          b.classList.toggle('active', i < selectedStars);
+        });
+      });
+      btn.addEventListener('mouseenter', () => {
+        const s = parseInt(btn.dataset.star);
+        document.querySelectorAll('#starSelect button').forEach((b, i) => {
+          b.style.color = i < s ? 'var(--gold)' : 'var(--border)';
+        });
+      });
+    });
+    document.getElementById('starSelect').addEventListener('mouseleave', () => {
+      document.querySelectorAll('#starSelect button').forEach((b, i) => {
+        b.style.color = i < selectedStars ? 'var(--gold)' : 'var(--border)';
+      });
+    });
+
+    function submitReview() {
+      const text = document.getElementById('reviewText').value.trim();
+      const lang = document.documentElement.getAttribute('data-lang');
+      if (selectedStars === 0) {
+        alert(lang === 'om' ? 'Maaloo urjii filadhu!' : 'Please select a star rating!');
+        return;
+      }
+      if (!text) {
+        alert(lang === 'om' ? 'Maaloo review barreessi!' : 'Please write a review!');
+        return;
+      }
+      alert(lang === 'om' ? 'Review kee galteera! Galatoomi. ✓' : 'Your review has been submitted! Thank you. ✓');
+      document.getElementById('reviewText').value = '';
+      selectedStars = 0;
+      document.querySelectorAll('#starSelect button').forEach(b => {
+        b.classList.remove('active');
+        b.style.color = 'var(--border)';
+      });
+    }
+  </script>
+</body>
+</html>

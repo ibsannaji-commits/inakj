@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="om" data-lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gabaa | Marketplace – INA-KJ Agro Connect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Marketplace specific */
+    .marketplace-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 28px;
+      padding: 32px 0 60px;
+    }
+    .filters {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      height: fit-content;
+      position: sticky;
+      top: 140px;
+    }
+    .filters h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--primary-dark);
+    }
+    .filter-group {
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .filter-group:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+    .filter-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .filter-group select,
+    .filter-group input[type="number"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      margin-bottom: 8px;
+    }
+    .filter-group select:focus,
+    .filter-group input:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+    .checkbox-list label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: var(--text);
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+    .checkbox-list input {
+      accent-color: var(--primary);
+      width: 16px;
+      height: 16px;
+    }
+    .filter-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .filter-actions button {
+      flex: 1;
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .btn-apply {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-reset {
+      background: var(--bg);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+    .marketplace-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .results-count {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+    .results-count strong {
+      color: var(--text);
+    }
+    .sort-select {
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      font-size: 0.9rem;
+    }
+    .mobile-filter-btn {
+      display: none;
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: white;
+      border-radius: var(--radius);
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 900px) {
+      .marketplace-layout {
+        grid-template-columns: 1fr;
+      }
+      .filters {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 2000;
+        border-radius: 0;
+        overflow-y: auto;
+        padding: 24px;
+      }
+      .filters.open {
+        display: block;
+      }
+      .mobile-filter-btn {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER (same as index) -->
+  <header class="header">
+    <div class="header-top">
+      <div class="container">
+        <span class="lang-om">🌱 Qonnaan Bulaa → Gabaa → Buyer → Delivery → Kaffaltii</span>
+        <span class="lang-en">🌱 Farmer → Market → Buyer → Delivery → Payment</span>
+        <span>
+          <span class="lang-om">📞 Deeggarsa: +251 9XX XXX XXX</span>
+          <span class="lang-en">📞 Support: +251 9XX XXX XXX</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="header-main">
+      <div class="container">
+        <a href="index.html" class="logo">
+          <div class="logo-icon">IK</div>
+          <div class="logo-text">INA-KJ <span>Agro</span></div>
+        </a>
+
+        <form class="search-bar" action="marketplace.html" method="get">
+          <input type="text" name="q" placeholder="Oomisha barbaadi..." class="lang-om">
+          <input type="text" name="q" placeholder="Search products..." class="lang-en">
+          <button type="submit">🔍</button>
+        </form>
+
+        <div class="header-actions">
+          <div class="lang-toggle">
+            <button class="lang-btn active" data-lang="om">OM</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+          </div>
+          <a href="buyer/login.html" class="header-btn">
+            <span class="icon">🛒</span>
+            <span class="lang-om">Buyer</span>
+            <span class="lang-en">Buyer</span>
+          </a>
+          <a href="farmer/login.html" class="header-btn">
+            <span class="icon">👨‍🌾</span>
+            <span class="lang-om">Qonnaan</span>
+            <span class="lang-en">Farmer</span>
+          </a>
+          <a href="farmer/login.html" class="btn-primary">
+            <span class="lang-om">+ Oomisha Galchi</span>
+            <span class="lang-en">+ List Product</span>
+          </a>
+          <button class="menu-toggle">☰</button>
+        </div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div class="container">
+        <a href="index.html" class="nav-link">
+          <span class="lang-om">Mana</span>
+          <span class="lang-en">Home</span>
+        </a>
+        <a href="marketplace.html" class="nav-link active">
+          <span class="lang-om">Gabaa</span>
+          <span class="lang-en">Marketplace</span>
+        </a>
+        <a href="market-price.html" class="nav-link">
+          <span class="lang-om">Gatii Gabaa</span>
+          <span class="lang-en">Market Prices</span>
+        </a>
+        <a href="marketplace.html?cat=export" class="nav-link">
+          <span class="lang-om">Export</span>
+          <span class="lang-en">Export</span>
+        </a>
+        <a href="index.html#how-it-works" class="nav-link">
+          <span class="lang-om">Akkamitti Hojjeta?</span>
+          <span class="lang-en">How it Works</span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MARKETPLACE CONTENT -->
+  <div class="container">
+    <div class="marketplace-layout">
+
+      <!-- FILTERS SIDEBAR -->
+      <aside class="filters" id="filters">
+        <h3>
+          <span class="lang-om">🔍 Filter</span>
+          <span class="lang-en">🔍 Filters</span>
+        </h3>
+
+        <div class="filter-group">
+          <label>
+            <span class="lang-om">Ramaddii</span>
+            <span class="lang-en">Category</span>
+          </label>
+          <div class="checkbox-list">
+            <label><input type="checkbox" name="cat" value="khat"> <span class="lang-om">Jimaa</span><span class="lang-en">Khat</span></label>
+            <label><input type="checkbox" name="cat" value="coffee"> <span class="lang-om">Buna</span><span class="lang-en">Coffee</span></label>
+            <label><input type="checkbox" name="cat" value="grains"> <span class="lang-om">Midhaan</span><span class="lang-en">Grains</span></label>
+            <label><input type="checkbox" name="cat" value="vegetables"> <span class="lang-om">Kuduraa</span><span class="lang-en">Vegetables</span></label>
+            <label><input type="checkbox" name="cat" value="fruits"> <span class="lang-om">Fuduraa</span><span class="lang-en">Fruits</span></label>
+            <label><input type="checkbox" name="cat" value="spices"> <span class="lang-om">Qophaa'ina</span><span class="lang-en">Spices</span></label>
+            <label><input type="checkbox" name="cat" value="honey"> <span class="lang-om">Damma</span><span class="lang-en">Honey</span></label>
+            <label><input type="checkbox" name="cat" value="livestock"> <span class="lang-om">Beeylada</span><span class="lang-en">Livestock</span></label>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label>
+            <span class="lang-om">Bakka</span>
+            <span class="lang-en">Location</span>
+          </label>
+          <select name="location">
+            <option value="">
+              <span class="lang-om">Hunda</span>
+              <span class="lang-en">All Locations</span>
+            </option>
+            <option value="hararghe">West Hararghe</option>
+            <option value="yirgacheffe">Yirgacheffe</option>
+            <option value="arsi">Arsi</option>
+            <option value="bale">Bale</option>
+            <option value="jimma">Jimma</option>
+            <option value="sidama">Sidama</option>
+            <option value="oromia">Oromia (All)</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>
+            <span class="lang-om">Gatii (ETB/kg)</span>
+            <span class="lang-en">Price (ETB/kg)</span>
+          </label>
+          <div style="display:flex;gap:8px;">
+            <input type="number" placeholder="Min" min="0">
+            <input type="number" placeholder="Max" min="0">
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label>
+            <span class="lang-om">Hanga (kg)</span>
+            <span class="lang-en">Quantity (kg)</span>
+          </label>
+          <div style="display:flex;gap:8px;">
+            <input type="number" placeholder="Min" min="0">
+            <input type="number" placeholder="Max" min="0">
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label>
+            <span class="lang-om">Qulqullina</span>
+            <span class="lang-en">Quality</span>
+          </label>
+          <div class="checkbox-list">
+            <label><input type="checkbox" name="quality" value="A"> Grade A</label>
+            <label><input type="checkbox" name="quality" value="B"> Grade B</label>
+            <label><input type="checkbox" name="quality" value="export"> Export Quality</label>
+            <label><input type="checkbox" name="quality" value="organic"> Organic</label>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label>
+            <span class="lang-om">Seller</span>
+            <span class="lang-en">Seller</span>
+          </label>
+          <div class="checkbox-list">
+            <label><input type="checkbox" name="verified" value="1"> 
+              <span class="lang-om">Verified qofa</span>
+              <span class="lang-en">Verified only</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="filter-actions">
+          <button class="btn-apply">
+            <span class="lang-om">Hojjechiisi</span>
+            <span class="lang-en">Apply</span>
+          </button>
+          <button class="btn-reset">
+            <span class="lang-om">Haqi</span>
+            <span class="lang-en">Reset</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- PRODUCTS AREA -->
+      <main>
+        <button class="mobile-filter-btn" onclick="document.getElementById('filters').classList.toggle('open')">
+          <span class="lang-om">🔍 Filter Agarsiisi</span>
+          <span class="lang-en">🔍 Show Filters</span>
+        </button>
+
+        <div class="marketplace-header">
+          <div class="results-count">
+            <span class="lang-om"><strong>48</strong> oomisha argame</span>
+            <span class="lang-en"><strong>48</strong> products found</span>
+          </div>
+          <select class="sort-select">
+            <option>
+              <span class="lang-om">Haaraa → Durii</span>
+              <span class="lang-en">Newest first</span>
+            </option>
+            <option>
+              <span class="lang-om">Gatii: Gadi → Ol</span>
+              <span class="lang-en">Price: Low to High</span>
+            </option>
+            <option>
+              <span class="lang-om">Gatii: Ol → Gadi</span>
+              <span class="lang-en">Price: High to Low</span>
+            </option>
+            <option>
+              <span class="lang-om">Hanga: Ol → Gadi</span>
+              <span class="lang-en">Quantity: High to Low</span>
+            </option>
+          </select>
+        </div>
+
+        <div class="products-grid">
+          <!-- Product cards (sample data) -->
+          <div class="product-card" data-id="1">
+            <div class="product-img">🌿 <span class="product-badge">Grade A</span></div>
+            <div class="product-body">
+              <div class="product-location">📍 West Hararghe, Chiro</div>
+              <h3 class="product-title">
+                <span class="lang-om">Jimaa Goggogaa – Grade A</span>
+                <span class="lang-en">Dried Khat – Grade A</span>
+              </h3>
+              <div class="product-meta"><span>500 kg</span> • <span>Grade A</span></div>
+              <div class="product-price">1,200 <span>ETB/kg</span></div>
+              <div class="product-seller"><span class="verified-badge">✓</span> Verified Farmer</div>
+            </div>
+          </div>
+
+          <div class="product-card" data-id="2">
+            <div class="product-img">☕ <span class="product-badge verified">Export</span></div>
+            <div class="product-body">
+              <div class="product-location">📍 Yirgacheffe, Gedeo</div>
+              <h3 class="product-title">
+                <span class="lang-om">Buna Yirgacheffe – Specialty</span>
+                <span class="lang-en">Yirgacheffe Coffee – Specialty</span>
+              </h3>
+              <div class="product-meta"><span>2,000 kg</span> • <span>Grade 1</span></div>
+              <div class="product-price">480 <span>ETB/kg</span></div>
+              <div class="product-seller"><span class="verified-badge">✓</span> Verified Cooperative</div>
+            </div>
+          </div>
+
+          <div class="product-card" data-id="3">
+            <div class="product-img">🌾 <span class="product-badge">Fresh</span></div>
+            <div class="product-body">
+              <div class="product-location">📍 Arsi, Asella</div>
+              <h3 class="product-title">
+                <span class="lang-om">Qamadii – Qulqulluu</span>
+                <span class="lang-en">Wheat – Clean</span>
+              </h3>
+              <div class="product-meta"><span>10,000 kg</span> • <span>Fresh</span></div>
+              <div class="product-price">45 <span>ETB/kg</span></div>
+              <div class="product-seller"><span class="verified-badge">✓</span> Verified Farmer</div>
+            </div>
+          </div>
+
+          <div class="product-card" data-id="4">
+            <div class="product-img">🍯 <span class="product-badge">Organic</span></div>
+            <div class="product-body">
+              <div class="product-location">📍 Bale, Robe</div>
+              <h3 class="product-title">
+                <span class="lang-om">Damma Qulqulluu – Organic</span>
+                <span class="lang-en">Pure Honey – Organic</span>
+              </h3>
+              <div class="product-meta"><span>200 kg</span> • <span>100% Natural</span></div>
+              <div class="product-price">350 <span>ETB/kg</span></div>
+              <div class="product-seller"><span class="verified-badge">✓</span> Verified Beekeeper</div>
+            </div>
+          </div>
+
+          <div class="product-card" data-id="5">
+            <div class="product-img">🌶️ <span class="product-badge">Grade A</span></div>
+            <div class="product-body">
+              <div class="product-location">📍 Jimma</div>
+              <h3 class="product-title">
+                <span class="lang-om">Barbaree Qophaa'e</span>
+                <span class="lang-en">Dried Chili</span>
+              </h3>
+              <div class="product-meta"><span>800 kg</span> • <span>Grade A</span></div>
+              <div class="product-price">95 <span>ETB/kg</span></div>
+              <div class="product-seller"><span class="verified-badge">✓</span> Verified Farmer</div>
+            </div>
+          </div>
+
+          <div class="product-card" data-id="6">
+            <div class="product-img">🍊 <span class="product-badge">Fresh</span></div>
+            <div class="product-body">
+              <div class="product-location">📍 Sidama</div>
+              <h3 class="product-title">
+                <span class="lang-om">Burtukaana</span>
+                <span class="lang-en">Oranges</span>
+              </h3>
+              <div class="product-meta"><span>3,000 kg</span> • <span>Fresh</span></div>
+              <div class="product-price">35 <span>ETB/kg</span></div>
+              <div class="product-seller"><span class="verified-badge">✓</span> Verified Farmer</div>
+            </div>
+          </div>
+
+          <div class="product-card" data-id="7">
+            <div class="product-img">🌿 <span class="product-badge">Grade B</span></div>
+            <div class="product-body">
+              <div class="product-location">📍 East Hararghe</div>
+              <h3 class="product-title">
+                <span class="lang-om">Jimaa Haaraa</span>
+                <span class="lang-en">Fresh Khat</span>
+              </h3>
+              <div class="product-meta"><span>150 kg</span> • <span>Grade B</span></div>
+              <div class="product-price">980 <span>ETB/kg</span></div>
+              <div class="product-seller"><span class="verified-badge">✓</span> Verified Farmer</div>
+            </div>
+          </div>
+
+          <div class="product-card" data-id="8">
+            <div class="product-img">🌾 <span class="product-badge">Bulk</span></div>
+            <div class="product-body">
+              <div class="product-location">📍 Jimma</div>
+              <h3 class="product-title">
+                <span class="lang-om">Boqqolloo</span>
+                <span class="lang-en">Maize</span>
+              </h3>
+              <div class="product-meta"><span>25,000 kg</span> • <span>Bulk</span></div>
+              <div class="product-price">28 <span>ETB/kg</span></div>
+              <div class="product-seller"><span class="verified-badge">✓</span> Verified Cooperative</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <div style="display:flex;justify-content:center;gap:8px;margin-top:40px;">
+          <button class="btn-outline" style="padding:8px 14px;">←</button>
+          <button class="btn-primary" style="padding:8px 14px;">1</button>
+          <button class="btn-outline" style="padding:8px 14px;">2</button>
+          <button class="btn-outline" style="padding:8px 14px;">3</button>
+          <button class="btn-outline" style="padding:8px 14px;">→</button>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border:none;padding-top:0;">
+        <span>© 2026 INA-KJ Agro Connect</span>
+        <span>
+          <span class="lang-om">Itoophiyaaf ijaarame</span>
+          <span class="lang-en">Built for Ethiopia</span>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

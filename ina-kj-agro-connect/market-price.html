@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="om" data-lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gatii Gabaa | Market Prices – INA-KJ Agro Connect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .page-hero {
+      background: linear-gradient(135deg, #1B7A3D 0%, #145C2E 100%);
+      color: white;
+      padding: 40px 0 50px;
+    }
+    .page-hero h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .page-hero p {
+      opacity: 0.9;
+      font-size: 1.05rem;
+      max-width: 560px;
+    }
+    .last-updated {
+      margin-top: 16px;
+      font-size: 0.9rem;
+      opacity: 0.85;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .live-dot {
+      width: 8px; height: 8px;
+      background: #90EE90;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* Filters bar */
+    .price-filters {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin: -24px auto 32px;
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      box-shadow: var(--shadow);
+    }
+    .price-filters select,
+    .price-filters input {
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      font-size: 0.9rem;
+      min-width: 140px;
+    }
+    .price-filters select:focus,
+    .price-filters input:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+    .filter-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    /* Summary cards */
+    .summary-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .summary-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      transition: all 0.2s;
+    }
+    .summary-card:hover {
+      box-shadow: var(--shadow);
+      border-color: var(--primary-light);
+    }
+    .summary-card .sc-icon {
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+    }
+    .summary-card h3 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin-bottom: 2px;
+    }
+    .summary-card p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    .summary-card .change {
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+    .change.up { color: var(--success); }
+    .change.down { color: var(--danger); }
+
+    /* Main table */
+    .price-table-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 32px;
+      box-shadow: var(--shadow-sm);
+    }
+    .price-table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--border-light);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .price-table-header h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+    .table-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .table-actions button {
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+    .table-actions button:hover,
+    .table-actions button.active {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .price-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .price-table th {
+      background: var(--primary-soft);
+      padding: 13px 16px;
+      text-align: left;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+      white-space: nowrap;
+    }
+    .price-table td {
+      padding: 14px 16px;
+      border-top: 1px solid var(--border-light);
+      font-size: 0.95rem;
+      vertical-align: middle;
+    }
+    .price-table tr:hover td {
+      background: var(--bg);
+    }
+    .product-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .product-icon {
+      width: 40px; height: 40px;
+      border-radius: 8px;
+      background: var(--primary-soft);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; flex-shrink: 0;
+    }
+    .product-cell strong {
+      display: block;
+      font-size: 0.95rem;
+    }
+    .product-cell .sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .price-val {
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+    .change-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .change-badge.up {
+      background: #E8F5E9;
+      color: var(--success);
+    }
+    .change-badge.down {
+      background: #FFEBEE;
+      color: var(--danger);
+    }
+    .change-badge.same {
+      background: #F5F5F5;
+      color: #757575;
+    }
+    .trend-spark {
+      font-size: 0.85rem;
+      letter-spacing: -1px;
+      color: var(--text-muted);
+    }
+
+    /* Location tabs */
+    .location-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      margin-bottom: 20px;
+      scrollbar-width: none;
+    }
+    .location-tabs::-webkit-scrollbar { display: none; }
+    .loc-tab {
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      white-space: nowrap;
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      color: var(--text-secondary);
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .loc-tab:hover, .loc-tab.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    /* Insight cards */
+    .insights-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 40px;
+    }
+    .insight-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .insight-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .insight-card ul {
+      list-style: none;
+    }
+    .insight-card li {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border-light);
+      font-size: 0.9rem;
+    }
+    .insight-card li:last-child { border-bottom: none; }
+    .insight-card .val {
+      font-weight: 700;
+    }
+
+    /* Alert / tip */
+    .price-tip {
+      background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 40px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .price-tip .tip-icon {
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+    .price-tip h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--primary-dark);
+    }
+    .price-tip p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* History mini */
+    .history-note {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 16px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    @media (max-width: 1000px) {
+      .summary-cards { grid-template-columns: repeat(2, 1fr); }
+      .insights-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 700px) {
+      .price-filters { flex-direction: column; align-items: stretch; }
+      .price-filters select, .price-filters input { width: 100%; }
+      .summary-cards { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .price-table { font-size: 0.85rem; }
+      .price-table th, .price-table td { padding: 10px 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-top">
+      <div class="container">
+        <span class="lang-om">🌱 Qonnaan Bulaa → Gabaa → Buyer → Delivery → Kaffaltii</span>
+        <span class="lang-en">🌱 Farmer → Market → Buyer → Delivery → Payment</span>
+        <span>
+          <span class="lang-om">📞 Deeggarsa: +251 9XX XXX XXX</span>
+          <span class="lang-en">📞 Support: +251 9XX XXX XXX</span>
+        </span>
+      </div>
+    </div>
+    <div class="header-main">
+      <div class="container">
+        <a href="index.html" class="logo">
+          <div class="logo-icon">IK</div>
+          <div class="logo-text">INA-KJ <span>Agro</span></div>
+        </a>
+        <form class="search-bar" action="marketplace.html" method="get">
+          <input type="text" name="q" placeholder="Oomisha barbaadi..." class="lang-om">
+          <input type="text" name="q" placeholder="Search products..." class="lang-en">
+          <button type="submit">🔍</button>
+        </form>
+        <div class="header-actions">
+          <div class="lang-toggle">
+            <button class="lang-btn active" data-lang="om">OM</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+          </div>
+          <a href="buyer/login.html" class="header-btn">
+            <span class="icon">🛒</span>
+            <span class="lang-om">Buyer</span>
+            <span class="lang-en">Buyer</span>
+          </a>
+          <a href="farmer/login.html" class="header-btn">
+            <span class="icon">👨‍🌾</span>
+            <span class="lang-om">Qonnaan</span>
+            <span class="lang-en">Farmer</span>
+          </a>
+          <button class="menu-toggle">☰</button>
+        </div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="container">
+        <a href="index.html" class="nav-link">
+          <span class="lang-om">Mana</span>
+          <span class="lang-en">Home</span>
+        </a>
+        <a href="marketplace.html" class="nav-link">
+          <span class="lang-om">Gabaa</span>
+          <span class="lang-en">Marketplace</span>
+        </a>
+        <a href="market-price.html" class="nav-link active">
+          <span class="lang-om">Gatii Gabaa</span>
+          <span class="lang-en">Market Prices</span>
+        </a>
+        <a href="index.html#how-it-works" class="nav-link">
+          <span class="lang-om">Akkamitti Hojjeta?</span>
+          <span class="lang-en">How it Works</span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <h1>
+        <span class="lang-om">📊 Gatii Gabaa Yeroo Ammaa</span>
+        <span class="lang-en">📊 Live Market Prices</span>
+      </h1>
+      <p>
+        <span class="lang-om">Gatii oomisha qonnaa Itoophiyaa keessatti yeroo ammaa. Qonnaan bulaa yoom gurguruu akka qabu hubadhu.</span>
+        <span class="lang-en">Real-time agricultural commodity prices across Ethiopia. Know when to sell.</span>
+      </p>
+      <div class="last-updated">
+        <span class="live-dot"></span>
+        <span class="lang-om">Haaraa ta'e: Har'a, 11:30 PM EAT • Madda: Gabaa Naannoo + Platform</span>
+        <span class="lang-en">Updated: Today, 11:30 PM EAT • Source: Local Markets + Platform</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+
+    <!-- Filters -->
+    <div class="price-filters">
+      <div>
+        <div class="filter-label">
+          <span class="lang-om">Ramaddii</span>
+          <span class="lang-en">Category</span>
+        </div>
+        <select id="filterCategory">
+          <option value="all">
+            <span class="lang-om">Hunda</span>
+            <span class="lang-en">All</span>
+          </option>
+          <option value="khat">
+            <span class="lang-om">Jimaa</span>
+            <span class="lang-en">Khat</span>
+          </option>
+          <option value="coffee">
+            <span class="lang-om">Buna</span>
+            <span class="lang-en">Coffee</span>
+          </option>
+          <option value="grains">
+            <span class="lang-om">Midhaan</span>
+            <span class="lang-en">Grains</span>
+          </option>
+          <option value="spices">
+            <span class="lang-om">Qophaa'ina</span>
+            <span class="lang-en">Spices</span>
+          </option>
+          <option value="honey">
+            <span class="lang-om">Damma</span>
+            <span class="lang-en">Honey</span>
+          </option>
+        </select>
+      </div>
+      <div>
+        <div class="filter-label">
+          <span class="lang-om">Bakka</span>
+          <span class="lang-en">Location</span>
+        </div>
+        <select id="filterLocation">
+          <option value="all">
+            <span class="lang-om">Hunda</span>
+            <span class="lang-en">All Locations</span>
+          </option>
+          <option value="chiro">Chiro (West Hararghe)</option>
+          <option value="yirgacheffe">Yirgacheffe</option>
+          <option value="asella">Asella (Arsi)</option>
+          <option value="bale">Bale</option>
+          <option value="jimma">Jimma</option>
+          <option value="sidama">Sidama</option>
+          <option value="addis">Addis Ababa</option>
+        </select>
+      </div>
+      <div>
+        <div class="filter-label">
+          <span class="lang-om">Barbaadi</span>
+          <span class="lang-en">Search</span>
+        </div>
+        <input type="text" id="searchPrice" placeholder="Jimaa, Buna, Qamadii...">
+      </div>
+      <div style="margin-left:auto;align-self:flex-end;">
+        <button class="btn-primary" style="padding:10px 18px;" onclick="applyFilters()">
+          <span class="lang-om">Filter</span>
+          <span class="lang-en">Filter</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+      <div class="summary-card">
+        <div class="sc-icon">🌿</div>
+        <h3>1,200</h3>
+        <p>
+          <span class="lang-om">Jimaa (Chiro) ETB/kg</span>
+          <span class="lang-en">Khat (Chiro) ETB/kg</span>
+        </p>
+        <div class="change up">▲ +4.3%</div>
+      </div>
+      <div class="summary-card">
+        <div class="sc-icon">☕</div>
+        <h3>480</h3>
+        <p>
+          <span class="lang-om">Buna (Yirgacheffe) ETB/kg</span>
+          <span class="lang-en">Coffee (Yirgacheffe) ETB/kg</span>
+        </p>
+        <div class="change up">▲ +1.3%</div>
+      </div>
+      <div class="summary-card">
+        <div class="sc-icon">🌾</div>
+        <h3>45</h3>
+        <p>
+          <span class="lang-om">Qamadii (Asella) ETB/kg</span>
+          <span class="lang-en">Wheat (Asella) ETB/kg</span>
+        </p>
+        <div class="change down">▼ -0.9%</div>
+      </div>
+      <div class="summary-card">
+        <div class="sc-icon">🍯</div>
+        <h3>350</h3>
+        <p>
+          <span class="lang-om">Damma (Bale) ETB/kg</span>
+          <span class="lang-en">Honey (Bale) ETB/kg</span>
+        </p>
+        <div class="change up">▲ +2.0%</div>
+      </div>
+    </div>
+
+    <!-- Location quick tabs -->
+    <div class="location-tabs">
+      <button class="loc-tab active" data-loc="all">
+        <span class="lang-om">Hunda</span>
+        <span class="lang-en">All</span>
+      </button>
+      <button class="loc-tab" data-loc="chiro">Chiro</button>
+      <button class="loc-tab" data-loc="yirgacheffe">Yirgacheffe</button>
+      <button class="loc-tab" data-loc="asella">Asella</button>
+      <button class="loc-tab" data-loc="bale">Bale</button>
+      <button class="loc-tab" data-loc="jimma">Jimma</button>
+      <button class="loc-tab" data-loc="sidama">Sidama</button>
+      <button class="loc-tab" data-loc="addis">Addis Ababa</button>
+    </div>
+
+    <!-- Main Price Table -->
+    <div class="price-table-card">
+      <div class="price-table-header">
+        <h2>
+          <span class="lang-om">Gatii Gabaa Guutuu</span>
+          <span class="lang-en">Full Market Price List</span>
+        </h2>
+        <div class="table-actions">
+          <button class="active" data-sort="name">
+            <span class="lang-om">Maqaa</span>
+            <span class="lang-en">Name</span>
+          </button>
+          <button data-sort="price">
+            <span class="lang-om">Gatii</span>
+            <span class="lang-en">Price</span>
+          </button>
+          <button data-sort="change">
+            <span class="lang-om">Jijjiirama</span>
+            <span class="lang-en">Change</span>
+          </button>
+        </div>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="price-table" id="priceTable">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-om">Oomisha</span>
+                <span class="lang-en">Product</span>
+              </th>
+              <th>
+                <span class="lang-om">Bakka</span>
+                <span class="lang-en">Location</span>
+              </th>
+              <th>
+                <span class="lang-om">Gatii Har'aa</span>
+                <span class="lang-en">Today</span>
+              </th>
+              <th>
+                <span class="lang-om">Kaleessa</span>
+                <span class="lang-en">Yesterday</span>
+              </th>
+              <th>
+                <span class="lang-om">Jijjiirama</span>
+                <span class="lang-en">Change</span>
+              </th>
+              <th>
+                <span class="lang-om">Torbee</span>
+                <span class="lang-en">7-day</span>
+              </th>
+              <th>
+                <span class="lang-om">Unit</span>
+                <span class="lang-en">Unit</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Khat -->
+            <tr data-cat="khat" data-loc="chiro">
+              <td>
+                <div class="product-cell">
+                  <div class="product-icon">🌿</div>
+                  <div>
+                    <strong>
+                      <span class="lang-om">Jimaa Goggogaa</span>
+                      <span class="lang-en">Dried Khat</span>
+                    </strong>
+                    <span class="sub">Grade A</span>
+                  </div>
+                </div>
+              </td>
+              <td>Chiro</td>
+              <td class="price-val">1,200 ETB</td>
+              <td>1,150 ETB</td>
+              <td><span class="change-badge up">▲ +4.3%</span></td>
+              <td><span class="trend-spark">▁▂▃▅▇</span></td>
+              <td>kg</td>
+            </tr>
+            <tr data-cat="khat" data-loc="chiro">
+              <td>
+                <div class="product-cell">
+                  <div class="product-icon">🌿</div>
+                  <div>
+                    <strong>
+                      <span class="lang-om">Jimaa Haaraa</span>
+                      <span class="lang-en">Fresh Khat</span>
+                    </strong>
+                    <span class="sub">Grade B</span>
+                  </div>
+                </div>
+              </td>
+              <td>Chiro</td>
+              <td class="price-val">980 ETB</td>
+              <td>950 ETB</td>
+              <td><span class="change-badge up">▲ +3.2%</span></td>
+              <td><span class="trend-spark">▂▃▄▅▆</span></td>
+              <td>kg</td>
+            </tr>
+            <tr data-cat="khat" data-loc="chiro">
+              <td>
+                <div class="product-cell">
+                  <div class="product-icon">🌿</div>
+                  <div>
+                    <strong>
+                      <span class="lang-om">Jimaa (East Hararghe)</span>
+                      <span class="lang-en">Khat (East Hararghe)</span>
+                    </strong>
+                    <span class="sub">Grade A</span>
+                  </div>
+                </div>
+              </td>
+              <td>East Hararghe</td>
+              <td class="price-val">1,150 ETB</td>
+              <td>1,120 ETB</td>
+              <td><span class="change-badge up">▲ +2.7%</span></td>
+              <td><span class="trend-spark">▃▄▅▆▇</span></td>
+              <td>kg</td>
+            </tr>
+
+            <!-- Coffee -->
+            <tr data-cat="coffee" data-loc="yirgacheffe">
+              <td>
+                <div class="product-cell">
+                  <div class="product-icon">☕</div>
+                  <div>
+                    <strong>
+                      <span class="lang-om">Buna Yirgacheffe</span>
+                      <span class="lang-en">Yirgacheffe Coffee</span>
+                    </strong>
+                    <span class="sub">Specialty / Grade 1</span>
+                  </div>
+                </div>
+              </td>
+              <td>Yirgacheffe</td>
+              <td class="price-val">480 ETB</td>
+              <td>474 ETB</td>
+              <td><span class="change-badge up">▲ +1.3%</span></td>
+              <td><span class="trend-spark">▄▅▅▆▇</span></td>
+              <td>kg</td>
+            </tr>
+            <tr data-cat="coffee" data-loc="sidama">
+              <td>
+                <div class="product-cell">
+                  <div class="product-icon">☕</div>
+                  <div>
+                    <strong>
+                      <span class="lang-om">Buna Sidama</span>
+                      <span class="lang-en">Sidama Coffee</span>
+                    </strong>
+                    <span class="sub">Grade 2</span>
+                  </div>
+                </div>
+              </td>
+              <td>Sidama</td>
+              <td class="price-val">420 ETB</td>
+              <td>415 ETB</td>
+              <td><span class="change-badge up">▲ +1.2%</span></td>
+              <td><span class="trend-spark">▃▄▅▅▆</span></td>
+              <td>kg</td>
+            </tr>
+            <tr data-cat="coffee" data-loc="jimma">
+              <td>
+                <div class="product-cell">
+                  <div class="product-icon">☕</div>
+                  <div>
+                    <strong>
+                      <span class="lang-om">Buna Jimma</span>
+                      <span class="lang-en">Jimma Coffee</span>
+                    </strong>
+                    <span class="sub">Commercial</span>
+                  </div>
+                </div>
+              </td>
+              <td>Jimma</td>
+              <td class="price-val">380 ETB</td>
+              <td>385 ETB</td>
+              <td><span class="change-badge down">▼ -1.3%</span></td>
+              <td><span class="trend-spark">▇▆▅▄▃</span></td>
+              <td>kg</td>
+            </tr>
+
+            <!-- Grains -->
+            <tr data-cat="grains" data-loc="asella">
+              <td>
+                <div class="product-cell">
+                  <div class="product-icon">🌾</div>
+                  <div>
+                    <strong>
+                      <span class="lang-om">Qamadii (Wheat)</span>
+                      <span class="lang-en">Wheat</span>
+                    </strong>
+                    <span class="sub">Clean</span>
+                  </div>
+                </div>
+              </td>
+              <td>Asella</td>
+              <td class="price-val">45 ETB</td>
+              <td>45.4 ETB</td>
+              <td><span class="change-badge down">▼ -0.9%</span></td>
+              <td><span class="trend-spark">▅▅▄▄▃</span></td>
+              <td>kg</td>
+            </tr>
+            <tr data-cat="grains" data-loc="jimma">
+              <td>
+                <div class="product-cell">
+                  <div class="product-icon">🌽</div>
+                  <div>
+                    <strong>
+                      <span class="lang-om">Boqqolloo (Maize)</span>
+                      <span class="lang-en">Maize</span>
+                    </strong>
+                    <span class="sub">White</span>
+                  </div>
+                </div>
+              </td>
+              <td>Jimma</td>
+              <td class="price-val">28 ETB</td>
+              <td>27.5 ETB</td>
+              <td><span class="change-badge up">▲ +1.8%</span></td>
+              <td><span class="trend-spark">▂▃▄▅▆</span></td>
+              <td>kg</td>
+            </tr>
+            <tr data-cat="grains" data-loc="bale">
+              <td>
+                <div class="product-cell">
+                  <div class="product-icon">🫘</div>
+                  <div>
+                    <strong>
+                      <span class="lang-om">Shumburaa (Chickpea)</span>
+                      <span class="lang-en">Chickpea</span>
+                    </strong>
+                    <span class="sub">Grade A</span>
+                  </div>
+                </div>
+              </td>
+              <td>Bale</td>
+              <td class="price-val">62 ETB</td>
+              <td>60.7 ETB</td>
+              <td><span class="change-badge up">▲ +2.1%</span></td>
+              <td><span class="trend-spark">▃▄▅▆▇</span></td>
+              <td>kg</td>
+            </tr>
+            <tr data-cat="grains" data-loc="asella">
+              <td>
+                <div class="product-cell">
+                  <div class="product-icon">🌾</div>
+                  <div>
+                    <strong>
+                      <span class="lang-om">Garbuu (Barley)</span>
+                      <span class="lang-en">Barley</span>
+                    </strong>
+                    <span class="sub">Malt</span>
+                  </div>
+                </div>
+              </td>
+              <td>Asella</td>
+              <td class="price-val">38 ETB</td>
+              <td>38 ETB</td>
+              <td><span class="change-badge same">— 0%</span></td>
+              <td><span class="trend-spark">▄▄▄▄▄</span></td>
+              <td>kg</td>
+            </tr>
+
+            <!-- Spices & Honey -->
+            <tr data-cat="spices" data-loc="jimma">
+              <td>
+                <div class="product-cell">
+                  <div class="product-icon">🌶️</div>
+                  <div>
+                    <strong>
+                      <span class="lang-om">Barbaree</span>
+                      <span class="lang-en">Dried Chili</span>
+                    </strong>
+                    <span class="sub">Grade A</span>
+                  </div>
+                </div>
+              </td>
+              <td>Jimma</td>
+              <td class="price-val">95 ETB</td>
+              <td>92 ETB</td>
+              <td><span class="change-badge up">▲ +3.3%</span></td>
+              <td><span class="trend-spark">▂▃▅▆▇</span></td>
+              <td>kg</td>
+            </tr>
+            <tr data-cat="honey" data-loc="bale">
+              <td>
+                <div class="product-cell">
+                  <div class="product-icon">🍯</div>
+                  <div>
+                    <strong>
+                      <span class="lang-om">Damma Organic</span>
+                      <span class="lang-en">Organic Honey</span>
+                    </strong>
+                    <span class="sub">Pure</span>
+                  </div>
+                </div>
+              </td>
+              <td>Bale</td>
+              <td class="price-val">350 ETB</td>
+              <td>343 ETB</td>
+              <td><span class="change-badge up">▲ +2.0%</span></td>
+              <td><span class="trend-spark">▄▅▅▆▇</span></td>
+              <td>kg</td>
+            </tr>
+            <tr data-cat="spices" data-loc="sidama">
+              <td>
+                <div class="product-cell">
+                  <div class="product-icon">🫚</div>
+                  <div>
+                    <strong>
+                      <span class="lang-om">Jinjibila</span>
+                      <span class="lang-en">Ginger</span>
+                    </strong>
+                    <span class="sub">Dried</span>
+                  </div>
+                </div>
+              </td>
+              <td>Sidama</td>
+              <td class="price-val">110 ETB</td>
+              <td>108 ETB</td>
+              <td><span class="change-badge up">▲ +1.9%</span></td>
+              <td><span class="trend-spark">▃▄▅▆▆</span></td>
+              <td>kg</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="history-note">
+        <span class="lang-om">Gatiin guyyaa guyyaan haaraa ta'a. Madda: Gabaalee naannoo + INA-KJ platform data.</span>
+        <span class="lang-en">Prices updated daily. Source: Local markets + INA-KJ platform data.</span>
+      </div>
+    </div>
+
+    <!-- Insights -->
+    <div class="insights-grid">
+      <div class="insight-card">
+        <h3>📈 
+          <span class="lang-om">Gatiin Ol Ka'aa</span>
+          <span class="lang-en">Top Gainers</span>
+        </h3>
+        <ul>
+          <li>
+            <span class="lang-om">Jimaa Goggogaa (Chiro)</span>
+            <span class="lang-en">Dried Khat (Chiro)</span>
+            <span class="val change up">+4.3%</span>
+          </li>
+          <li>
+            <span class="lang-om">Barbaree (Jimma)</span>
+            <span class="lang-en">Chili (Jimma)</span>
+            <span class="val change up">+3.3%</span>
+          </li>
+          <li>
+            <span class="lang-om">Jimaa Haaraa</span>
+            <span class="lang-en">Fresh Khat</span>
+            <span class="val change up">+3.2%</span>
+          </li>
+        </ul>
+      </div>
+      <div class="insight-card">
+        <h3>📉 
+          <span class="lang-om">Gatiin Gadi Bu'aa</span>
+          <span class="lang-en">Top Losers</span>
+        </h3>
+        <ul>
+          <li>
+            <span class="lang-om">Buna Jimma</span>
+            <span class="lang-en">Jimma Coffee</span>
+            <span class="val change down">-1.3%</span>
+          </li>
+          <li>
+            <span class="lang-om">Qamadii (Asella)</span>
+            <span class="lang-en">Wheat (Asella)</span>
+            <span class="val change down">-0.9%</span>
+          </li>
+          <li>
+            <span>—</span>
+            <span class="val">—</span>
+          </li>
+        </ul>
+      </div>
+      <div class="insight-card">
+        <h3>💡 
+          <span class="lang-om">Gorsa Gurgurtaa</span>
+          <span class="lang-en">Selling Tips</span>
+        </h3>
+        <ul>
+          <li>
+            <span class="lang-om">Jimaa — gatiin ol ka'aa jira</span>
+            <span class="lang-en">Khat — prices rising</span>
+            <span class="val">🔥</span>
+          </li>
+          <li>
+            <span class="lang-om">Buna Specialty — gaarii</span>
+            <span class="lang-en">Specialty Coffee — good</span>
+            <span class="val">✅</span>
+          </li>
+          <li>
+            <span class="lang-om">Qamadii — eegaa</span>
+            <span class="lang-en">Wheat — wait</span>
+            <span class="val">⏳</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Tip -->
+    <div class="price-tip">
+      <div class="tip-icon">💡</div>
+      <div>
+        <h3>
+          <span class="lang-om">Gorsa Qonnaan Bulaaf</span>
+          <span class="lang-en">Tip for Farmers</span>
+        </h3>
+        <p class="lang-om">
+          Gatii gabaa guyyaa guyyaan hordofi. Yeroo gatiin ol ka'u gurguri. 
+          Jimaa fi Barbaree har'a gatiin isaanii ol ka'aa jira — carraa gaarii dha.
+          Platform keenya irratti oomisha kee galchuu dandeessa.
+        </p>
+        <p class="lang-en">
+          Track market prices daily. Sell when prices rise. 
+          Khat and Chili are currently rising — good opportunity.
+          You can list your products on our platform.
+        </p>
+        <a href="farmer/add-product.html" class="btn-primary" style="display:inline-block;margin-top:12px;padding:10px 20px;">
+          <span class="lang-om">+ Oomisha Galchi</span>
+          <span class="lang-en">+ List Your Product</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border:none;padding-top:0;">
+        <span>© 2026 INA-KJ Agro Connect</span>
+        <span>
+          <span class="lang-om">Itoophiyaaf ijaarame</span>
+          <span class="lang-en">Built for Ethiopia</span>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+  <script>
+    // Location tabs
+    document.querySelectorAll('.loc-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.loc-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        filterByLocation(tab.dataset.loc);
+      });
+    });
+
+    function filterByLocation(loc) {
+      const rows = document.querySelectorAll('#priceTable tbody tr');
+      rows.forEach(row => {
+        if (loc === 'all' || row.dataset.loc === loc) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+
+    function applyFilters() {
+      const cat = document.getElementById('filterCategory').value;
+      const loc = document.getElementById('filterLocation').value;
+      const search = document.getElementById('searchPrice').value.toLowerCase();
+      const rows = document.querySelectorAll('#priceTable tbody tr');
+
+      rows.forEach(row => {
+        const matchCat = cat === 'all' || row.dataset.cat === cat;
+        const matchLoc = loc === 'all' || row.dataset.loc === loc;
+        const text = row.textContent.toLowerCase();
+        const matchSearch = !search || text.includes(search);
+        row.style.display = (matchCat && matchLoc && matchSearch) ? '' : 'none';
+      });
+    }
+
+    document.getElementById('searchPrice').addEventListener('input', applyFilters);
+    document.getElementById('filterCategory').addEventListener('change', applyFilters);
+    document.getElementById('filterLocation').addEventListener('change', applyFilters);
+  </script>
+</body>
+</html>

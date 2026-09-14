@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="om" data-lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart | Order – INA-KJ Agro Connect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .page-title {
+      padding: 28px 0 8px;
+    }
+    .page-title h1 {
+      font-size: 1.7rem;
+      font-weight: 800;
+    }
+    .page-title p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+
+    .cart-layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 28px;
+      padding-bottom: 60px;
+    }
+
+    /* Cart items */
+    .cart-items {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .cart-item {
+      display: grid;
+      grid-template-columns: 90px 1fr auto;
+      gap: 16px;
+      padding: 20px;
+      border-bottom: 1px solid var(--border-light);
+      align-items: center;
+    }
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+    .cart-item-img {
+      width: 90px;
+      height: 90px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+    .cart-item-info h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .cart-item-info .meta {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .cart-item-info .seller {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .cart-item-price {
+      text-align: right;
+    }
+    .cart-item-price .unit-price {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .cart-item-price .line-total {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+    .qty-control {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      width: fit-content;
+      margin-left: auto;
+    }
+    .qty-control button {
+      width: 34px;
+      height: 34px;
+      background: var(--bg);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text);
+    }
+    .qty-control button:hover {
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+    .qty-control input {
+      width: 48px;
+      height: 34px;
+      text-align: center;
+      border: none;
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      font-weight: 700;
+      background: white;
+    }
+    .remove-btn {
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: var(--danger);
+      font-weight: 600;
+      cursor: pointer;
+      background: none;
+      border: none;
+      display: block;
+      margin-left: auto;
+    }
+    .remove-btn:hover {
+      text-decoration: underline;
+    }
+
+    /* Empty cart */
+    .empty-cart {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+    .empty-cart .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 16px;
+    }
+    .empty-cart h3 {
+      font-size: 1.2rem;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    /* Summary sidebar */
+    .cart-summary {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      position: sticky;
+      top: 140px;
+      height: fit-content;
+    }
+    .cart-summary h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    .summary-row.total {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--primary);
+      padding-top: 14px;
+      margin-top: 8px;
+      border-top: 2px solid var(--border);
+    }
+    .summary-row .label {
+      color: var(--text-secondary);
+    }
+    .delivery-note {
+      background: var(--primary-soft);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      font-size: 0.85rem;
+      color: var(--primary-dark);
+      margin: 16px 0;
+      line-height: 1.5;
+    }
+    .btn-checkout {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: white;
+      border-radius: var(--radius);
+      font-weight: 700;
+      font-size: 1.05rem;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+    .btn-checkout:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow);
+    }
+    .btn-continue {
+      width: 100%;
+      padding: 12px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: white;
+      margin-top: 10px;
+      transition: all 0.2s;
+    }
+    .btn-continue:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .payment-methods {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-light);
+    }
+    .payment-methods p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .payment-icons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .payment-icon {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    /* Steps indicator */
+    .checkout-steps {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .step .num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--border);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+    }
+    .step.active { color: var(--primary); }
+    .step.active .num { background: var(--primary); }
+    .step.done { color: var(--success); }
+    .step.done .num { background: var(--success); }
+    .step-line {
+      width: 40px;
+      height: 2px;
+      background: var(--border);
+      align-self: center;
+    }
+    .step-line.done { background: var(--success); }
+
+    @media (max-width: 900px) {
+      .cart-layout {
+        grid-template-columns: 1fr;
+      }
+      .cart-summary {
+        position: static;
+      }
+      .cart-item {
+        grid-template-columns: 70px 1fr;
+        gap: 12px;
+      }
+      .cart-item-price {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: left;
+        padding-top: 8px;
+        border-top: 1px solid var(--border-light);
+      }
+      .cart-item-price .line-total {
+        margin-bottom: 0;
+      }
+      .qty-control {
+        margin-left: 0;
+      }
+      .remove-btn {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-top">
+      <div class="container">
+        <span class="lang-om">🌱 Qonnaan Bulaa → Gabaa → Buyer → Delivery → Kaffaltii</span>
+        <span class="lang-en">🌱 Farmer → Market → Buyer → Delivery → Payment</span>
+        <span>
+          <span class="lang-om">📞 Deeggarsa: +251 9XX XXX XXX</span>
+          <span class="lang-en">📞 Support: +251 9XX XXX XXX</span>
+        </span>
+      </div>
+    </div>
+    <div class="header-main">
+      <div class="container">
+        <a href="index.html" class="logo">
+          <div class="logo-icon">IK</div>
+          <div class="logo-text">INA-KJ <span>Agro</span></div>
+        </a>
+        <form class="search-bar" action="marketplace.html" method="get">
+          <input type="text" name="q" placeholder="Oomisha barbaadi..." class="lang-om">
+          <input type="text" name="q" placeholder="Search products..." class="lang-en">
+          <button type="submit">🔍</button>
+        </form>
+        <div class="header-actions">
+          <div class="lang-toggle">
+            <button class="lang-btn active" data-lang="om">OM</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+          </div>
+          <a href="buyer/dashboard.html" class="header-btn">
+            <span class="icon">🛒</span>
+            <span class="lang-om">Buyer</span>
+            <span class="lang-en">Buyer</span>
+          </a>
+          <a href="cart.html" class="header-btn" style="color:var(--primary);font-weight:700;">
+            <span class="icon">🛍️</span>
+            <span class="lang-om">Cart (2)</span>
+            <span class="lang-en">Cart (2)</span>
+          </a>
+          <button class="menu-toggle">☰</button>
+        </div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="container">
+        <a href="index.html" class="nav-link">
+          <span class="lang-om">Mana</span>
+          <span class="lang-en">Home</span>
+        </a>
+        <a href="marketplace.html" class="nav-link">
+          <span class="lang-om">Gabaa</span>
+          <span class="lang-en">Marketplace</span>
+        </a>
+        <a href="market-price.html" class="nav-link">
+          <span class="lang-om">Gatii Gabaa</span>
+          <span class="lang-en">Market Prices</span>
+        </a>
+        <a href="cart.html" class="nav-link active">
+          <span class="lang-om">Cart</span>
+          <span class="lang-en">Cart</span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container">
+
+    <!-- Steps -->
+    <div class="checkout-steps" style="padding-top:28px;">
+      <div class="step active">
+        <span class="num">1</span>
+        <span class="lang-om">Cart</span>
+        <span class="lang-en">Cart</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step">
+        <span class="num">2</span>
+        <span class="lang-om">Checkout</span>
+        <span class="lang-en">Checkout</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step">
+        <span class="num">3</span>
+        <span class="lang-om">Kaffaltii</span>
+        <span class="lang-en">Payment</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step">
+        <span class="num">4</span>
+        <span class="lang-om">Mirkaneessa</span>
+        <span class="lang-en">Confirmed</span>
+      </div>
+    </div>
+
+    <div class="page-title">
+      <h1>
+        <span class="lang-om">🛒 Cart Keessaa</span>
+        <span class="lang-en">🛒 Your Cart</span>
+      </h1>
+      <p>
+        <span class="lang-om">Oomisha 2 cart keessatti jiru</span>
+        <span class="lang-en">2 items in your cart</span>
+      </p>
+    </div>
+
+    <div class="cart-layout">
+
+      <!-- Cart Items -->
+      <div class="cart-items" id="cartItems">
+
+        <!-- Item 1 -->
+        <div class="cart-item" data-price="1200" data-id="1">
+          <div class="cart-item-img">🌿</div>
+          <div class="cart-item-info">
+            <h3>
+              <span class="lang-om">Jimaa Goggogaa – Grade A</span>
+              <span class="lang-en">Dried Khat – Grade A</span>
+            </h3>
+            <div class="meta">📍 West Hararghe, Chiro • Grade A</div>
+            <div class="seller">
+              <span style="color:var(--info);">✓</span>
+              Ahmed Hassan
+              <span class="lang-om">(Qonnaan Mirkaneeffame)</span>
+              <span class="lang-en">(Verified Farmer)</span>
+            </div>
+          </div>
+          <div class="cart-item-price">
+            <div class="unit-price">1,200 ETB/kg</div>
+            <div class="line-total" id="total-1">60,000 ETB</div>
+            <div class="qty-control">
+              <button type="button" onclick="updateQty(1, -10)">−</button>
+              <input type="number" id="qty-1" value="50" min="10" max="500" step="10" onchange="recalc(1)">
+              <button type="button" onclick="updateQty(1, 10)">+</button>
+            </div>
+            <button class="remove-btn" onclick="removeItem(1)">
+              <span class="lang-om">✕ Haqi</span>
+              <span class="lang-en">✕ Remove</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="cart-item" data-price="350" data-id="2">
+          <div class="cart-item-img">🍯</div>
+          <div class="cart-item-info">
+            <h3>
+              <span class="lang-om">Damma Organic</span>
+              <span class="lang-en">Organic Honey</span>
+            </h3>
+            <div class="meta">📍 Bale, Robe • 100% Natural</div>
+            <div class="seller">
+              <span style="color:var(--info);">✓</span>
+              Fatuma Ali
+              <span class="lang-om">(Beekeeper Mirkaneeffame)</span>
+              <span class="lang-en">(Verified Beekeeper)</span>
+            </div>
+          </div>
+          <div class="cart-item-price">
+            <div class="unit-price">350 ETB/kg</div>
+            <div class="line-total" id="total-2">7,000 ETB</div>
+            <div class="qty-control">
+              <button type="button" onclick="updateQty(2, -5)">−</button>
+              <input type="number" id="qty-2" value="20" min="5" max="200" step="5" onchange="recalc(2)">
+              <button type="button" onclick="updateQty(2, 5)">+</button>
+            </div>
+            <button class="remove-btn" onclick="removeItem(2)">
+              <span class="lang-om">✕ Haqi</span>
+              <span class="lang-en">✕ Remove</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Summary -->
+      <aside class="cart-summary">
+        <h2>
+          <span class="lang-om">Cuunfaa Order</span>
+          <span class="lang-en">Order Summary</span>
+        </h2>
+
+        <div class="summary-row">
+          <span class="label">
+            <span class="lang-om">Subtotal</span>
+            <span class="lang-en">Subtotal</span>
+          </span>
+          <span id="subtotal">67,000 ETB</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">
+            <span class="lang-om">Delivery</span>
+            <span class="lang-en">Delivery</span>
+          </span>
+          <span id="deliveryFee">1,500 ETB</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">
+            <span class="lang-om">Commission (platform)</span>
+            <span class="lang-en">Platform fee</span>
+          </span>
+          <span id="platformFee">0 ETB</span>
+        </div>
+        <div class="summary-row total">
+          <span>
+            <span class="lang-om">Walgahii</span>
+            <span class="lang-en">Total</span>
+          </span>
+          <span id="grandTotal">68,500 ETB</span>
+        </div>
+
+        <div class="delivery-note">
+          <span class="lang-om">🚚 Delivery: Platform partner ykn seller ofiin geessuu danda'a. Bakka kee irratti filadhu.</span>
+          <span class="lang-en">🚚 Delivery: Via platform partner or seller. Choose at checkout.</span>
+        </div>
+
+        <button class="btn-checkout" onclick="window.location.href='checkout.html'">
+          <span class="lang-om">Checkout →</span>
+          <span class="lang-en">Proceed to Checkout →</span>
+        </button>
+        <button class="btn-continue" onclick="window.location.href='marketplace.html'">
+          <span class="lang-om">← Gabaa itti fufi</span>
+          <span class="lang-en">← Continue Shopping</span>
+        </button>
+
+        <div class="payment-methods">
+          <p>
+            <span class="lang-om">Mala kaffaltii:</span>
+            <span class="lang-en">Payment methods:</span>
+          </p>
+          <div class="payment-icons">
+            <span class="payment-icon">Telebirr</span>
+            <span class="payment-icon">CBE Birr</span>
+            <span class="payment-icon">Bank Transfer</span>
+            <span class="payment-icon">Card</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border:none;padding-top:0;">
+        <span>© 2026 INA-KJ Agro Connect</span>
+        <span>
+          <span class="lang-om">Itoophiyaaf ijaarame</span>
+          <span class="lang-en">Built for Ethiopia</span>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+  <script>
+    const prices = { 1: 1200, 2: 350 };
+
+    function updateQty(id, delta) {
+      const input = document.getElementById('qty-' + id);
+      let val = parseInt(input.value) || 0;
+      const min = parseInt(input.min) || 1;
+      const max = parseInt(input.max) || 9999;
+      val = Math.max(min, Math.min(max, val + delta));
+      input.value = val;
+      recalc(id);
+    }
+
+    function recalc(id) {
+      const qty = parseInt(document.getElementById('qty-' + id).value) || 0;
+      const lineTotal = qty * prices[id];
+      document.getElementById('total-' + id).textContent = lineTotal.toLocaleString() + ' ETB';
+      updateSummary();
+    }
+
+    function updateSummary() {
+      let subtotal = 0;
+      document.querySelectorAll('.cart-item').forEach(item => {
+        const id = item.dataset.id;
+        const qty = parseInt(document.getElementById('qty-' + id)?.value) || 0;
+        subtotal += qty * prices[id];
+      });
+      const delivery = subtotal > 0 ? 1500 : 0;
+      const total = subtotal + delivery;
+      document.getElementById('subtotal').textContent = subtotal.toLocaleString() + ' ETB';
+      document.getElementById('deliveryFee').textContent = delivery.toLocaleString() + ' ETB';
+      document.getElementById('grandTotal').textContent = total.toLocaleString() + ' ETB';
+    }
+
+    function removeItem(id) {
+      const item = document.querySelector(`.cart-item[data-id="${id}"]`);
+      if (item) {
+        item.remove();
+        delete prices[id];
+        updateSummary();
+        // Check if empty
+        if (document.querySelectorAll('.cart-item').length === 0) {
+          document.getElementById('cartItems').innerHTML = `
+            <div class="empty-cart">
+              <div class="empty-icon">🛒</div>
+              <h3>
+                <span class="lang-om">Cart keessaa duwwaa dha</span>
+                <span class="lang-en">Your cart is empty</span>
+              </h3>
+              <p>
+                <span class="lang-om">Oomisha gabaa irraa filadhu</span>
+                <span class="lang-en">Browse the marketplace to add products</span>
+              </p>
+              <a href="marketplace.html" class="btn-primary" style="display:inline-block;margin-top:16px;padding:12px 24px;">
+                <span class="lang-om">Gabaa Ilaali</span>
+                <span class="lang-en">Browse Marketplace</span>
+              </a>
+            </div>`;
+        }
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="om" data-lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buyer Dashboard – INA-KJ Agro Connect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .dash-wrapper {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: calc(100vh - 50px);
+    }
+    .dash-sidebar {
+      background: #0D3D1F;
+      color: white;
+      padding: 24px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .dash-sidebar .logo {
+      padding: 0 20px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      margin-bottom: 16px;
+    }
+    .dash-sidebar .logo-text { color: white; font-size: 1.1rem; }
+    .dash-sidebar .logo-text span { color: var(--gold); }
+    .sidebar-user {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      margin-bottom: 12px;
+    }
+    .sidebar-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: #457B9D;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+    }
+    .sidebar-user-info h4 { font-size: 0.95rem; font-weight: 650; }
+    .sidebar-user-info p { font-size: 0.8rem; opacity: 0.7; }
+    .sidebar-nav a {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 20px; font-size: 0.95rem; font-weight: 500;
+      color: rgba(255,255,255,0.8); transition: all 0.2s;
+      border-left: 3px solid transparent;
+    }
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+      background: rgba(255,255,255,0.08); color: white;
+      border-left-color: var(--gold);
+    }
+    .sidebar-nav a .icon { font-size: 1.15rem; width: 24px; text-align: center; }
+    .sidebar-nav .badge-count {
+      margin-left: auto; background: var(--accent-dark); color: white;
+      font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 20px;
+    }
+    .dash-main {
+      background: var(--bg);
+      padding: 28px 32px 60px;
+    }
+    .dash-topbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .sidebar-toggle {
+      display: none; background: none; border: none;
+      font-size: 1.5rem; color: var(--primary); cursor: pointer;
+    }
+    .dash-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 28px; flex-wrap: wrap; gap: 16px;
+    }
+    .dash-header h1 { font-size: 1.6rem; font-weight: 800; }
+    .dash-header p { color: var(--text-secondary); font-size: 0.95rem; margin-top: 4px; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: all 0.2s;
+    }
+    .stat-card:hover { box-shadow: var(--shadow); border-color: var(--primary-light); }
+    .stat-card .stat-icon {
+      width: 42px; height: 42px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; margin-bottom: 12px;
+    }
+    .stat-card .stat-icon.green { background: var(--primary-soft); }
+    .stat-card .stat-icon.blue { background: #E3F2FD; }
+    .stat-card .stat-icon.orange { background: #FFF3E0; }
+    .stat-card .stat-icon.purple { background: #F3E5F5; }
+    .stat-card h3 { font-size: 1.6rem; font-weight: 800; margin-bottom: 4px; }
+    .stat-card p { font-size: 0.9rem; color: var(--text-secondary); }
+
+    .dash-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .dash-card-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .dash-card-header h2 { font-size: 1.1rem; font-weight: 700; }
+    .dash-table { width: 100%; border-collapse: collapse; }
+    .dash-table th {
+      background: var(--bg); padding: 12px 18px; text-align: left;
+      font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);
+      text-transform: uppercase; letter-spacing: 0.3px;
+    }
+    .dash-table td {
+      padding: 14px 18px; border-top: 1px solid var(--border-light);
+      font-size: 0.95rem; vertical-align: middle;
+    }
+    .dash-table tr:hover td { background: var(--bg); }
+    .status-badge {
+      display: inline-block; padding: 4px 12px; border-radius: 20px;
+      font-size: 0.8rem; font-weight: 600;
+    }
+    .status-pending { background: #FFF3E0; color: #E65100; }
+    .status-processing { background: #E3F2FD; color: #1565C0; }
+    .status-transit { background: #E8F5E9; color: #2E7D32; }
+    .status-delivered { background: var(--primary-soft); color: var(--primary); }
+    .status-cancelled { background: #FFEBEE; color: #C62828; }
+
+    .product-cell { display: flex; align-items: center; gap: 12px; }
+    .product-thumb {
+      width: 42px; height: 42px; border-radius: 8px;
+      background: var(--primary-soft);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; flex-shrink: 0;
+    }
+    .action-btns { display: flex; gap: 6px; }
+    .action-btns button, .action-btns a {
+      padding: 6px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 600;
+      border: 1px solid var(--border); background: var(--white);
+      color: var(--text-secondary); transition: all 0.2s; cursor: pointer;
+    }
+    .action-btns button:hover, .action-btns a:hover {
+      border-color: var(--primary); color: var(--primary);
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 14px; margin-bottom: 28px;
+    }
+    .quick-btn {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px 16px; text-align: center;
+      transition: all 0.2s; cursor: pointer;
+    }
+    .quick-btn:hover {
+      border-color: var(--primary); box-shadow: var(--shadow); transform: translateY(-2px);
+    }
+    .quick-btn .qa-icon { font-size: 1.8rem; margin-bottom: 8px; }
+    .quick-btn h4 { font-size: 0.95rem; font-weight: 650; }
+
+    /* Favorites / Cart preview cards */
+    .mini-products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+      padding: 18px 22px;
+    }
+    .mini-product {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      transition: all 0.2s;
+    }
+    .mini-product:hover { border-color: var(--primary); box-shadow: var(--shadow-sm); }
+    .mini-product .thumb {
+      width: 50px; height: 50px; border-radius: 8px;
+      background: var(--primary-soft);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; flex-shrink: 0;
+    }
+    .mini-product h4 { font-size: 0.9rem; font-weight: 650; margin-bottom: 2px; }
+    .mini-product .price { font-size: 0.95rem; font-weight: 700; color: var(--primary); }
+    .mini-product .meta { font-size: 0.8rem; color: var(--text-muted); }
+
+    /* Tracking steps */
+    .tracking-steps {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px 22px;
+      position: relative;
+    }
+    .tracking-steps::before {
+      content: '';
+      position: absolute;
+      top: 36px;
+      left: 10%;
+      right: 10%;
+      height: 3px;
+      background: var(--border);
+      z-index: 0;
+    }
+    .track-step {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      flex: 1;
+    }
+    .track-step .dot {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--border); margin: 0 auto 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700; color: white;
+    }
+    .track-step.done .dot { background: var(--primary); }
+    .track-step.active .dot { background: var(--accent-dark); box-shadow: 0 0 0 4px rgba(231,111,81,0.25); }
+    .track-step p { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+    .track-step.done p, .track-step.active p { color: var(--text); font-weight: 600; }
+
+    @media (max-width: 1100px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .dash-wrapper { grid-template-columns: 1fr; }
+      .dash-sidebar {
+        position: fixed; left: -280px; z-index: 2000;
+        transition: left 0.3s; width: 260px;
+      }
+      .dash-sidebar.open { left: 0; }
+      .sidebar-toggle { display: block; }
+      .dash-main { padding: 20px 16px 60px; }
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .tracking-steps { flex-wrap: wrap; gap: 12px; }
+      .tracking-steps::before { display: none; }
+    }
+    @media (max-width: 500px) {
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dash-topbar">
+    <button class="sidebar-toggle" onclick="document.querySelector('.dash-sidebar').classList.toggle('open')">☰</button>
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="om">OM</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </div>
+
+  <div class="dash-wrapper">
+
+    <!-- SIDEBAR -->
+    <aside class="dash-sidebar">
+      <div class="logo">
+        <div class="logo-icon" style="width:36px;height:36px;font-size:1.1rem;">IK</div>
+        <div class="logo-text">INA-KJ <span>Agro</span></div>
+      </div>
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">🛒</div>
+        <div class="sidebar-user-info">
+          <h4>Sara Trading Co.</h4>
+          <p>
+            <span class="lang-om">Buyer ✓</span>
+            <span class="lang-en">Verified Buyer ✓</span>
+          </p>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="active">
+          <span class="icon">📊</span>
+          <span class="lang-om">Dashboard</span>
+          <span class="lang-en">Dashboard</span>
+        </a>
+        <a href="../marketplace.html">
+          <span class="icon">🛍️</span>
+          <span class="lang-om">Gabaa</span>
+          <span class="lang-en">Marketplace</span>
+        </a>
+        <a href="#orders">
+          <span class="icon">📦</span>
+          <span class="lang-om">Orders Koo</span>
+          <span class="lang-en">My Orders</span>
+          <span class="badge-count">3</span>
+        </a>
+        <a href="../cart.html">
+          <span class="icon">🛒</span>
+          <span class="lang-om">Cart</span>
+          <span class="lang-en">Cart</span>
+          <span class="badge-count">2</span>
+        </a>
+        <a href="#favorites">
+          <span class="icon">❤️</span>
+          <span class="lang-om">Favorites</span>
+          <span class="lang-en">Favorites</span>
+        </a>
+        <a href="#tracking">
+          <span class="icon">🚚</span>
+          <span class="lang-om">Delivery Tracking</span>
+          <span class="lang-en">Delivery Tracking</span>
+        </a>
+        <a href="#payments">
+          <span class="icon">💳</span>
+          <span class="lang-om">Kaffaltii History</span>
+          <span class="lang-en">Payment History</span>
+        </a>
+        <a href="../messages.html">
+          <span class="icon">💬</span>
+          <span class="lang-om">Ergaa</span>
+          <span class="lang-en">Messages</span>
+          <span class="badge-count">2</span>
+        </a>
+        <a href="../market-price.html">
+          <span class="icon">📈</span>
+          <span class="lang-om">Gatii Gabaa</span>
+          <span class="lang-en">Market Prices</span>
+        </a>
+        <a href="../index.html" style="margin-top:20px;opacity:0.7;">
+          <span class="icon">🏠</span>
+          <span class="lang-om">Gara Website</span>
+          <span class="lang-en">Back to Website</span>
+        </a>
+        <a href="login.html" style="opacity:0.7;">
+          <span class="icon">🚪</span>
+          <span class="lang-om">Ba'i</span>
+          <span class="lang-en">Logout</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="dash-main">
+
+      <div class="dash-header">
+        <div>
+          <h1>
+            <span class="lang-om">Akkam jirta, Sara! 👋</span>
+            <span class="lang-en">Welcome back, Sara! 👋</span>
+          </h1>
+          <p>
+            <span class="lang-om">Orders kee, cart fi delivery hordofi</span>
+            <span class="lang-en">Track your orders, cart and deliveries</span>
+          </p>
+        </div>
+        <a href="../marketplace.html" class="btn-primary">
+          <span class="lang-om">🛍️ Gabaa Ilaali</span>
+          <span class="lang-en">🛍️ Browse Marketplace</span>
+        </a>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon blue">📦</div>
+          <h3>3</h3>
+          <p>
+            <span class="lang-om">Orders Aktiivii</span>
+            <span class="lang-en">Active Orders</span>
+          </p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">✅</div>
+          <h3>18</h3>
+          <p>
+            <span class="lang-om">Orders Xumuraman</span>
+            <span class="lang-en">Completed Orders</span>
+          </p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange">🛒</div>
+          <h3>2</h3>
+          <p>
+            <span class="lang-om">Cart keessatti</span>
+            <span class="lang-en">Items in Cart</span>
+          </p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple">💰</div>
+          <h3>245,000</h3>
+          <p>
+            <span class="lang-om">Kaffaltii Walgahii (ETB)</span>
+            <span class="lang-en">Total Spent (ETB)</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <a href="../marketplace.html" class="quick-btn">
+          <div class="qa-icon">🛍️</div>
+          <h4>
+            <span class="lang-om">Oomisha Barbaadi</span>
+            <span class="lang-en">Search Products</span>
+          </h4>
+        </a>
+        <a href="../cart.html" class="quick-btn">
+          <div class="qa-icon">🛒</div>
+          <h4>
+            <span class="lang-om">Cart Ilaali</span>
+            <span class="lang-en">View Cart</span>
+          </h4>
+        </a>
+        <a href="#tracking" class="quick-btn">
+          <div class="qa-icon">🚚</div>
+          <h4>
+            <span class="lang-om">Delivery Hordofi</span>
+            <span class="lang-en">Track Delivery</span>
+          </h4>
+        </a>
+        <a href="#favorites" class="quick-btn">
+          <div class="qa-icon">❤️</div>
+          <h4>
+            <span class="lang-om">Favorites</span>
+            <span class="lang-en">Favorites</span>
+          </h4>
+        </a>
+      </div>
+
+      <!-- Active Orders -->
+      <div class="dash-card" id="orders">
+        <div class="dash-card-header">
+          <h2>
+            <span class="lang-om">📦 Orders Aktiivii</span>
+            <span class="lang-en">📦 Active Orders</span>
+          </h2>
+          <a href="#" class="view-all" style="margin:0;font-size:0.9rem;">
+            <span class="lang-om">Hunda Ilaali →</span>
+            <span class="lang-en">View All →</span>
+          </a>
+        </div>
+        <div>
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>
+                  <span class="lang-om">Oomisha</span>
+                  <span class="lang-en">Product</span>
+                </th>
+                <th>
+                  <span class="lang-om">Seller</span>
+                  <span class="lang-en">Seller</span>
+                </th>
+                <th>
+                  <span class="lang-om">Hanga</span>
+                  <span class="lang-en">Qty</span>
+                </th>
+                <th>
+                  <span class="lang-om">Gatii</span>
+                  <span class="lang-en">Amount</span>
+                </th>
+                <th>
+                  <span class="lang-om">Haala</span>
+                  <span class="lang-en">Status</span>
+                </th>
+                <th>
+                  <span class="lang-om">Gocha</span>
+                  <span class="lang-en">Action</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>#ORD-1042</strong></td>
+                <td>
+                  <div class="product-cell">
+                    <div class="product-thumb">🌿</div>
+                    <div>
+                      <span class="lang-om">Jimaa Goggogaa – Grade A</span>
+                      <span class="lang-en">Dried Khat – Grade A</span>
+                    </div>
+                  </div>
+                </td>
+                <td>Ahmed Hassan ✓</td>
+                <td>50 kg</td>
+                <td><strong>60,000 ETB</strong></td>
+                <td><span class="status-badge status-pending">
+                  <span class="lang-om">Eegaa</span>
+                  <span class="lang-en">Pending</span>
+                </span></td>
+                <td>
+                  <div class="action-btns">
+                    <button>
+                      <span class="lang-om">Ilaali</span>
+                      <span class="lang-en">View</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>#ORD-1038</strong></td>
+                <td>
+                  <div class="product-cell">
+                    <div class="product-thumb">☕</div>
+                    <div>
+                      <span class="lang-om">Buna Yirgacheffe</span>
+                      <span class="lang-en">Yirgacheffe Coffee</span>
+                    </div>
+                  </div>
+                </td>
+                <td>Tigist Cooperative ✓</td>
+                <td>200 kg</td>
+                <td><strong>96,000 ETB</strong></td>
+                <td><span class="status-badge status-processing">
+                  <span class="lang-om">Hojii irra</span>
+                  <span class="lang-en">Processing</span>
+                </span></td>
+                <td>
+                  <div class="action-btns">
+                    <button>
+                      <span class="lang-om">Ilaali</span>
+                      <span class="lang-en">View</span>
+                    </button>
+                    <button>
+                      <span class="lang-om">Track</span>
+                      <span class="lang-en">Track</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>#ORD-1031</strong></td>
+                <td>
+                  <div class="product-cell">
+                    <div class="product-thumb">🌾</div>
+                    <div>
+                      <span class="lang-om">Qamadii</span>
+                      <span class="lang-en">Wheat</span>
+                    </div>
+                  </div>
+                </td>
+                <td>Mulugeta Alemu ✓</td>
+                <td>1,000 kg</td>
+                <td><strong>45,000 ETB</strong></td>
+                <td><span class="status-badge status-transit">
+                  <span class="lang-om">Karaa irra</span>
+                  <span class="lang-en">In Transit</span>
+                </span></td>
+                <td>
+                  <div class="action-btns">
+                    <button>
+                      <span class="lang-om">Track</span>
+                      <span class="lang-en">Track</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Delivery Tracking -->
+      <div class="dash-card" id="tracking">
+        <div class="dash-card-header">
+          <h2>
+            <span class="lang-om">🚚 Delivery Tracking – #ORD-1031</span>
+            <span class="lang-en">🚚 Delivery Tracking – #ORD-1031</span>
+          </h2>
+        </div>
+        <div class="tracking-steps">
+          <div class="track-step done">
+            <div class="dot">✓</div>
+            <p>
+              <span class="lang-om">Order Mirkanaa'e</span>
+              <span class="lang-en">Confirmed</span>
+            </p>
+          </div>
+          <div class="track-step done">
+            <div class="dot">✓</div>
+            <p>
+              <span class="lang-om">Hojii irra</span>
+              <span class="lang-en">Processing</span>
+            </p>
+          </div>
+          <div class="track-step done">
+            <div class="dot">✓</div>
+            <p>
+              <span class="lang-om">Fudhatame</span>
+              <span class="lang-en">Picked Up</span>
+            </p>
+          </div>
+          <div class="track-step active">
+            <div class="dot">4</div>
+            <p>
+              <span class="lang-om">Karaa irra</span>
+              <span class="lang-en">In Transit</span>
+            </p>
+          </div>
+          <div class="track-step">
+            <div class="dot">5</div>
+            <p>
+              <span class="lang-om">Geesse</span>
+              <span class="lang-en">Delivered</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cart Preview -->
+      <div class="dash-card" id="cart">
+        <div class="dash-card-header">
+          <h2>
+            <span class="lang-om">🛒 Cart Keessaa</span>
+            <span class="lang-en">🛒 Your Cart</span>
+          </h2>
+          <a href="../cart.html" class="view-all" style="margin:0;font-size:0.9rem;">
+            <span class="lang-om">Cart Guutuu Ilaali →</span>
+            <span class="lang-en">View Full Cart →</span>
+          </a>
+        </div>
+        <div class="mini-products">
+          <div class="mini-product">
+            <div class="thumb">🌿</div>
+            <div>
+              <h4>
+                <span class="lang-om">Jimaa Goggogaa</span>
+                <span class="lang-en">Dried Khat</span>
+              </h4>
+              <div class="meta">50 kg • Grade A</div>
+              <div class="price">60,000 ETB</div>
+            </div>
+          </div>
+          <div class="mini-product">
+            <div class="thumb">🍯</div>
+            <div>
+              <h4>
+                <span class="lang-om">Damma Organic</span>
+                <span class="lang-en">Organic Honey</span>
+              </h4>
+              <div class="meta">20 kg</div>
+              <div class="price">7,000 ETB</div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:0 22px 18px;display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-weight:700;font-size:1.1rem;">
+            <span class="lang-om">Walgahii:</span>
+            <span class="lang-en">Total:</span>
+            67,000 ETB
+          </div>
+          <a href="../cart.html" class="btn-primary" style="padding:10px 20px;">
+            <span class="lang-om">Checkout →</span>
+            <span class="lang-en">Checkout →</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Favorites -->
+      <div class="dash-card" id="favorites">
+        <div class="dash-card-header">
+          <h2>
+            <span class="lang-om">❤️ Favorites</span>
+            <span class="lang-en">❤️ Favorites</span>
+          </h2>
+        </div>
+        <div class="mini-products">
+          <div class="mini-product">
+            <div class="thumb">☕</div>
+            <div>
+              <h4>
+                <span class="lang-om">Buna Yirgacheffe</span>
+                <span class="lang-en">Yirgacheffe Coffee</span>
+              </h4>
+              <div class="meta">Grade 1 • Export</div>
+              <div class="price">480 ETB/kg</div>
+            </div>
+          </div>
+          <div class="mini-product">
+            <div class="thumb">🌶️</div>
+            <div>
+              <h4>
+                <span class="lang-om">Barbaree</span>
+                <span class="lang-en">Dried Chili</span>
+              </h4>
+              <div class="meta">Grade A</div>
+              <div class="price">95 ETB/kg</div>
+            </div>
+          </div>
+          <div class="mini-product">
+            <div class="thumb">🍊</div>
+            <div>
+              <h4>
+                <span class="lang-om">Burtukaana</span>
+                <span class="lang-en">Oranges</span>
+              </h4>
+              <div class="meta">Fresh • Sidama</div>
+              <div class="price">35 ETB/kg</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment History -->
+      <div class="dash-card" id="payments">
+        <div class="dash-card-header">
+          <h2>
+            <span class="lang-om">💳 Kaffaltii History</span>
+            <span class="lang-en">💳 Payment History</span>
+          </h2>
+        </div>
+        <div>
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Order ID</th>
+                <th>
+                  <span class="lang-om">Mala</span>
+                  <span class="lang-en">Method</span>
+                </th>
+                <th>
+                  <span class="lang-om">Gatii</span>
+                  <span class="lang-en">Amount</span>
+                </th>
+                <th>
+                  <span class="lang-om">Haala</span>
+                  <span class="lang-en">Status</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>12 Sep 2026</td>
+                <td>#ORD-1038</td>
+                <td>Telebirr</td>
+                <td><strong>96,000 ETB</strong></td>
+                <td><span class="status-badge status-delivered">
+                  <span class="lang-om">Milkaa'e</span>
+                  <span class="lang-en">Paid</span>
+                </span></td>
+              </tr>
+              <tr>
+                <td>08 Sep 2026</td>
+                <td>#ORD-1029</td>
+                <td>CBE Birr</td>
+                <td><strong>22,500 ETB</strong></td>
+                <td><span class="status-badge status-delivered">
+                  <span class="lang-om">Milkaa'e</span>
+                  <span class="lang-en">Paid</span>
+                </span></td>
+              </tr>
+              <tr>
+                <td>02 Sep 2026</td>
+                <td>#ORD-1018</td>
+                <td>Bank Transfer</td>
+                <td><strong>45,000 ETB</strong></td>
+                <td><span class="status-badge status-delivered">
+                  <span class="lang-om">Milkaa'e</span>
+                  <span class="lang-en">Paid</span>
+                </span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../js/script.js"></script>
+  <script>
+    document.addEventListener('click', function(e) {
+      const sidebar = document.querySelector('.dash-sidebar');
+      const toggle = document.querySelector('.sidebar-toggle');
+      if (window.innerWidth <= 900 && sidebar.classList.contains('open')) {
+        if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
+          sidebar.classList.remove('open');
+        }
+      }
+    });
+  </script>
+</body>
+</html>

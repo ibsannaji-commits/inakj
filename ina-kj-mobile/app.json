@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "INA-KJ Agro Connect",
+    "slug": "ina-kj-agro",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icons/icon.png",
+    "scheme": "inakj",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/icons/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1B7A3D"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.inakj.agro"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icons/adaptive-icon.png",
+        "backgroundColor": "#1B7A3D"
+      },
+      "package": "com.inakj.agro",
+      "permissions": ["CAMERA", "READ_EXTERNAL_STORAGE"]
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "apiUrl": "http://localhost:4000/api/v1",
+      "wsUrl": "http://localhost:4000"
+    }
+  }
+}

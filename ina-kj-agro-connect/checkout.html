@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="om" data-lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout – INA-KJ Agro Connect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .checkout-steps {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 28px 0;
+      flex-wrap: wrap;
+    }
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .step .num {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--border); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem;
+    }
+    .step.active { color: var(--primary); }
+    .step.active .num { background: var(--primary); }
+    .step.done { color: var(--success); }
+    .step.done .num { background: var(--success); }
+    .step-line {
+      width: 40px; height: 2px; background: var(--border); align-self: center;
+    }
+    .step-line.done { background: var(--success); }
+
+    .checkout-layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 28px;
+      padding-bottom: 60px;
+    }
+    .checkout-form {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+    }
+    .form-section {
+      margin-bottom: 28px;
+    }
+    .form-section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--primary-soft);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+    .form-row.full { grid-template-columns: 1fr; }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group label {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .form-group label .req { color: var(--danger); }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      font-size: 0.95rem;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--primary);
+      background: white;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(27,122,61,0.1);
+    }
+
+    /* Delivery options */
+    .delivery-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .delivery-option {
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .delivery-option:hover {
+      border-color: var(--primary-light);
+    }
+    .delivery-option.selected {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+    }
+    .delivery-option input {
+      accent-color: var(--primary);
+      width: 18px;
+      height: 18px;
+    }
+    .delivery-option .opt-info {
+      flex: 1;
+    }
+    .delivery-option .opt-info strong {
+      display: block;
+      font-size: 0.95rem;
+    }
+    .delivery-option .opt-info span {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .delivery-option .opt-price {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* Payment methods */
+    .payment-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .pay-option {
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .pay-option:hover {
+      border-color: var(--primary-light);
+    }
+    .pay-option.selected {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+    }
+    .pay-option .pay-icon {
+      font-size: 1.6rem;
+      margin-bottom: 6px;
+    }
+    .pay-option strong {
+      display: block;
+      font-size: 0.95rem;
+    }
+    .pay-option span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Summary */
+    .order-summary {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      position: sticky;
+      top: 140px;
+      height: fit-content;
+    }
+    .order-summary h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .summary-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .summary-item:last-of-type {
+      border-bottom: none;
+    }
+    .summary-item .img {
+      width: 50px; height: 50px;
+      border-radius: 8px;
+      background: var(--primary-soft);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; flex-shrink: 0;
+    }
+    .summary-item .info {
+      flex: 1;
+    }
+    .summary-item .info strong {
+      font-size: 0.9rem;
+      display: block;
+    }
+    .summary-item .info span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .summary-item .price {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+    .summary-row.total {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--primary);
+      padding-top: 12px;
+      border-top: 2px solid var(--border);
+      margin-top: 8px;
+    }
+    .btn-place-order {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: white;
+      border-radius: var(--radius);
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-top: 16px;
+      transition: all 0.2s;
+    }
+    .btn-place-order:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow);
+    }
+
+    @media (max-width: 900px) {
+      .checkout-layout { grid-template-columns: 1fr; }
+      .order-summary { position: static; }
+      .form-row { grid-template-columns: 1fr; }
+      .payment-options { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-top">
+      <div class="container">
+        <span class="lang-om">🌱 Qonnaan Bulaa → Gabaa → Buyer → Delivery → Kaffaltii</span>
+        <span class="lang-en">🌱 Farmer → Market → Buyer → Delivery → Payment</span>
+        <span>
+          <span class="lang-om">📞 Deeggarsa: +251 9XX XXX XXX</span>
+          <span class="lang-en">📞 Support: +251 9XX XXX XXX</span>
+        </span>
+      </div>
+    </div>
+    <div class="header-main">
+      <div class="container">
+        <a href="index.html" class="logo">
+          <div class="logo-icon">IK</div>
+          <div class="logo-text">INA-KJ <span>Agro</span></div>
+        </a>
+        <div class="header-actions" style="margin-left:auto;">
+          <div class="lang-toggle">
+            <button class="lang-btn active" data-lang="om">OM</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+          </div>
+          <a href="cart.html" class="header-btn">
+            <span class="icon">🛍️</span>
+            <span class="lang-om">Cart</span>
+            <span class="lang-en">Cart</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- Steps -->
+    <div class="checkout-steps">
+      <div class="step done">
+        <span class="num">✓</span>
+        <span class="lang-om">Cart</span>
+        <span class="lang-en">Cart</span>
+      </div>
+      <div class="step-line done"></div>
+      <div class="step active">
+        <span class="num">2</span>
+        <span class="lang-om">Checkout</span>
+        <span class="lang-en">Checkout</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step">
+        <span class="num">3</span>
+        <span class="lang-om">Kaffaltii</span>
+        <span class="lang-en">Payment</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step">
+        <span class="num">4</span>
+        <span class="lang-om">Mirkaneessa</span>
+        <span class="lang-en">Confirmed</span>
+      </div>
+    </div>
+
+    <div class="checkout-layout">
+
+      <!-- Form -->
+      <div class="checkout-form">
+
+        <!-- Delivery Address -->
+        <div class="form-section">
+          <div class="form-section-title">
+            📍
+            <span class="lang-om">Teessoo Delivery</span>
+            <span class="lang-en">Delivery Address</span>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>
+                <span class="lang-om">Maqaa Guutuu</span>
+                <span class="lang-en">Full Name</span>
+                <span class="req">*</span>
+              </label>
+              <input type="text" required placeholder="Sara Bekele">
+            </div>
+            <div class="form-group">
+              <label>
+                <span class="lang-om">Bilbila</span>
+                <span class="lang-en">Phone</span>
+                <span class="req">*</span>
+              </label>
+              <input type="tel" required placeholder="+251 9XX XXX XXX">
+            </div>
+          </div>
+          <div class="form-row full">
+            <div class="form-group">
+              <label>
+                <span class="lang-om">Teessoo</span>
+                <span class="lang-en">Address</span>
+                <span class="req">*</span>
+              </label>
+              <input type="text" required placeholder="Bole, Addis Ababa">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>
+                <span class="lang-om">Magaalaa</span>
+                <span class="lang-en">City</span>
+                <span class="req">*</span>
+              </label>
+              <select required>
+                <option value="">
+                  <span class="lang-om">-- Filadhu --</span>
+                  <span class="lang-en">-- Select --</span>
+                </option>
+                <option>Addis Ababa</option>
+                <option>Adama</option>
+                <option>Hawassa</option>
+                <option>Bahir Dar</option>
+                <option>Dire Dawa</option>
+                <option>Jimma</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>
+                <span class="lang-om">Naannoo</span>
+                <span class="lang-en">Region</span>
+              </label>
+              <input type="text" placeholder="Oromia / Addis Ababa">
+            </div>
+          </div>
+          <div class="form-row full">
+            <div class="form-group">
+              <label>
+                <span class="lang-om">Yaada dabalataa</span>
+                <span class="lang-en">Delivery notes</span>
+              </label>
+              <textarea rows="2" placeholder="Landmark, gate number..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delivery Method -->
+        <div class="form-section">
+          <div class="form-section-title">
+            🚚
+            <span class="lang-om">Mala Delivery</span>
+            <span class="lang-en">Delivery Method</span>
+          </div>
+          <div class="delivery-options">
+            <label class="delivery-option selected">
+              <input type="radio" name="delivery" value="platform" checked>
+              <div class="opt-info">
+                <strong>
+                  <span class="lang-om">Platform Delivery</span>
+                  <span class="lang-en">Platform Delivery</span>
+                </strong>
+                <span>
+                  <span class="lang-om">2–4 guyyaa • Tracking ni argama</span>
+                  <span class="lang-en">2–4 days • Tracking available</span>
+                </span>
+              </div>
+              <div class="opt-price">1,500 ETB</div>
+            </label>
+            <label class="delivery-option">
+              <input type="radio" name="delivery" value="seller">
+              <div class="opt-info">
+                <strong>
+                  <span class="lang-om">Seller ofiin geessa</span>
+                  <span class="lang-en">Seller delivers</span>
+                </strong>
+                <span>
+                  <span class="lang-om">Seller waliin mari'adhu</span>
+                  <span class="lang-en">Arrange with seller</span>
+                </span>
+              </div>
+              <div class="opt-price">
+                <span class="lang-om">Mari'achuun</span>
+                <span class="lang-en">Negotiable</span>
+              </div>
+            </label>
+            <label class="delivery-option">
+              <input type="radio" name="delivery" value="pickup">
+              <div class="opt-info">
+                <strong>
+                  <span class="lang-om">Ofiin fudhadhu (Pickup)</span>
+                  <span class="lang-en">Self Pickup</span>
+                </strong>
+                <span>
+                  <span class="lang-om">Bakka seller irraa fudhadhu</span>
+                  <span class="lang-en">Collect from seller location</span>
+                </span>
+              </div>
+              <div class="opt-price">0 ETB</div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="form-section">
+          <div class="form-section-title">
+            💳
+            <span class="lang-om">Mala Kaffaltii</span>
+            <span class="lang-en">Payment Method</span>
+          </div>
+          <div class="payment-options">
+            <label class="pay-option selected">
+              <input type="radio" name="payment" value="telebirr" checked hidden>
+              <div class="pay-icon">📱</div>
+              <strong>Telebirr</strong>
+              <span>
+                <span class="lang-om">Mobile money</span>
+                <span class="lang-en">Mobile money</span>
+              </span>
+            </label>
+            <label class="pay-option">
+              <input type="radio" name="payment" value="cbe" hidden>
+              <div class="pay-icon">🏦</div>
+              <strong>CBE Birr</strong>
+              <span>
+                <span class="lang-om">Bank mobile</span>
+                <span class="lang-en">Bank mobile</span>
+              </span>
+            </label>
+            <label class="pay-option">
+              <input type="radio" name="payment" value="bank" hidden>
+              <div class="pay-icon">🏧</div>
+              <strong>
+                <span class="lang-om">Bank Transfer</span>
+                <span class="lang-en">Bank Transfer</span>
+              </strong>
+              <span>CBE / Awash / etc.</span>
+            </label>
+            <label class="pay-option">
+              <input type="radio" name="payment" value="card" hidden>
+              <div class="pay-icon">💳</div>
+              <strong>Card</strong>
+              <span>Visa / Mastercard</span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Order Summary -->
+      <aside class="order-summary">
+        <h2>
+          <span class="lang-om">Order Keessaa</span>
+          <span class="lang-en">Your Order</span>
+        </h2>
+
+        <div class="summary-item">
+          <div class="img">🌿</div>
+          <div class="info">
+            <strong>
+              <span class="lang-om">Jimaa Goggogaa</span>
+              <span class="lang-en">Dried Khat</span>
+            </strong>
+            <span>50 kg × 1,200 ETB</span>
+          </div>
+          <div class="price">60,000</div>
+        </div>
+        <div class="summary-item">
+          <div class="img">🍯</div>
+          <div class="info">
+            <strong>
+              <span class="lang-om">Damma Organic</span>
+              <span class="lang-en">Organic Honey</span>
+            </strong>
+            <span>20 kg × 350 ETB</span>
+          </div>
+          <div class="price">7,000</div>
+        </div>
+
+        <div class="summary-row">
+          <span class="lang-om">Subtotal</span>
+          <span class="lang-en">Subtotal</span>
+          <span>67,000 ETB</span>
+        </div>
+        <div class="summary-row">
+          <span class="lang-om">Delivery</span>
+          <span class="lang-en">Delivery</span>
+          <span>1,500 ETB</span>
+        </div>
+        <div class="summary-row total">
+          <span class="lang-om">Walgahii</span>
+          <span class="lang-en">Total</span>
+          <span>68,500 ETB</span>
+        </div>
+
+        <button class="btn-place-order" onclick="placeOrder()">
+          <span class="lang-om">Order Mirkaneessi →</span>
+          <span class="lang-en">Place Order →</span>
+        </button>
+        <a href="cart.html" style="display:block;text-align:center;margin-top:12px;font-size:0.9rem;color:var(--text-secondary);">
+          <span class="lang-om">← Cart irratti deebi'i</span>
+          <span class="lang-en">← Back to Cart</span>
+        </a>
+      </aside>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border:none;padding-top:0;">
+        <span>© 2026 INA-KJ Agro Connect</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+  <script>
+    // Delivery option selection
+    document.querySelectorAll('.delivery-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        document.querySelectorAll('.delivery-option').forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+        opt.querySelector('input').checked = true;
+      });
+    });
+
+    // Payment option selection
+    document.querySelectorAll('.pay-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        document.querySelectorAll('.pay-option').forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+        opt.querySelector('input').checked = true;
+      });
+    });
+
+    function placeOrder() {
+      window.location.href = 'order-confirmed.html';
+    }
+  </script>
+</body>
+</html>

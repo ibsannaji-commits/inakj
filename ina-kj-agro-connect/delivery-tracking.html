@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="om" data-lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delivery Tracking – INA-KJ Agro Connect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .track-wrapper {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+    }
+    .track-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .track-header h1 {
+      font-size: 1.7rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .track-header p {
+      color: var(--text-secondary);
+    }
+
+    /* Search / Order ID input */
+    .track-search {
+      display: flex;
+      gap: 10px;
+      max-width: 480px;
+      margin: 0 auto 32px;
+    }
+    .track-search input {
+      flex: 1;
+      padding: 14px 18px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 1rem;
+      background: var(--white);
+    }
+    .track-search input:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(27,122,61,0.12);
+    }
+    .track-search button {
+      padding: 14px 24px;
+      background: var(--primary);
+      color: white;
+      border-radius: var(--radius);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .track-search button:hover {
+      background: var(--primary-dark);
+    }
+
+    /* Status card */
+    .status-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .status-banner {
+      background: linear-gradient(135deg, #1B7A3D, #145C2E);
+      color: white;
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .status-banner h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    .status-banner .order-meta {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    .status-badge-lg {
+      background: rgba(255,255,255,0.2);
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    /* Timeline */
+    .timeline {
+      padding: 28px 24px;
+    }
+    .timeline-item {
+      display: flex;
+      gap: 16px;
+      position: relative;
+      padding-bottom: 28px;
+    }
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+    .timeline-item:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 17px;
+      top: 36px;
+      bottom: 0;
+      width: 3px;
+      background: var(--border);
+    }
+    .timeline-item.done:not(:last-child)::before {
+      background: var(--primary);
+    }
+    .timeline-dot {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--border);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      z-index: 1;
+    }
+    .timeline-item.done .timeline-dot {
+      background: var(--primary);
+    }
+    .timeline-item.active .timeline-dot {
+      background: var(--accent-dark);
+      box-shadow: 0 0 0 4px rgba(231,111,81,0.25);
+      animation: pulse-dot 1.5s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(231,111,81,0.25); }
+      50% { box-shadow: 0 0 0 8px rgba(231,111,81,0.1); }
+    }
+    .timeline-content h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .timeline-content p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .timeline-content .time {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .timeline-item.pending h4,
+    .timeline-item.pending p {
+      color: var(--text-muted);
+    }
+
+    /* Order details grid */
+    .details-section {
+      padding: 0 24px 24px;
+    }
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      background: var(--bg);
+      border-radius: var(--radius);
+      padding: 18px;
+    }
+    .detail-box .label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+    .detail-box .value {
+      font-weight: 650;
+      font-size: 0.95rem;
+    }
+
+    /* Products in order */
+    .order-products {
+      padding: 0 24px 24px;
+    }
+    .order-products h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .prod-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .prod-row:last-child {
+      border-bottom: none;
+    }
+    .prod-img {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      background: var(--primary-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+    .prod-info {
+      flex: 1;
+    }
+    .prod-info strong {
+      display: block;
+      font-size: 0.95rem;
+    }
+    .prod-info span {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .prod-price {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* Driver / partner card */
+    .partner-card {
+      margin: 0 24px 24px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--bg);
+    }
+    .partner-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--primary-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+    .partner-info h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    .partner-info p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .partner-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+    }
+    .partner-actions a {
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+    .partner-actions a:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Map placeholder */
+    .map-placeholder {
+      margin: 0 24px 24px;
+      height: 180px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 8px;
+      color: var(--primary-dark);
+      border: 1px solid var(--border);
+    }
+    .map-placeholder .map-icon {
+      font-size: 2.5rem;
+    }
+    .map-placeholder p {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    /* Actions */
+    .track-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    /* Sample orders list */
+    .sample-orders {
+      margin-top: 40px;
+    }
+    .sample-orders h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+    .sample-list {
+      display: grid;
+      gap: 10px;
+    }
+    .sample-item {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .sample-item:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+    .sample-item strong {
+      font-size: 0.95rem;
+    }
+    .sample-item span {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .sample-status {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .st-transit { background: #E8F5E9; color: #2E7D32; }
+    .st-processing { background: #E3F2FD; color: #1565C0; }
+    .st-delivered { background: var(--primary-soft); color: var(--primary); }
+    .st-pending { background: #FFF3E0; color: #E65100; }
+
+    @media (max-width: 600px) {
+      .details-grid { grid-template-columns: 1fr; }
+      .status-banner { flex-direction: column; align-items: flex-start; }
+      .partner-card { flex-wrap: wrap; }
+      .partner-actions { margin-left: 0; width: 100%; }
+      .track-search { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-top">
+      <div class="container">
+        <span class="lang-om">🌱 Qonnaan Bulaa → Gabaa → Buyer → Delivery → Kaffaltii</span>
+        <span class="lang-en">🌱 Farmer → Market → Buyer → Delivery → Payment</span>
+        <span>
+          <span class="lang-om">📞 Deeggarsa: +251 9XX XXX XXX</span>
+          <span class="lang-en">📞 Support: +251 9XX XXX XXX</span>
+        </span>
+      </div>
+    </div>
+    <div class="header-main">
+      <div class="container">
+        <a href="index.html" class="logo">
+          <div class="logo-icon">IK</div>
+          <div class="logo-text">INA-KJ <span>Agro</span></div>
+        </a>
+        <div class="header-actions" style="margin-left:auto;">
+          <div class="lang-toggle">
+            <button class="lang-btn active" data-lang="om">OM</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+          </div>
+          <a href="buyer/dashboard.html" class="header-btn">
+            <span class="icon">📊</span>
+            <span class="lang-om">Dashboard</span>
+            <span class="lang-en">Dashboard</span>
+          </a>
+          <a href="cart.html" class="header-btn">
+            <span class="icon">🛍️</span>
+            <span class="lang-om">Cart</span>
+            <span class="lang-en">Cart</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="container">
+        <a href="index.html" class="nav-link">
+          <span class="lang-om">Mana</span>
+          <span class="lang-en">Home</span>
+        </a>
+        <a href="marketplace.html" class="nav-link">
+          <span class="lang-om">Gabaa</span>
+          <span class="lang-en">Marketplace</span>
+        </a>
+        <a href="market-price.html" class="nav-link">
+          <span class="lang-om">Gatii Gabaa</span>
+          <span class="lang-en">Market Prices</span>
+        </a>
+        <a href="delivery-tracking.html" class="nav-link active">
+          <span class="lang-om">Tracking</span>
+          <span class="lang-en">Tracking</span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="track-wrapper">
+
+    <div class="track-header">
+      <h1>
+        <span class="lang-om">🚚 Delivery Tracking</span>
+        <span class="lang-en">🚚 Delivery Tracking</span>
+      </h1>
+      <p>
+        <span class="lang-om">Order ID galchi status ilaaluuf</span>
+        <span class="lang-en">Enter Order ID to track status</span>
+      </p>
+    </div>
+
+    <!-- Search -->
+    <div class="track-search">
+      <input type="text" id="orderInput" placeholder="#ORD-1031" value="#ORD-1031">
+      <button onclick="loadTracking()">
+        <span class="lang-om">Hordofi</span>
+        <span class="lang-en">Track</span>
+      </button>
+    </div>
+
+    <!-- Tracking Result -->
+    <div class="status-card" id="trackingResult">
+
+      <div class="status-banner">
+        <div>
+          <h2>Order #ORD-1031</h2>
+          <div class="order-meta">
+            <span class="lang-om">Qamadii • 1,000 kg • Mulugeta Alemu</span>
+            <span class="lang-en">Wheat • 1,000 kg • Mulugeta Alemu</span>
+          </div>
+        </div>
+        <div class="status-badge-lg">
+          🚛
+          <span class="lang-om">Karaa irra</span>
+          <span class="lang-en">In Transit</span>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="timeline">
+        <div class="timeline-item done">
+          <div class="timeline-dot">✓</div>
+          <div class="timeline-content">
+            <h4>
+              <span class="lang-om">Order Mirkanaa'e</span>
+              <span class="lang-en">Order Confirmed</span>
+            </h4>
+            <p>
+              <span class="lang-om">Order kee qabameera fi kaffaltiin mirkanaa'eera</span>
+              <span class="lang-en">Your order was received and payment confirmed</span>
+            </p>
+            <div class="time">12 Sep 2026, 09:15 AM</div>
+          </div>
+        </div>
+        <div class="timeline-item done">
+          <div class="timeline-dot">✓</div>
+          <div class="timeline-content">
+            <h4>
+              <span class="lang-om">Hojii irra (Processing)</span>
+              <span class="lang-en">Processing</span>
+            </h4>
+            <p>
+              <span class="lang-om">Seller order fudhateera. Oomisha qophaa'aa jira</span>
+              <span class="lang-en">Seller accepted. Product is being prepared</span>
+            </p>
+            <div class="time">12 Sep 2026, 11:40 AM</div>
+          </div>
+        </div>
+        <div class="timeline-item done">
+          <div class="timeline-dot">✓</div>
+          <div class="timeline-content">
+            <h4>
+              <span class="lang-om">Fudhatame (Picked Up)</span>
+              <span class="lang-en">Picked Up</span>
+            </h4>
+            <p>
+              <span class="lang-om">Delivery partner oomisha fudhateera</span>
+              <span class="lang-en">Delivery partner picked up the product</span>
+            </p>
+            <div class="time">13 Sep 2026, 08:20 AM</div>
+          </div>
+        </div>
+        <div class="timeline-item active">
+          <div class="timeline-dot">4</div>
+          <div class="timeline-content">
+            <h4>
+              <span class="lang-om">Karaa irra (In Transit)</span>
+              <span class="lang-en">In Transit</span>
+            </h4>
+            <p>
+              <span class="lang-om">Oomisha karaa irra jira — gara Addis Ababa deemaa jira</span>
+              <span class="lang-en">Product is on the way — heading to Addis Ababa</span>
+            </p>
+            <div class="time">13 Sep 2026, 02:45 PM • ETA: 15 Sep</div>
+          </div>
+        </div>
+        <div class="timeline-item pending">
+          <div class="timeline-dot">5</div>
+          <div class="timeline-content">
+            <h4>
+              <span class="lang-om">Geesse (Delivered)</span>
+              <span class="lang-en">Delivered</span>
+            </h4>
+            <p>
+              <span class="lang-om">Oomisha teessoo keetti geessuu</span>
+              <span class="lang-en">Product will be delivered to your address</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map placeholder -->
+      <div class="map-placeholder">
+        <div class="map-icon">🗺️</div>
+        <p>
+          <span class="lang-om">Live map (Asella → Addis Ababa)</span>
+          <span class="lang-en">Live map (Asella → Addis Ababa)</span>
+        </p>
+        <span style="font-size:0.85rem;opacity:0.8;">
+          <span class="lang-om">GPS tracking yeroo dhufu ni dabalama</span>
+          <span class="lang-en">GPS tracking coming soon</span>
+        </span>
+      </div>
+
+      <!-- Delivery partner -->
+      <div class="partner-card">
+        <div class="partner-avatar">🚚</div>
+        <div class="partner-info">
+          <h4>
+            <span class="lang-om">Delivery Partner: Abebe Transport</span>
+            <span class="lang-en">Delivery Partner: Abebe Transport</span>
+          </h4>
+          <p>
+            <span class="lang-om">Driver: Dawit K. • ★ 4.7</span>
+            <span class="lang-en">Driver: Dawit K. • ★ 4.7</span>
+          </p>
+        </div>
+        <div class="partner-actions">
+          <a href="tel:+251911000000">📞 Call</a>
+          <a href="#">💬 Chat</a>
+        </div>
+      </div>
+
+      <!-- Products -->
+      <div class="order-products">
+        <h3>
+          <span class="lang-om">Oomisha Order keessaa</span>
+          <span class="lang-en">Products in this order</span>
+        </h3>
+        <div class="prod-row">
+          <div class="prod-img">🌾</div>
+          <div class="prod-info">
+            <strong>
+              <span class="lang-om">Qamadii (Wheat) – Clean</span>
+              <span class="lang-en">Wheat – Clean</span>
+            </strong>
+            <span>1,000 kg • Mulugeta Alemu ✓</span>
+          </div>
+          <div class="prod-price">45,000 ETB</div>
+        </div>
+      </div>
+
+      <!-- Details -->
+      <div class="details-section">
+        <div class="details-grid">
+          <div class="detail-box">
+            <div class="label">
+              <span class="lang-om">Teessoo Delivery</span>
+              <span class="lang-en">Delivery Address</span>
+            </div>
+            <div class="value">Bole, Addis Ababa</div>
+          </div>
+          <div class="detail-box">
+            <div class="label">
+              <span class="lang-om">Mala Delivery</span>
+              <span class="lang-en">Delivery Method</span>
+            </div>
+            <div class="value">
+              <span class="lang-om">Platform Delivery</span>
+              <span class="lang-en">Platform Delivery</span>
+            </div>
+          </div>
+          <div class="detail-box">
+            <div class="label">ETA</div>
+            <div class="value">15 Sep 2026</div>
+          </div>
+          <div class="detail-box">
+            <div class="label">
+              <span class="lang-om">Kaffaltii</span>
+              <span class="lang-en">Payment</span>
+            </div>
+            <div class="value" style="color:var(--success);">
+              <span class="lang-om">✓ Kaffalame</span>
+              <span class="lang-en">✓ Paid</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="track-actions">
+      <a href="buyer/dashboard.html" class="btn-primary" style="padding:12px 24px;">
+        <span class="lang-om">📊 Dashboard</span>
+        <span class="lang-en">📊 Dashboard</span>
+      </a>
+      <a href="marketplace.html" class="btn-outline" style="padding:10px 20px;">
+        <span class="lang-om">← Gabaa</span>
+        <span class="lang-en">← Marketplace</span>
+      </a>
+    </div>
+
+    <!-- Sample other orders -->
+    <div class="sample-orders">
+      <h3>
+        <span class="lang-om">Orders biroo kee</span>
+        <span class="lang-en">Your other orders</span>
+      </h3>
+      <div class="sample-list">
+        <div class="sample-item" onclick="document.getElementById('orderInput').value='#ORD-1042'; loadTracking();">
+          <div>
+            <strong>#ORD-1042</strong>
+            <span>
+              <span class="lang-om"> • Jimaa Goggogaa • 50 kg</span>
+              <span class="lang-en"> • Dried Khat • 50 kg</span>
+            </span>
+          </div>
+          <span class="sample-status st-pending">
+            <span class="lang-om">Eegaa</span>
+            <span class="lang-en">Pending</span>
+          </span>
+        </div>
+        <div class="sample-item" onclick="document.getElementById('orderInput').value='#ORD-1038'; loadTracking();">
+          <div>
+            <strong>#ORD-1038</strong>
+            <span>
+              <span class="lang-om"> • Buna Yirgacheffe • 200 kg</span>
+              <span class="lang-en"> • Yirgacheffe Coffee • 200 kg</span>
+            </span>
+          </div>
+          <span class="sample-status st-processing">
+            <span class="lang-om">Hojii irra</span>
+            <span class="lang-en">Processing</span>
+          </span>
+        </div>
+        <div class="sample-item" onclick="document.getElementById('orderInput').value='#ORD-1029'; loadTracking();">
+          <div>
+            <strong>#ORD-1029</strong>
+            <span>
+              <span class="lang-om"> • Qamadii • 500 kg</span>
+              <span class="lang-en"> • Wheat • 500 kg</span>
+            </span>
+          </div>
+          <span class="sample-status st-delivered">
+            <span class="lang-om">Geesse</span>
+            <span class="lang-en">Delivered</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border:none;padding-top:0;">
+        <span>© 2026 INA-KJ Agro Connect</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+  <script>
+    function loadTracking() {
+      const id = document.getElementById('orderInput').value.trim();
+      // Demo: just scroll to result (in real app: fetch API)
+      document.getElementById('trackingResult').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Could update content based on order ID here
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="om" data-lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oomisha Galchi | Add Product – INA-KJ Agro Connect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* Reuse dashboard styles */
+    .dash-wrapper {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: calc(100vh - 50px);
+    }
+    .dash-sidebar {
+      background: #0D3D1F;
+      color: white;
+      padding: 24px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .dash-sidebar .logo {
+      padding: 0 20px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      margin-bottom: 16px;
+    }
+    .dash-sidebar .logo-text { color: white; font-size: 1.1rem; }
+    .dash-sidebar .logo-text span { color: var(--gold); }
+    .sidebar-user {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      margin-bottom: 12px;
+    }
+    .sidebar-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--primary-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+    }
+    .sidebar-user-info h4 { font-size: 0.95rem; font-weight: 650; }
+    .sidebar-user-info p { font-size: 0.8rem; opacity: 0.7; }
+    .sidebar-nav a {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 20px; font-size: 0.95rem; font-weight: 500;
+      color: rgba(255,255,255,0.8); transition: all 0.2s;
+      border-left: 3px solid transparent;
+    }
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+      background: rgba(255,255,255,0.08); color: white;
+      border-left-color: var(--gold);
+    }
+    .sidebar-nav a .icon { font-size: 1.15rem; width: 24px; text-align: center; }
+    .sidebar-nav .badge-count {
+      margin-left: auto; background: var(--accent-dark); color: white;
+      font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 20px;
+    }
+    .dash-main {
+      background: var(--bg);
+      padding: 28px 32px 60px;
+    }
+    .dash-topbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .sidebar-toggle {
+      display: none; background: none; border: none;
+      font-size: 1.5rem; color: var(--primary); cursor: pointer;
+    }
+
+    /* Form specific */
+    .form-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      max-width: 800px;
+      overflow: hidden;
+    }
+    .form-header {
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border-light);
+      background: var(--primary-soft);
+    }
+    .form-header h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+    .form-header p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    .form-body {
+      padding: 28px;
+    }
+    .form-section {
+      margin-bottom: 32px;
+    }
+    .form-section-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--primary-soft);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+    .form-row.full {
+      grid-template-columns: 1fr;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .form-group label .required {
+      color: var(--danger);
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--primary);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(27, 122, 61, 0.1);
+      outline: none;
+    }
+    .form-group textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+    .form-group .hint {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .form-group .unit {
+      position: relative;
+    }
+    .form-group .unit input {
+      padding-right: 60px;
+    }
+    .form-group .unit-label {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Image upload */
+    .image-upload {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 32px 20px;
+      text-align: center;
+      background: var(--bg);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .image-upload:hover {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+    }
+    .image-upload .upload-icon {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .image-upload p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+    .image-upload .hint {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+    .image-preview {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .preview-item {
+      width: 90px;
+      height: 90px;
+      border-radius: 8px;
+      background: var(--primary-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      position: relative;
+      border: 1px solid var(--border);
+    }
+    .preview-item .remove {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--danger);
+      color: white;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Quality grade buttons */
+    .grade-options {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .grade-btn {
+      padding: 10px 20px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .grade-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .grade-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    /* Checkbox row */
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .check-row input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+    }
+    .check-row label {
+      font-weight: 500;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    /* Form actions */
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-light);
+      margin-top: 10px;
+    }
+    .form-actions .btn-secondary {
+      padding: 12px 24px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+    .form-actions .btn-secondary:hover {
+      border-color: var(--text-muted);
+      color: var(--text);
+    }
+    .form-actions .btn-primary {
+      padding: 12px 28px;
+    }
+
+    /* Success toast */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--primary);
+      color: white;
+      padding: 16px 24px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      display: none;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      z-index: 3000;
+      animation: slideIn 0.3s ease;
+    }
+    .toast.show { display: flex; }
+    @keyframes slideIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @media (max-width: 900px) {
+      .dash-wrapper { grid-template-columns: 1fr; }
+      .dash-sidebar {
+        position: fixed; left: -280px; z-index: 2000;
+        transition: left 0.3s; width: 260px;
+      }
+      .dash-sidebar.open { left: 0; }
+      .sidebar-toggle { display: block; }
+      .dash-main { padding: 20px 16px 60px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dash-topbar">
+    <button class="sidebar-toggle" onclick="document.querySelector('.dash-sidebar').classList.toggle('open')">☰</button>
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="om">OM</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </div>
+
+  <div class="dash-wrapper">
+
+    <!-- SIDEBAR -->
+    <aside class="dash-sidebar">
+      <div class="logo">
+        <div class="logo-icon" style="width:36px;height:36px;font-size:1.1rem;">IK</div>
+        <div class="logo-text">INA-KJ <span>Agro</span></div>
+      </div>
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">👨‍🌾</div>
+        <div class="sidebar-user-info">
+          <h4>Ahmed Hassan</h4>
+          <p>
+            <span class="lang-om">Qonnaan Bulaa ✓</span>
+            <span class="lang-en">Verified Farmer ✓</span>
+          </p>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html">
+          <span class="icon">📊</span>
+          <span class="lang-om">Dashboard</span>
+          <span class="lang-en">Dashboard</span>
+        </a>
+        <a href="add-product.html" class="active">
+          <span class="icon">➕</span>
+          <span class="lang-om">Oomisha Galchi</span>
+          <span class="lang-en">Add Product</span>
+        </a>
+        <a href="dashboard.html#products">
+          <span class="icon">📦</span>
+          <span class="lang-om">Oomisha Koo</span>
+          <span class="lang-en">My Products</span>
+        </a>
+        <a href="dashboard.html#orders">
+          <span class="icon">🛒</span>
+          <span class="lang-om">Orders</span>
+          <span class="lang-en">Orders</span>
+          <span class="badge-count">5</span>
+        </a>
+        <a href="dashboard.html#sales">
+          <span class="icon">💰</span>
+          <span class="lang-om">Gurgurtaa / Revenue</span>
+          <span class="lang-en">Sales / Revenue</span>
+        </a>
+        <a href="#">
+          <span class="icon">💬</span>
+          <span class="lang-om">Ergaa</span>
+          <span class="lang-en">Messages</span>
+          <span class="badge-count">3</span>
+        </a>
+        <a href="../market-price.html">
+          <span class="icon">📈</span>
+          <span class="lang-om">Gatii Gabaa</span>
+          <span class="lang-en">Market Prices</span>
+        </a>
+        <a href="#">
+          <span class="icon">👤</span>
+          <span class="lang-om">Profile</span>
+          <span class="lang-en">Profile</span>
+        </a>
+        <a href="../index.html" style="margin-top:20px;opacity:0.7;">
+          <span class="icon">🏠</span>
+          <span class="lang-om">Gara Website</span>
+          <span class="lang-en">Back to Website</span>
+        </a>
+        <a href="login.html" style="opacity:0.7;">
+          <span class="icon">🚪</span>
+          <span class="lang-om">Ba'i</span>
+          <span class="lang-en">Logout</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="dash-main">
+
+      <div class="form-card">
+        <div class="form-header">
+          <h1>
+            <span class="lang-om">➕ Oomisha Haaraa Galchi</span>
+            <span class="lang-en">➕ Add New Product</span>
+          </h1>
+          <p>
+            <span class="lang-om">Oomisha kee gabaa irratti maxxansi. Odeeffannoo sirrii fi qulqullina qabu galchi.</span>
+            <span class="lang-en">List your product on the marketplace. Provide accurate details and quality info.</span>
+          </p>
+        </div>
+
+        <form class="form-body" id="addProductForm" onsubmit="return handleSubmit(event)">
+
+          <!-- 1. Basic Info -->
+          <div class="form-section">
+            <div class="form-section-title">
+              📝
+              <span class="lang-om">Odeeffannoo Bu'uuraa</span>
+              <span class="lang-en">Basic Information</span>
+            </div>
+
+            <div class="form-row full">
+              <div class="form-group">
+                <label>
+                  <span class="lang-om">Maqaa Oomishaa</span>
+                  <span class="lang-en">Product Name</span>
+                  <span class="required">*</span>
+                </label>
+                <input type="text" name="name" required
+                       placeholder="Fakkeenyaaf: Jimaa Goggogaa – Grade A">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>
+                  <span class="lang-om">Ramaddii</span>
+                  <span class="lang-en">Category</span>
+                  <span class="required">*</span>
+                </label>
+                <select name="category" required>
+                  <option value="">
+                    <span class="lang-om">-- Filadhu --</span>
+                    <span class="lang-en">-- Select --</span>
+                  </option>
+                  <option value="khat">
+                    <span class="lang-om">Jimaa</span>
+                    <span class="lang-en">Khat</span>
+                  </option>
+                  <option value="coffee">
+                    <span class="lang-om">Buna</span>
+                    <span class="lang-en">Coffee</span>
+                  </option>
+                  <option value="grains">
+                    <span class="lang-om">Midhaan</span>
+                    <span class="lang-en">Grains</span>
+                  </option>
+                  <option value="vegetables">
+                    <span class="lang-om">Kuduraa</span>
+                    <span class="lang-en">Vegetables</span>
+                  </option>
+                  <option value="fruits">
+                    <span class="lang-om">Fuduraa</span>
+                    <span class="lang-en">Fruits</span>
+                  </option>
+                  <option value="spices">
+                    <span class="lang-om">Qophaa'ina</span>
+                    <span class="lang-en">Spices</span>
+                  </option>
+                  <option value="honey">
+                    <span class="lang-om">Damma</span>
+                    <span class="lang-en">Honey</span>
+                  </option>
+                  <option value="livestock">
+                    <span class="lang-om">Beeylada</span>
+                    <span class="lang-en">Livestock</span>
+                  </option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>
+                  <span class="lang-om">Bakka (Location)</span>
+                  <span class="lang-en">Location</span>
+                  <span class="required">*</span>
+                </label>
+                <select name="location" required>
+                  <option value="">
+                    <span class="lang-om">-- Filadhu --</span>
+                    <span class="lang-en">-- Select --</span>
+                  </option>
+                  <option value="west-hararghe">West Hararghe (Chiro)</option>
+                  <option value="east-hararghe">East Hararghe</option>
+                  <option value="yirgacheffe">Yirgacheffe</option>
+                  <option value="arsi">Arsi (Asella)</option>
+                  <option value="bale">Bale</option>
+                  <option value="jimma">Jimma</option>
+                  <option value="sidama">Sidama</option>
+                  <option value="other">
+                    <span class="lang-om">Kan biroo</span>
+                    <span class="lang-en">Other</span>
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row full">
+              <div class="form-group">
+                <label>
+                  <span class="lang-om">Ibsa Oomishaa</span>
+                  <span class="lang-en">Product Description</span>
+                </label>
+                <textarea name="description"
+                          placeholder="Oomisha kee ibsi... (qulqullina, haala, yeroo haaraa ta'uu fi kkf)"></textarea>
+                <span class="hint">
+                  <span class="lang-om">Gabaabbinaan ibsi — buyers akka sirriitti hubatan</span>
+                  <span class="lang-en">Brief description so buyers understand your product</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Pricing & Quantity -->
+          <div class="form-section">
+            <div class="form-section-title">
+              💰
+              <span class="lang-om">Gatii fi Hanga</span>
+              <span class="lang-en">Price & Quantity</span>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>
+                  <span class="lang-om">Gatii (ETB)</span>
+                  <span class="lang-en">Price (ETB)</span>
+                  <span class="required">*</span>
+                </label>
+                <div class="unit">
+                  <input type="number" name="price" required min="1" step="0.01" placeholder="1200">
+                  <span class="unit-label">/ kg</span>
+                </div>
+                <span class="hint">
+                  <span class="lang-om">Gatii gabaa yeroo ammaa ilaali</span>
+                  <span class="lang-en">Check current market price</span>
+                </span>
+              </div>
+              <div class="form-group">
+                <label>
+                  <span class="lang-om">Hanga Argamu (kg)</span>
+                  <span class="lang-en">Available Quantity (kg)</span>
+                  <span class="required">*</span>
+                </label>
+                <div class="unit">
+                  <input type="number" name="quantity" required min="1" placeholder="500">
+                  <span class="unit-label">kg</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>
+                  <span class="lang-om">Hanga Gurguramaa Xiqqaa</span>
+                  <span class="lang-en">Minimum Order Quantity</span>
+                </label>
+                <div class="unit">
+                  <input type="number" name="min_order" min="1" placeholder="10">
+                  <span class="unit-label">kg</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>
+                  <span class="lang-om">Unit</span>
+                  <span class="lang-en">Unit</span>
+                </label>
+                <select name="unit">
+                  <option value="kg">kg</option>
+                  <option value="quintal">Quintal (100 kg)</option>
+                  <option value="ton">Ton</option>
+                  <option value="piece">
+                    <span class="lang-om">Tokkoo</span>
+                    <span class="lang-en">Piece</span>
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Quality -->
+          <div class="form-section">
+            <div class="form-section-title">
+              ⭐
+              <span class="lang-om">Qulqullina</span>
+              <span class="lang-en">Quality</span>
+            </div>
+
+            <div class="form-group" style="margin-bottom:18px;">
+              <label>
+                <span class="lang-om">Grade / Qulqullina</span>
+                <span class="lang-en">Grade / Quality</span>
+                <span class="required">*</span>
+              </label>
+              <div class="grade-options" id="gradeOptions">
+                <button type="button" class="grade-btn active" data-grade="A">Grade A</button>
+                <button type="button" class="grade-btn" data-grade="B">Grade B</button>
+                <button type="button" class="grade-btn" data-grade="C">Grade C</button>
+                <button type="button" class="grade-btn" data-grade="export">Export Quality</button>
+                <button type="button" class="grade-btn" data-grade="organic">Organic</button>
+              </div>
+              <input type="hidden" name="grade" id="gradeInput" value="A">
+            </div>
+
+            <div class="check-row">
+              <input type="checkbox" id="exportReady" name="export_ready">
+              <label for="exportReady">
+                <span class="lang-om">Export-ready (biyya alaa gurguruuf qophaa'e)</span>
+                <span class="lang-en">Export-ready (suitable for international buyers)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- 4. Images -->
+          <div class="form-section">
+            <div class="form-section-title">
+              📷
+              <span class="lang-om">Suuraa Oomishaa</span>
+              <span class="lang-en">Product Images</span>
+            </div>
+
+            <div class="image-upload" onclick="document.getElementById('imageInput').click()">
+              <div class="upload-icon">📷</div>
+              <p>
+                <span class="lang-om">Suuraa tuqi ykn asitti dhiibsi</span>
+                <span class="lang-en">Click or drag images here</span>
+              </p>
+              <p class="hint">
+                <span class="lang-om">PNG, JPG — hanga 5 MB (hanga 5 suuraa)</span>
+                <span class="lang-en">PNG, JPG — max 5 MB (up to 5 images)</span>
+              </p>
+              <input type="file" id="imageInput" name="images" accept="image/*" multiple hidden
+                     onchange="previewImages(this)">
+            </div>
+            <div class="image-preview" id="imagePreview"></div>
+          </div>
+
+          <!-- 5. Contact / Delivery -->
+          <div class="form-section">
+            <div class="form-section-title">
+              📞
+              <span class="lang-om">Quunnamtii fi Delivery</span>
+              <span class="lang-en">Contact & Delivery</span>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>
+                  <span class="lang-om">Lakkoofsa Bilbilaa</span>
+                  <span class="lang-en">Phone Number</span>
+                  <span class="required">*</span>
+                </label>
+                <input type="tel" name="phone" required placeholder="+251 9XX XXX XXX">
+              </div>
+              <div class="form-group">
+                <label>
+                  <span class="lang-om">Haala Delivery</span>
+                  <span class="lang-en">Delivery Option</span>
+                </label>
+                <select name="delivery">
+                  <option value="seller">
+                    <span class="lang-om">Ani ofiin geessa</span>
+                    <span class="lang-en">I will deliver</span>
+                  </option>
+                  <option value="platform">
+                    <span class="lang-om">Platform delivery fayyadami</span>
+                    <span class="lang-en">Use platform delivery</span>
+                  </option>
+                  <option value="pickup">
+                    <span class="lang-om">Buyer ofiin fudhata</span>
+                    <span class="lang-en">Buyer pickup</span>
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="check-row">
+              <input type="checkbox" id="negotiable" name="negotiable">
+              <label for="negotiable">
+                <span class="lang-om">Gatii mari'achuun ni danda'ama</span>
+                <span class="lang-en">Price is negotiable</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" onclick="window.location.href='dashboard.html'">
+              <span class="lang-om">Dhiisi</span>
+              <span class="lang-en">Cancel</span>
+            </button>
+            <button type="submit" class="btn-primary">
+              <span class="lang-om">✓ Oomisha Maxxansi</span>
+              <span class="lang-en">✓ Publish Product</span>
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <span>✓</span>
+    <span class="lang-om">Oomisha kee milkaa'inaan maxxanfame!</span>
+    <span class="lang-en">Product published successfully!</span>
+  </div>
+
+  <script src="../js/script.js"></script>
+  <script>
+    // Grade selection
+    document.querySelectorAll('.grade-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('gradeInput').value = btn.dataset.grade;
+      });
+    });
+
+    // Image preview
+    function previewImages(input) {
+      const preview = document.getElementById('imagePreview');
+      preview.innerHTML = '';
+      const files = Array.from(input.files).slice(0, 5);
+      files.forEach((file, i) => {
+        const div = document.createElement('div');
+        div.className = 'preview-item';
+        div.innerHTML = `📷 <span class="remove" onclick="this.parentElement.remove()">✕</span>`;
+        preview.appendChild(div);
+      });
+    }
+
+    // Form submit (demo)
+    function handleSubmit(e) {
+      e.preventDefault();
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+        window.location.href = 'dashboard.html';
+      }, 2000);
+      return false;
+    }
+
+    // Mobile sidebar
+    document.addEventListener('click', function(e) {
+      const sidebar = document.querySelector('.dash-sidebar');
+      const toggle = document.querySelector('.sidebar-toggle');
+      if (window.innerWidth <= 900 && sidebar.classList.contains('open')) {
+        if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
+          sidebar.classList.remove('open');
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="om" data-lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login – INA-KJ Agro Connect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(160deg, #FFF3E0 0%, #F7F9F8 40%, #fff 100%);
+    }
+    .auth-page {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    .auth-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      width: 100%;
+      max-width: 420px;
+      overflow: hidden;
+    }
+    .auth-header {
+      background: linear-gradient(135deg, #E65100, #BF360C);
+      color: white;
+      padding: 28px 28px 24px;
+      text-align: center;
+    }
+    .auth-header .logo-icon {
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 12px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 800;
+    }
+    .auth-header h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .auth-header p {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    .auth-body { padding: 28px; }
+    .role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #FFF3E0;
+      color: #E65100;
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      font-size: 0.95rem;
+    }
+    .form-group input:focus {
+      border-color: #E65100;
+      background: white;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(230,81,0,0.12);
+    }
+    .form-row-between {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+    }
+    .form-row-between label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      color: var(--text-secondary);
+    }
+    .form-row-between input { accent-color: #E65100; }
+    .form-row-between a {
+      color: #E65100;
+      font-weight: 600;
+    }
+    .btn-auth {
+      width: 100%;
+      padding: 14px;
+      background: #E65100;
+      color: white;
+      border-radius: var(--radius);
+      font-weight: 700;
+      font-size: 1.05rem;
+      transition: all 0.2s;
+    }
+    .btn-auth:hover {
+      background: #BF360C;
+      transform: translateY(-1px);
+      box-shadow: var(--shadow);
+    }
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    .auth-divider::before,
+    .auth-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .auth-footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .switch-role {
+      text-align: center;
+      padding: 16px 28px;
+      border-top: 1px solid var(--border-light);
+      background: var(--bg);
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .switch-role a {
+      color: var(--primary);
+      font-weight: 600;
+      margin: 0 4px;
+    }
+    .lang-top { position: absolute; top: 16px; right: 16px; }
+    .back-home {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #E65100;
+    }
+    .secure-note {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #FFF3E0;
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-size: 0.85rem;
+      color: #E65100;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+  <a href="../index.html" class="back-home">← Home</a>
+  <div class="lang-top">
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="om">OM</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </div>
+
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="logo-icon">IK</div>
+        <h1>INA-KJ Agro Connect</h1>
+        <p>
+          <span class="lang-om">Admin Login</span>
+          <span class="lang-en">Admin Login</span>
+        </p>
+      </div>
+      <div class="auth-body">
+        <div class="role-badge">
+          👨‍💼
+          <span class="lang-om">Super Admin</span>
+          <span class="lang-en">Super Admin</span>
+        </div>
+
+        <div class="secure-note">
+          🔒
+          <span class="lang-om">Kan admin qofaaf. Seensa nageenya qabu.</span>
+          <span class="lang-en">Admin only. Secure access required.</span>
+        </div>
+
+        <form onsubmit="return handleLogin(event)">
+          <div class="form-group">
+            <label>
+              <span class="lang-om">Email Admin</span>
+              <span class="lang-en">Admin Email</span>
+            </label>
+            <input type="email" required placeholder="admin@ina-kj.et">
+          </div>
+          <div class="form-group">
+            <label>
+              <span class="lang-om">Jecha iccitii</span>
+              <span class="lang-en">Password</span>
+            </label>
+            <input type="password" required placeholder="••••••••">
+          </div>
+          <div class="form-row-between">
+            <label>
+              <input type="checkbox">
+              <span class="lang-om">Na yaadadhu</span>
+              <span class="lang-en">Remember me</span>
+            </label>
+            <a href="#">
+              <span class="lang-om">Jecha iccitii dagattee?</span>
+              <span class="lang-en">Forgot password?</span>
+            </a>
+          </div>
+          <button type="submit" class="btn-auth">
+            <span class="lang-om">Seeni (Admin)</span>
+            <span class="lang-en">Log In as Admin</span>
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          <span class="lang-om">Admin account Admin qofaatu uuma.</span>
+          <span class="lang-en">Admin accounts are created by Super Admin only.</span>
+        </div>
+      </div>
+      <div class="switch-role">
+        <span class="lang-om">Gosa biraa:</span>
+        <span class="lang-en">Other roles:</span>
+        <a href="../farmer/login.html">
+          <span class="lang-om">Qonnaan</span>
+          <span class="lang-en">Farmer</span>
+        </a> •
+        <a href="../buyer/login.html">Buyer</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/script.js"></script>
+  <script>
+    function handleLogin(e) {
+      e.preventDefault();
+      window.location.href = 'dashboard.html';
+      return false;
+    }
+  </script>
+</body>
+</html>

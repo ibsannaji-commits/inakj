@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="om" data-lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>INA-KJ Agro Connect | Qonnaan Bulaa → Gabaa</title>
+  <meta name="description" content="Platform qonnaan bulaa, gurgurtoota fi buyers walitti fida. Agricultural marketplace for Ethiopia.">
+  <meta name="theme-color" content="#1B7A3D">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="INA-KJ Agro">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-96.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ========== HEADER ========== -->
+  <header class="header">
+    <div class="header-top">
+      <div class="container">
+        <span class="lang-om">🌱 Qonnaan Bulaa → Gabaa → Buyer → Delivery → Kaffaltii</span>
+        <span class="lang-en">🌱 Farmer → Market → Buyer → Delivery → Payment</span>
+        <span>
+          <span class="lang-om">📞 Deeggarsa: +251 9XX XXX XXX</span>
+          <span class="lang-en">📞 Support: +251 9XX XXX XXX</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="header-main">
+      <div class="container">
+        <a href="index.html" class="logo">
+          <div class="logo-icon">IK</div>
+          <div class="logo-text">INA-KJ <span>Agro</span></div>
+        </a>
+
+        <form class="search-bar" action="marketplace.html" method="get">
+          <input type="text" name="q" 
+                 placeholder="Oomisha barbaadi... (jimaa, buna, midhaan...)" 
+                 class="lang-om"
+                 aria-label="Search">
+          <input type="text" name="q" 
+                 placeholder="Search products... (khat, coffee, grains...)" 
+                 class="lang-en"
+                 aria-label="Search">
+          <button type="submit" aria-label="Search">🔍</button>
+        </form>
+
+        <div class="header-actions">
+          <div class="lang-toggle">
+            <button class="lang-btn active" data-lang="om">OM</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+          </div>
+
+          <a href="buyer/login.html" class="header-btn">
+            <span class="icon">🛒</span>
+            <span class="lang-om">Buyer</span>
+            <span class="lang-en">Buyer</span>
+          </a>
+
+          <a href="farmer/login.html" class="header-btn">
+            <span class="icon">👨‍🌾</span>
+            <span class="lang-om">Qonnaan</span>
+            <span class="lang-en">Farmer</span>
+          </a>
+
+          <a href="farmer/login.html" class="btn-primary">
+            <span class="lang-om">+ Oomisha Galchi</span>
+            <span class="lang-en">+ List Product</span>
+          </a>
+
+          <button class="menu-toggle" aria-label="Menu">☰</button>
+        </div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div class="container">
+        <a href="index.html" class="nav-link active">
+          <span class="lang-om">Mana</span>
+          <span class="lang-en">Home</span>
+        </a>
+        <a href="marketplace.html" class="nav-link">
+          <span class="lang-om">Gabaa</span>
+          <span class="lang-en">Marketplace</span>
+        </a>
+        <a href="market-price.html" class="nav-link">
+          <span class="lang-om">Gatii Gabaa</span>
+          <span class="lang-en">Market Prices</span>
+        </a>
+        <a href="marketplace.html?cat=export" class="nav-link">
+          <span class="lang-om">Export</span>
+          <span class="lang-en">Export</span>
+        </a>
+        <a href="#how-it-works" class="nav-link">
+          <span class="lang-om">Akkamitti Hojjeta?</span>
+          <span class="lang-en">How it Works</span>
+        </a>
+        <a href="admin/login.html" class="nav-link">
+          <span class="lang-om">Admin</span>
+          <span class="lang-en">Admin</span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>
+          <span class="lang-om">Qonnaan Bulaa fi Gabaa<br>Walitti Fida</span>
+          <span class="lang-en">Connecting Farmers<br>to the Market</span>
+        </h1>
+        <p>
+          <span class="lang-om">Oomisha qonnaa kee online irratti gurguri. Buyers biyya keessaa fi alaa waliin walqunnami. Gatii gabaa yeroo ammaa argadhu.</span>
+          <span class="lang-en">Sell your farm products online. Connect with local & international buyers. Get real-time market prices.</span>
+        </p>
+        <div class="hero-actions">
+          <a href="marketplace.html" class="btn-hero btn-hero-primary">
+            <span class="lang-om">Gabaa Ilaali</span>
+            <span class="lang-en">Browse Marketplace</span>
+          </a>
+          <a href="farmer/login.html" class="btn-hero btn-hero-outline">
+            <span class="lang-om">Oomisha Galchi</span>
+            <span class="lang-en">Start Selling</span>
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <h3>2,400+</h3>
+            <p class="lang-om">Qonnaan Bulaa</p>
+            <p class="lang-en">Farmers</p>
+          </div>
+          <div class="stat-item">
+            <h3>8,500+</h3>
+            <p class="lang-om">Oomisha</p>
+            <p class="lang-en">Products</p>
+          </div>
+          <div class="stat-item">
+            <h3>1,200+</h3>
+            <p class="lang-om">Buyers</p>
+            <p class="lang-en">Buyers</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-card">
+          <h4>
+            <span class="lang-om">📊 Gatii Gabaa Har'aa</span>
+            <span class="lang-en">📊 Today's Market Prices</span>
+          </h4>
+          <div class="price-item">
+            <span class="product">
+              <span class="lang-om">Jimaa (Chiro)</span>
+              <span class="lang-en">Khat (Chiro)</span>
+            </span>
+            <span>
+              <span class="price">1,200 ETB</span>
+              <span class="change up">+4.3%</span>
+            </span>
+          </div>
+          <div class="price-item">
+            <span class="product">
+              <span class="lang-om">Buna (Yirgacheffe)</span>
+              <span class="lang-en">Coffee (Yirgacheffe)</span>
+            </span>
+            <span>
+              <span class="price">480 ETB</span>
+              <span class="change up">+1.2%</span>
+            </span>
+          </div>
+          <div class="price-item">
+            <span class="product">
+              <span class="lang-om">Midhaan (Wheat)</span>
+              <span class="lang-en">Wheat</span>
+            </span>
+            <span>
+              <span class="price">45 ETB</span>
+              <span class="change down">-0.8%</span>
+            </span>
+          </div>
+          <div class="price-item">
+            <span class="product">
+              <span class="lang-om">Shumburaa</span>
+              <span class="lang-en">Chickpea</span>
+            </span>
+            <span>
+              <span class="price">62 ETB</span>
+              <span class="change up">+2.1%</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CATEGORIES ========== -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">
+        <span class="lang-om">Ramaddii Oomishaa</span>
+        <span class="lang-en">Product Categories</span>
+      </h2>
+      <p class="section-subtitle">
+        <span class="lang-om">Oomisha barbaaddu filadhu</span>
+        <span class="lang-en">Choose the product you need</span>
+      </p>
+
+      <div class="categories-grid">
+        <a href="marketplace.html?cat=khat" class="category-card">
+          <div class="category-icon">🌿</div>
+          <h4 class="lang-om">Jimaa</h4>
+          <h4 class="lang-en">Khat</h4>
+          <p>320+</p>
+        </a>
+        <a href="marketplace.html?cat=coffee" class="category-card">
+          <div class="category-icon">☕</div>
+          <h4 class="lang-om">Buna</h4>
+          <h4 class="lang-en">Coffee</h4>
+          <p>580+</p>
+        </a>
+        <a href="marketplace.html?cat=grains" class="category-card">
+          <div class="category-icon">🌾</div>
+          <h4 class="lang-om">Midhaan</h4>
+          <h4 class="lang-en">Grains</h4>
+          <p>1,200+</p>
+        </a>
+        <a href="marketplace.html?cat=vegetables" class="category-card">
+          <div class="category-icon">🥬</div>
+          <h4 class="lang-om">Kuduraa</h4>
+          <h4 class="lang-en">Vegetables</h4>
+          <p>890+</p>
+        </a>
+        <a href="marketplace.html?cat=fruits" class="category-card">
+          <div class="category-icon">🍊</div>
+          <h4 class="lang-om">Fuduraa</h4>
+          <h4 class="lang-en">Fruits</h4>
+          <p>450+</p>
+        </a>
+        <a href="marketplace.html?cat=spices" class="category-card">
+          <div class="category-icon">🌶️</div>
+          <h4 class="lang-om">Qophaa'ina</h4>
+          <h4 class="lang-en">Spices</h4>
+          <p>210+</p>
+        </a>
+        <a href="marketplace.html?cat=livestock" class="category-card">
+          <div class="category-icon">🐄</div>
+          <h4 class="lang-om">Beeylada</h4>
+          <h4 class="lang-en">Livestock</h4>
+          <p>180+</p>
+        </a>
+        <a href="marketplace.html?cat=honey" class="category-card">
+          <div class="category-icon">🍯</div>
+          <h4 class="lang-om">Damma</h4>
+          <h4 class="lang-en">Honey</h4>
+          <p>95+</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FEATURED PRODUCTS ========== -->
+  <section class="section" style="background: var(--white);">
+    <div class="container">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:28px;">
+        <div>
+          <h2 class="section-title" style="margin-bottom:4px;">
+            <span class="lang-om">Oomisha Filatamoo</span>
+            <span class="lang-en">Featured Products</span>
+          </h2>
+          <p class="section-subtitle" style="margin-bottom:0;">
+            <span class="lang-om">Oomisha qulqullina olaanaa qaban</span>
+            <span class="lang-en">Top quality verified products</span>
+          </p>
+        </div>
+        <a href="marketplace.html" class="view-all">
+          <span class="lang-om">Hunda Ilaali →</span>
+          <span class="lang-en">View All →</span>
+        </a>
+      </div>
+
+      <div class="products-grid">
+        <!-- Product 1 -->
+        <div class="product-card" data-id="1">
+          <div class="product-img">
+            🌿
+            <span class="product-badge">Grade A</span>
+          </div>
+          <div class="product-body">
+            <div class="product-location">📍 West Hararghe, Chiro</div>
+            <h3 class="product-title">
+              <span class="lang-om">Jimaa Goggogaa – Grade A</span>
+              <span class="lang-en">Dried Khat – Grade A</span>
+            </h3>
+            <div class="product-meta">
+              <span>500 kg</span>
+              <span>•</span>
+              <span class="lang-om">Qulqullina: A</span>
+              <span class="lang-en">Quality: A</span>
+            </div>
+            <div class="product-price">1,200 <span>ETB/kg</span></div>
+            <div class="product-seller">
+              <span class="verified-badge">✓</span>
+              <span class="lang-om">Verified Farmer</span>
+              <span class="lang-en">Verified Farmer</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="product-card" data-id="2">
+          <div class="product-img">
+            ☕
+            <span class="product-badge verified">Export</span>
+          </div>
+          <div class="product-body">
+            <div class="product-location">📍 Yirgacheffe, Gedeo</div>
+            <h3 class="product-title">
+              <span class="lang-om">Buna Yirgacheffe – Specialty</span>
+              <span class="lang-en">Yirgacheffe Coffee – Specialty</span>
+            </h3>
+            <div class="product-meta">
+              <span>2,000 kg</span>
+              <span>•</span>
+              <span>Grade 1</span>
+            </div>
+            <div class="product-price">480 <span>ETB/kg</span></div>
+            <div class="product-seller">
+              <span class="verified-badge">✓</span>
+              <span class="lang-om">Verified Cooperative</span>
+              <span class="lang-en">Verified Cooperative</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 3 -->
+        <div class="product-card" data-id="3">
+          <div class="product-img">
+            🌾
+            <span class="product-badge">Fresh</span>
+          </div>
+          <div class="product-body">
+            <div class="product-location">📍 Arsi, Asella</div>
+            <h3 class="product-title">
+              <span class="lang-om">Qamadii (Wheat) – Qulqulluu</span>
+              <span class="lang-en">Wheat – Clean</span>
+            </h3>
+            <div class="product-meta">
+              <span>10,000 kg</span>
+              <span>•</span>
+              <span class="lang-om">Haala: Haaraa</span>
+              <span class="lang-en">Condition: Fresh</span>
+            </div>
+            <div class="product-price">45 <span>ETB/kg</span></div>
+            <div class="product-seller">
+              <span class="verified-badge">✓</span>
+              <span class="lang-om">Verified Farmer</span>
+              <span class="lang-en">Verified Farmer</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 4 -->
+        <div class="product-card" data-id="4">
+          <div class="product-img">
+            🍯
+            <span class="product-badge">Organic</span>
+          </div>
+          <div class="product-body">
+            <div class="product-location">📍 Bale, Robe</div>
+            <h3 class="product-title">
+              <span class="lang-om">Damma Qulqulluu – Organic</span>
+              <span class="lang-en">Pure Honey – Organic</span>
+            </h3>
+            <div class="product-meta">
+              <span>200 kg</span>
+              <span>•</span>
+              <span>100% Natural</span>
+            </div>
+            <div class="product-price">350 <span>ETB/kg</span></div>
+            <div class="product-seller">
+              <span class="verified-badge">✓</span>
+              <span class="lang-om">Verified Beekeeper</span>
+              <span class="lang-en">Verified Beekeeper</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== MARKET PRICE SNAPSHOT ========== -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">
+        <span class="lang-om">📊 Gatii Gabaa Yeroo Ammaa</span>
+        <span class="lang-en">📊 Live Market Prices</span>
+      </h2>
+      <p class="section-subtitle">
+        <span class="lang-om">Gatii har'aa fi jijjiirama kaleessaa</span>
+        <span class="lang-en">Today's prices and change from yesterday</span>
+      </p>
+
+      <div class="market-table-wrapper">
+        <table class="market-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="lang-om">Oomisha</span>
+                <span class="lang-en">Product</span>
+              </th>
+              <th>
+                <span class="lang-om">Bakka</span>
+                <span class="lang-en">Location</span>
+              </th>
+              <th>
+                <span class="lang-om">Gatii Har'aa</span>
+                <span class="lang-en">Today</span>
+              </th>
+              <th>
+                <span class="lang-om">Kaleessa</span>
+                <span class="lang-en">Yesterday</span>
+              </th>
+              <th>
+                <span class="lang-om">Jijjiirama</span>
+                <span class="lang-en">Change</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>
+                <span class="lang-om">Jimaa Goggogaa</span>
+                <span class="lang-en">Dried Khat</span>
+              </strong></td>
+              <td>Chiro</td>
+              <td>1,200 ETB/kg</td>
+              <td>1,150 ETB/kg</td>
+              <td class="change-up">+4.3%</td>
+            </tr>
+            <tr>
+              <td><strong>
+                <span class="lang-om">Buna</span>
+                <span class="lang-en">Coffee</span>
+              </strong></td>
+              <td>Yirgacheffe</td>
+              <td>480 ETB/kg</td>
+              <td>474 ETB/kg</td>
+              <td class="change-up">+1.3%</td>
+            </tr>
+            <tr>
+              <td><strong>
+                <span class="lang-om">Qamadii</span>
+                <span class="lang-en">Wheat</span>
+              </strong></td>
+              <td>Asella</td>
+              <td>45 ETB/kg</td>
+              <td>45.4 ETB/kg</td>
+              <td class="change-down">-0.9%</td>
+            </tr>
+            <tr>
+              <td><strong>
+                <span class="lang-om">Shumburaa</span>
+                <span class="lang-en">Chickpea</span>
+              </strong></td>
+              <td>Bale</td>
+              <td>62 ETB/kg</td>
+              <td>60.7 ETB/kg</td>
+              <td class="change-up">+2.1%</td>
+            </tr>
+            <tr>
+              <td><strong>
+                <span class="lang-om">Boqqolloo</span>
+                <span class="lang-en">Maize</span>
+              </strong></td>
+              <td>Jimma</td>
+              <td>28 ETB/kg</td>
+              <td>27.5 ETB/kg</td>
+              <td class="change-up">+1.8%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <a href="market-price.html" class="view-all">
+        <span class="lang-om">Gatii Guutuu Ilaali →</span>
+        <span class="lang-en">View Full Market Prices →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ========== VERIFIED FARMERS ========== -->
+  <section class="section" style="background: var(--white);">
+    <div class="container">
+      <h2 class="section-title">
+        <span class="lang-om">👨‍🌾 Qonnaan Bulaa Mirkaneeffaman</span>
+        <span class="lang-en">👨‍🌾 Verified Farmers</span>
+      </h2>
+      <p class="section-subtitle">
+        <span class="lang-om">Qonnaan bulaa amanamoo fi mirkaneeffaman</span>
+        <span class="lang-en">Trusted and verified farmers</span>
+      </p>
+
+      <div class="farmers-grid">
+        <div class="farmer-card">
+          <div class="farmer-avatar">👨‍🌾</div>
+          <h4>Ahmed Hassan</h4>
+          <p>West Hararghe</p>
+          <div class="farmer-badge">✓ Verified • Jimaa</div>
+        </div>
+        <div class="farmer-card">
+          <div class="farmer-avatar">👩‍🌾</div>
+          <h4>Tigist Bekele</h4>
+          <p>Yirgacheffe</p>
+          <div class="farmer-badge">✓ Verified • Buna</div>
+        </div>
+        <div class="farmer-card">
+          <div class="farmer-avatar">👨‍🌾</div>
+          <h4>Mulugeta Alemu</h4>
+          <p>Arsi</p>
+          <div class="farmer-badge">✓ Verified • Midhaan</div>
+        </div>
+        <div class="farmer-card">
+          <div class="farmer-avatar">👩‍🌾</div>
+          <h4>Fatuma Ali</h4>
+          <p>Bale</p>
+          <div class="farmer-badge">✓ Verified • Damma</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== HOW IT WORKS ========== -->
+  <section class="section" id="how-it-works">
+    <div class="container">
+      <h2 class="section-title text-center">
+        <span class="lang-om">Akkamitti Hojjeta?</span>
+        <span class="lang-en">How It Works</span>
+      </h2>
+      <p class="section-subtitle text-center">
+        <span class="lang-om">Tarkaanfii salphaa 4n gurguri ykn bitadhu</span>
+        <span class="lang-en">Sell or buy in 4 simple steps</span>
+      </p>
+
+      <div class="categories-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); max-width: 900px; margin: 0 auto;">
+        <div class="category-card" style="cursor:default;">
+          <div class="category-icon">1️⃣</div>
+          <h4 class="lang-om">Galmaa'i</h4>
+          <h4 class="lang-en">Register</h4>
+          <p class="lang-om">Qonnaan ykn Buyer ta'uun galmaa'i</p>
+          <p class="lang-en">Sign up as Farmer or Buyer</p>
+        </div>
+        <div class="category-card" style="cursor:default;">
+          <div class="category-icon">2️⃣</div>
+          <h4 class="lang-om">Oomisha Galchi / Barbaadi</h4>
+          <h4 class="lang-en">List / Search</h4>
+          <p class="lang-om">Oomisha kee galchi ykn barbaadi</p>
+          <p class="lang-en">List your product or search</p>
+        </div>
+        <div class="category-card" style="cursor:default;">
+          <div class="category-icon">3️⃣</div>
+          <h4 class="lang-om">Order & Kaffaltii</h4>
+          <h4 class="lang-en">Order & Pay</h4>
+          <p class="lang-om">Order godhi, Telebirr/CBE kaffali</p>
+          <p class="lang-en">Place order, pay via Telebirr/CBE</p>
+        </div>
+        <div class="category-card" style="cursor:default;">
+          <div class="category-icon">4️⃣</div>
+          <h4 class="lang-om">Delivery</h4>
+          <h4 class="lang-en">Delivery</h4>
+          <p class="lang-om">Oomisha geessisi / fudhadhu</p>
+          <p class="lang-en">Get your product delivered</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CTA ========== -->
+  <section class="section">
+    <div class="container">
+      <div class="cta-section">
+        <h2>
+          <span class="lang-om">Har'uma Oomisha Kee Galchi</span>
+          <span class="lang-en">List Your Product Today</span>
+        </h2>
+        <p>
+          <span class="lang-om">Kaffaltii tokkollee malee galmaa'i. Buyers biyyoolessaa fi alaa waliin walqunnami.</span>
+          <span class="lang-en">Register for free. Connect with local and international buyers.</span>
+        </p>
+        <div class="cta-actions">
+          <a href="farmer/login.html" class="btn-hero btn-hero-primary">
+            <span class="lang-om">Qonnaan Bulaa Ta'i</span>
+            <span class="lang-en">Become a Seller</span>
+          </a>
+          <a href="marketplace.html" class="btn-hero btn-hero-outline">
+            <span class="lang-om">Oomisha Bitadhu</span>
+            <span class="lang-en">Start Buying</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo">
+            <div class="logo-icon">IK</div>
+            <div class="logo-text" style="color:white;">INA-KJ <span style="color:var(--gold);">Agro</span></div>
+          </div>
+          <p style="margin-top:14px;">
+            <span class="lang-om">Platform qonnaan bulaa, gurgurtoota fi buyers walitti fida. Oomisha qonnaa online irratti gurguri.</span>
+            <span class="lang-en">Connecting farmers, sellers and buyers. Sell agricultural products online across Ethiopia.</span>
+          </p>
+        </div>
+
+        <div>
+          <h4>
+            <span class="lang-om">Linkwwan</span>
+            <span class="lang-en">Quick Links</span>
+          </h4>
+          <ul>
+            <li><a href="marketplace.html"><span class="lang-om">Gabaa</span><span class="lang-en">Marketplace</span></a></li>
+            <li><a href="market-price.html"><span class="lang-om">Gatii Gabaa</span><span class="lang-en">Market Prices</span></a></li>
+            <li><a href="farmer/login.html"><span class="lang-om">Oomisha Galchi</span><span class="lang-en">Sell Product</span></a></li>
+            <li><a href="#how-it-works"><span class="lang-om">Akkamitti Hojjeta</span><span class="lang-en">How it Works</span></a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>
+            <span class="lang-om">Deeggarsa</span>
+            <span class="lang-en">Support</span>
+          </h4>
+          <ul>
+            <li><a href="#"><span class="lang-om">Gaffii fi Deebii</span><span class="lang-en">FAQ</span></a></li>
+            <li><a href="#"><span class="lang-om">Nu Qunnamaa</span><span class="lang-en">Contact Us</span></a></li>
+            <li><a href="#"><span class="lang-om">Haala Fayyadamaa</span><span class="lang-en">Terms of Use</span></a></li>
+            <li><a href="#"><span class="lang-om">Iccitii</span><span class="lang-en">Privacy Policy</span></a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>
+            <span class="lang-om">Nu Qunnamaa</span>
+            <span class="lang-en">Contact</span>
+          </h4>
+          <ul>
+            <li>📧 info@ina-kj.et</li>
+            <li>📞 +251 9XX XXX XXX</li>
+            <li>📍 Addis Ababa, Ethiopia</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 INA-KJ Agro Connect. All rights reserved.</span>
+        <span>
+          <span class="lang-om">Itoophiyaaf ijaarame</span>
+          <span class="lang-en">Built for Ethiopia</span>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
